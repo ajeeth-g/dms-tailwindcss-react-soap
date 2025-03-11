@@ -50,6 +50,7 @@ const DocumentTable = ({ fetchDataRef, globalFilter, setGlobalFilter }) => {
         orderby: "REF_SEQ_NO DESC",
         includeEmpImage: false,
       };
+
       const response = await getDocMasterList(
         docsMasterListPayload,
         CURRENT_USER_LOGIN

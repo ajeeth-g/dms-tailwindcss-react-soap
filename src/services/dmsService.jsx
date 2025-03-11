@@ -194,6 +194,7 @@ export const getDocMasterList = async (
   const soapBody = createSoapEnvelope("DMS_GetDocMaster_List", payload);
 
   const soapResponse = await soapClient(endpoint, SOAP_ACTION, soapBody);
+
   const parsedResponse = parseDataModelResponse(
     soapResponse,
     "DMS_GetDocMaster_List"

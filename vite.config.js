@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/public": {
-        target: "https://103.168.19.35:4439/iStreamsSmartPublic.asmx",
+        target: "http://103.168.19.35/iStWebPublic/iStreamsSmartPublic.asmx",
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/public/, ""),

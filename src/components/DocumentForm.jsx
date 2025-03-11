@@ -432,11 +432,26 @@ const DocumentForm = ({
                         <option value="" disabled>
                           Select related to
                         </option>
-                        <option value="HR">HR</option>
-                        <option value="Accounts">Accounts</option>
-                        <option value="QS">QS</option>
+                        <option value="HRMS & Payroll">HRMS & Payroll</option>
+                        <option value="Material Management">
+                          Material Management
+                        </option>
+                        <option value="Accounting">Accounting</option>
+                        <option value="Sales (POS)">Sales (POS)</option>
                         <option value="Estimation">Estimation</option>
                         <option value="Projects">Projects</option>
+                        <option value="Job Costing">Job Costing</option>
+                        <option value="Production">Production</option>
+                        <option value="Packing Delivery">
+                          Packing Delivery
+                        </option>
+                        <option value="Task Management">Task Management</option>
+                        <option value="Documents & Communications">
+                          Documents & Communications
+                        </option>
+                        <option value="Product Administration">
+                          Product Administration
+                        </option>
                       </select>
                       {errors.DOC_RELATED_TO && (
                         <p className="text-red-500 text-xs">
@@ -690,12 +705,11 @@ const DocumentForm = ({
                               </div>
 
                               <Button
+                                type="button"
                                 icon={<View size={14} />}
                                 label="View"
                                 className="btn btn-primary btn-xs"
                                 onClick={() => handleViewDocs(doc)}
-                                tooltip="View"
-                                variant="ghost"
                               />
                             </div>
                           </div>

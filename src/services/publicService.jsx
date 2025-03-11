@@ -9,7 +9,11 @@ export const doConnectionPublic = async (loginUserName) => {
   const SOAP_ACTION = "http://tempuri.org/doConnection";
   const payload = { LoginUserName: loginUserName };
   const soapBody = createSoapEnvelope("doConnection", payload);
-  const responseText = await soapClient(PUBLIC_SERVICE_URL, SOAP_ACTION, soapBody);
+  const responseText = await soapClient(
+    PUBLIC_SERVICE_URL,
+    SOAP_ACTION,
+    soapBody
+  );
   const result = parseDataModelResponse(responseText, "doConnection");
   return result;
 };
@@ -18,7 +22,11 @@ export const getServiceURL = async (loginUserName) => {
   const SOAP_ACTION = "http://tempuri.org/GetServiceURL";
   const payload = { LoginUserName: loginUserName };
   const soapBody = createSoapEnvelope("GetServiceURL", payload);
-  const responseText = await soapClient(PUBLIC_SERVICE_URL, SOAP_ACTION, soapBody);
+  const responseText = await soapClient(
+    PUBLIC_SERVICE_URL,
+    SOAP_ACTION,
+    soapBody
+  );
   const result = parseDataModelResponse(responseText, "GetServiceURL");
   return result;
 };

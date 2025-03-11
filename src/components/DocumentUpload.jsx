@@ -11,7 +11,6 @@ import { getFileIcon } from "../utils/getFileIcon";
 import { readFileAsBase64 } from "../utils/soapUtils";
 import Button from "./common/Button";
 import LoadingSpinner from "./common/LoadingSpinner";
-import { getNameFromEmail } from "../utils/emailHelpers";
 
 const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
   const { userData } = useAuth();
@@ -88,22 +87,32 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
     accept: allowedMimeTypes,
     multiple: true,
     onDrop: (acceptedFiles) => {
-      const validFiles = acceptedFiles.filter((file) => {
-        const ext = file.name.split(".").pop().toLowerCase();
-        return !disallowedExtensions.includes(ext);
-      });
+      // Process accepted files as before
       setFiles((prev) => [
         ...prev,
-        ...validFiles.map((file) => ({
-          file,
-          preview: URL.createObjectURL(file),
-          name: file.name,
-          size: (file.size / 1024).toFixed(2) + " KB",
-          DOC_RELATED_CATEGORY: "",
-          EXPIRY_DATE: "",
-          progress: 0,
-        })),
+        ...acceptedFiles.map((file) => {
+          const ext = file.name.split(".").pop().toLowerCase();
+          return {
+            file,
+            name: file.name,
+            size: (file.size / 1024).toFixed(2) + " KB",
+            docExtension: ext,
+          };
+        }),
       ]);
+    },
+    onDropRejected: (fileRejections) => {
+      fileRejections.forEach((rejection) => {
+        const file = rejection.file;
+        const ext = file.name.split(".").pop().toLowerCase();
+        if (disallowedExtensions.includes(ext)) {
+          alert(`"${ext}" File format is not allowed.`);
+        } else {
+          alert(
+            `File "${file.name}" was rejected due to MIME type restrictions.`
+          );
+        }
+      });
     },
   });
 
@@ -143,7 +152,7 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
     return "";
   };
 
-  const handleSave = async () => {
+  const handleUpload = async () => {
     const editError = canCurrentUserEdit(selectedDocument);
     if (editError) {
       alert(editError);
@@ -370,13 +379,11 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
                     <div className="card-body">
                       <div className="flex items-start justify-between gap-1">
                         <div className="flex items-center gap-1">
-                          {file.preview && (
-                            <img
-                              src={file.preview}
-                              alt="Preview"
-                              className="w-8 h-8 object-cover rounded"
-                            />
-                          )}
+                          <img
+                            src={getFileIcon(file.docExtension)}
+                            alt={file.name}
+                            className="w-8 h-8 object-cover rounded"
+                          />
                           <div className="flex flex-col items-start">
                             <span className="text-md font-medium truncate">
                               {file.name}
@@ -412,7 +419,7 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
             >
               Cancel
             </button>
-            <button className="btn btn-primary" onClick={handleSave}>
+            <button className="btn btn-primary" onClick={handleUpload}>
               {isSubmitting ? (
                 <>
                   Uploading...

@@ -97,6 +97,12 @@ export default function DocumentViewPage() {
   }, []);
 
   const handleVerify = useCallback((doc) => {
+    if (userData.currentUserName === doc.USER_NAME) {
+      alert(
+        "Access Denied: This document is created by you. You can't Verify."
+      );
+      return;
+    }
     setSelectedDocument(doc);
     setDocFormMode("verify");
     modalRefForm.current?.showModal();
