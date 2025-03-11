@@ -99,7 +99,7 @@ export default function DocumentViewPage() {
   const handleVerify = useCallback((doc) => {
     if (userData.currentUserName === doc.USER_NAME) {
       alert(
-        "Access Denied: This document is created by you. You can't Verify."
+        "Access Denied: You created this document. You cannot verify your own document."
       );
       return;
     }
@@ -117,10 +117,10 @@ export default function DocumentViewPage() {
   // Handle dropdown select. Now we also pass the document details.
   const handleEmployeeSelect = (doc, event) => {
     if (userData.currentUserName === doc.USER_NAME) {
-      alert("Access Denied: This document is created by you.");
+      alert("Access Denied: You created this document.");
       return;
     } else if (doc.DOCUMENT_STATUS === "Rejected") {
-      alert("Access Denied: This document has been rejected. You can't assign");
+      alert("Access Denied: This rejected document cannot be assigned.");
       return;
     }
 

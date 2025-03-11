@@ -223,10 +223,12 @@ const DocumentForm = ({
   const handleVerifyApprove = async () => {
     try {
       if (userData.currentUserName === selectedDocument?.USER_NAME) {
-        alert("Access Denied: This document is created by you.");
+        alert("Access Denied: You created this document.");
         return;
       } else if (existingDocs.length === 0) {
-        alert("Warning: No documents found");
+        alert(
+          "Warning: No associated documents found. Check with uploader or reject."
+        );
         return;
       }
 
@@ -250,7 +252,7 @@ const DocumentForm = ({
 
   const handleReject = async () => {
     if (userData.currentUserName === selectedDocument?.USER_NAME) {
-      alert("Access Denied: This document is created by you.");
+      alert("Access Denied: You created this document.");
       return;
     }
 
@@ -274,13 +276,13 @@ const DocumentForm = ({
 
     const status = doc?.DOCUMENT_STATUS?.toUpperCase();
     if (status === "VERIFIED")
-      return "Access Denied: This document has been verified and approved for processing.";
+      return "Access Denied: Document is verified and approved.";
     if (status === "AWAITING FOR USER ACCEPTANCE")
-      return `Access Denied: This document has been assigned to ${doc.ASSIGNED_USER}.`;
+      return `Access Denied: Document is assigned to ${doc.ASSIGNED_USER}.`;
     if (status === "IN PROGRESS")
-      return "Access Denied: This document is in progress status.";
+      return "Access Denied: Document is in progress.";
     if (status === "COMPLETED")
-      return "Access Denied: This document has been processed and completed.";
+      return "Access Denied: Document has been completed.";
     return "";
   };
 
@@ -513,7 +515,7 @@ const DocumentForm = ({
                         type="date"
                         name="EXPIRY_DATE"
                         id="EXPIRY_DATE"
-                        value={formData.EXPIRY_DATE}
+                        value={convertServiceDate(formData.EXPIRY_DATE)}
                         onChange={handleChange}
                         className="input input-bordered input-sm w-full"
                         readOnly={isReadOnly}

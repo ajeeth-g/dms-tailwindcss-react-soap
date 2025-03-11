@@ -142,13 +142,13 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
     const STATUS = selectedDocument?.DOCUMENT_STATUS?.toUpperCase();
 
     if (STATUS === "VERIFIED")
-      return "Access Denied: This document has been verified and approved for processing.";
+      return "Access Denied: Document is verified and approved.";
     if (STATUS === "AWAITING FOR USER ACCEPTANCE")
-      return `Access Denied: This document has been assigned to ${selectedDocument.ASSIGNED_USER}.`;
+      return `Access Denied: Document is assigned to ${selectedDocument.ASSIGNED_USER}.`;
     if (STATUS === "IN PROGRESS")
-      return "Access Denied: This document is in progress status.";
+      return "Access Denied: Document is in progress.";
     if (STATUS === "COMPLETED")
-      return "Access Denied: This document has been processed and completed.";
+      return "Access Denied: Document has been completed.";
     return "";
   };
 
