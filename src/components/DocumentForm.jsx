@@ -252,9 +252,6 @@ const DocumentForm = ({
     if (userData.currentUserName === selectedDocument?.USER_NAME) {
       alert("Access Denied: This document is created by you.");
       return;
-    } else if (existingDocs.length === 0) {
-      alert("Warning: No documents found");
-      return;
     }
 
     if (!showRejectModal) {

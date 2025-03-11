@@ -110,6 +110,14 @@ export default function DocumentViewPage() {
 
   // Handle dropdown select. Now we also pass the document details.
   const handleEmployeeSelect = (doc, event) => {
+    if (userData.currentUserName === doc.USER_NAME) {
+      alert("Access Denied: This document is created by you.");
+      return;
+    } else if (doc.DOCUMENT_STATUS === "Rejected") {
+      alert("Access Denied: This document has been rejected. You can't assign");
+      return;
+    }
+
     const { name, value } = event.target;
     setTaskData((prev) => ({
       ...prev,
@@ -117,7 +125,7 @@ export default function DocumentViewPage() {
       taskName: doc.DOCUMENT_DESCRIPTION,
       relatedTo: doc.DOC_RELATED_TO,
       refSeqNo: doc.REF_SEQ_NO,
-    verifiedBy: doc.VERIFIED_BY,
+      verifiedBy: doc.VERIFIED_BY,
       [name]: value,
     }));
 
