@@ -3,7 +3,7 @@ import { createSoapEnvelope, parseDataModelResponse } from "../utils/soapUtils";
 import soapClient from "./soapClient";
 
 // Use the proxy path for the public service.
-const PUBLIC_SERVICE_URL = "/public";
+const PUBLIC_SERVICE_URL = import.meta.env.VITE_SOAP_ENDPOINT;
 
 export const doConnectionPublic = async (loginUserName) => {
   const SOAP_ACTION = "http://tempuri.org/doConnection";
