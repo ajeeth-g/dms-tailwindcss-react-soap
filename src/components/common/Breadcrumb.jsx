@@ -10,6 +10,7 @@ const Breadcrumb = () => {
     "category-view": "Category View",
     "document-list": "Document List",
     "document-view": "Document View",
+    "task-view": "Task View",
     // Add more as needed
   };
 

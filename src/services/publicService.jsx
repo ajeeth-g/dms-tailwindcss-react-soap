@@ -14,6 +14,9 @@ export const doConnectionPublic = async (loginUserName) => {
     SOAP_ACTION,
     soapBody
   );
+
+  console.log(soapBody);
+  
   const result = parseDataModelResponse(responseText, "doConnection");
   return result;
 };

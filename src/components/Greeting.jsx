@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuth } from "../context/AuthContext";
+import { capitalizeFirstLetter } from "../utils/stringUtils";
 
 const Greeting = () => {
   const { userData } = useAuth();
@@ -27,7 +28,7 @@ const Greeting = () => {
         <h2 className="text-4xl font-semibold text-white">
           Welcome Back,{" "}
           <span className="text-indigo-400">
-            {userData.currentUserName.toLowerCase()}
+            {capitalizeFirstLetter(userData.currentUserName)}
           </span>{" "}
           👋
         </h2>

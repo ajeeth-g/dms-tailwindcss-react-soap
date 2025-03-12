@@ -1,8 +1,11 @@
 import {
+  ClipboardList,
+  ClipboardListIcon,
   FileSearch,
   FileText,
   LayoutDashboard,
   LayoutGrid,
+  UserCheck,
   Users,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -81,6 +84,15 @@ const Sidebar = ({ isOpen }) => {
             >
               <FileSearch className="h-5 w-5" />
               Document View
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/task-view"
+              className="text-sm rounded-full py-3 px-5 mb-2 hover:bg-gray-800 transition"
+            >
+              <ClipboardListIcon className="h-5 w-5" />
+              Task View
             </Link>
           </li>
         </ul>
