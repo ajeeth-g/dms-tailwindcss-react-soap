@@ -1,5 +1,26 @@
 import axios from "axios";
 
+axios.interceptors.request.use(
+  config => {
+    console.log("Request config:", config);
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
+
+axios.interceptors.response.use(
+  response => {
+    console.log("Response:", response);
+    return response;
+  },
+  error => {
+    console.error("Response error:", error);
+    return Promise.reject(error);
+  }
+);
+
 const soapClient = async (url, soapAction, soapBody) => {
   try {
     const response = await axios.post(url, soapBody, {
@@ -10,18 +31,7 @@ const soapClient = async (url, soapAction, soapBody) => {
     });
     return response.data;
   } catch (error) {
-    if (error.response) {
-      // Request made and server responded
-      console.error("Response error data:", error.response.data);
-      console.error("Response status:", error.response.status);
-      console.error("Response headers:", error.response.headers);
-    } else if (error.request) {
-      // Request made but no response received
-      console.error("No response received:", error.request);
-    } else {
-      // Something happened in setting up the request
-      console.error("Error setting up the request:", error.message);
-    }
+    console.error("SOAP request error:", error);
     throw error;
   }
 };
