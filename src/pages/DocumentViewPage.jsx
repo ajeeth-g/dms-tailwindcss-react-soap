@@ -13,20 +13,20 @@ import { formatDateTime } from "../utils/dateUtils";
 export default function DocumentViewPage() {
   const [docsData, setDocsData] = useState([]);
   const [loadingDocs, setLoadingDocs] = useState(false);
-  const [loadingDownload, setLoadingDownload] = useState({});
+  const [loadingDownload, setLoadingDownload] = useState([]);
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([]);
-  const modalRef = useRef(null);
-  const { userData } = useAuth();
   const [verifierName, setVerifierName] = useState("");
   const [assignEnabled, setAssignEnabled] = useState({});
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [docFormMode, setDocFormMode] = useState("view");
+  const modalRef = useRef(null);
   const modalRefForm = useRef(null);
+  const { userData } = useAuth();
 
   // Task assignment state
   const [taskData, setTaskData] = useState({
-    userName: "",
+    userName: userData.currentUserName,
     taskName: "",
     taskSubject: "",
     relatedTo: "",
@@ -127,7 +127,6 @@ export default function DocumentViewPage() {
     const { name, value } = event.target;
     setTaskData((prev) => ({
       ...prev,
-      userName: doc.USER_NAME,
       taskName: doc.DOCUMENT_DESCRIPTION,
       relatedTo: doc.DOC_RELATED_TO,
       refSeqNo: doc.REF_SEQ_NO,
@@ -173,26 +172,24 @@ export default function DocumentViewPage() {
                     <FileSearch className="w-4 h-4 text-neutral-900" />
                   </div>
 
-                  <div className="flex flex-col w-full">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h2 className="text-md font-semibold leading-tight truncate">
-                          {doc.DOCUMENT_DESCRIPTION.length > 14
-                            ? doc.DOCUMENT_DESCRIPTION.substring(0, 14) + "..."
-                            : doc.DOCUMENT_DESCRIPTION}
-                        </h2>
-                        <p className="text-[10px] text-gray-500 leading-none">
-                          {doc.DOCUMENT_NO}
-                        </p>
-                      </div>
-                      <span className="text-xs badge badge-primary">
-                        {doc.REF_SEQ_NO}
-                      </span>
+                  <div className="flex justify-between items-start w-full">
+                    <div>
+                      <h2 className="text-md font-semibold leading-tight truncate">
+                        {doc.DOCUMENT_DESCRIPTION.length > 14
+                          ? doc.DOCUMENT_DESCRIPTION.substring(0, 14) + "..."
+                          : doc.DOCUMENT_DESCRIPTION}
+                      </h2>
+                      <p className="text-[10px] text-gray-500 leading-none">
+                        {doc.DOCUMENT_NO}
+                      </p>
                     </div>
+                    <span className="text-xs badge badge-primary">
+                      {doc.REF_SEQ_NO}
+                    </span>
                   </div>
                 </div>
 
-                <div className="card-actions flex-col items-center justify-between gap-1">
+                <div className="flex-col items-center justify-between gap-1">
                   <div className="flex justify-between items-center w-full">
                     <span className="text-xs font-medium">{doc.USER_NAME}</span>
                     <span className="text-xs text-gray-500">

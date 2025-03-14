@@ -1,6 +1,10 @@
 import { createSoapEnvelope, parseDataModelResponse } from "../utils/soapUtils";
 import { doConnection } from "./connectionService";
-import { createNewTaskPayload } from "./payloadBuilders";
+import {
+  createNewTaskPayload,
+  getUserTasksPayload,
+  updateUserTasksPayload,
+} from "./payloadBuilders";
 import soapClient from "./soapClient";
 
 // Helper: Use proxy endpoint if in development.
@@ -38,5 +42,57 @@ export const createNewTask = async (
   const soapResponse = await soapClient(endpoint, SOAP_ACTION, soapBody);
 
   const parsedResponse = parseDataModelResponse(soapResponse, "IM_Task_Create");
+  return parsedResponse;
+};
+
+export const getUserTasks = async (
+  userName,
+  loginUserName,
+  dynamicURL = DEFAULT_SOAP_URL
+) => {
+  const endpoint = getEndpoint(dynamicURL);
+
+  const payload = getUserTasksPayload(userName);
+
+  const doConnectionResponse = await doConnection(endpoint, loginUserName);
+  if (doConnectionResponse === "ERROR") {
+    throw new Error("Connection failed: Unable to authenticate.");
+  }
+
+  const SOAP_ACTION = "http://tempuri.org/IM_Get_User_Tasks";
+  const soapBody = createSoapEnvelope("IM_Get_User_Tasks", payload);
+
+  const soapResponse = await soapClient(endpoint, SOAP_ACTION, soapBody);
+
+  const parsedResponse = parseDataModelResponse(
+    soapResponse,
+    "IM_Get_User_Tasks"
+  );
+  return parsedResponse;
+};
+
+export const updateUserTasks = async (
+  taskUpdateData,
+  loginUserName,
+  dynamicURL = DEFAULT_SOAP_URL
+) => {
+  const endpoint = getEndpoint(dynamicURL);
+
+  const payload = updateUserTasksPayload(taskUpdateData);
+
+  console.log("payload", payload);
+  
+
+  const doConnectionResponse = await doConnection(endpoint, loginUserName);
+  if (doConnectionResponse === "ERROR") {
+    throw new Error("Connection failed: Unable to authenticate.");
+  }
+
+  const SOAP_ACTION = "http://tempuri.org/IM_Task_Update";
+  const soapBody = createSoapEnvelope("IM_Task_Update", payload);
+
+  const soapResponse = await soapClient(endpoint, SOAP_ACTION, soapBody);
+
+  const parsedResponse = parseDataModelResponse(soapResponse, "IM_Task_Update");
   return parsedResponse;
 };

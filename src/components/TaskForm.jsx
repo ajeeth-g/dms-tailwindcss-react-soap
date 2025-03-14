@@ -30,6 +30,9 @@ const TaskForm = ({
 
       const payload = refSeqNo !== -1 ? { ...rest, refSeqNo } : rest;
 
+      console.log(payload);
+      
+
       const createResponse = await createNewTask(
         payload,
         userData.currentUserLogin
@@ -248,12 +251,12 @@ const TaskForm = ({
                       className="h-8 w-8 rounded-full border"
                     />
                     <div>
-                      <h3 className="text-sm font-semibold">Design UI</h3>
-                      <p className="text-xs text-gray-500">John Doe</p>
+                      <h3 className="text-sm font-semibold">Tax Declaration</h3>
+                      <p className="text-xs text-gray-500">Gopi</p>
                     </div>
                   </div>
                   <p className="text-xs mt-2 text-gray-600">
-                    Created a UI for the dashboard.
+                    Created a tax declaration.
                   </p>
                   <p className="text-xs text-gray-400 mt-1">
                     Completed on: Jan 15, 2025 - 10:30 AM
@@ -272,13 +275,11 @@ const TaskForm = ({
                       className="h-8 w-8 rounded-full border"
                     />
                     <div>
-                      <h3 className="text-sm font-semibold">API Development</h3>
-                      <p className="text-xs text-gray-500">Jane Smith</p>
+                      <h3 className="text-sm font-semibold">Offer Letter</h3>
+                      <p className="text-xs text-gray-500">Gopi</p>
                     </div>
                   </div>
-                  <p className="text-xs mt-2 text-gray-600">
-                    Developed authentication API.
-                  </p>
+                  <p className="text-xs mt-2 text-gray-600">Offer Letter.</p>
                   <p className="text-xs text-gray-400 mt-1">
                     Completed on: Jan 14, 2025 - 02:15 PM
                   </p>

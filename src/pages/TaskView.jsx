@@ -1,206 +1,63 @@
-import React, { useState, useMemo } from "react";
-
-const tasksData = [
-  {
-    Task_ID: 1,
-    Task_Name: "Document Upload",
-    Task_Description:
-      "Upload new policy documents to the system. Ensure all files are in PDF format and follow naming conventions.",
-    Related_to: "HR",
-    Created_user: "Alice",
-    Creator_On: "2023-01-10",
-    Creater_remainder: "Follow up after 2 days",
-    ASsigned_Start_date: "2023-01-11",
-    Assigned_Complete_date: "2023-01-15",
-    Assigned_User: "Bob",
-    Start_date: "2023-01-11",
-    End_date: "2023-01-15",
-    Completion_date: "2023-01-14",
-    Remind_On: "2023-01-12",
-    Is_Approved: true,
-  },
-  {
-    Task_ID: 2,
-    Task_Name: "Contract Review",
-    Task_Description:
-      "Review new client contracts and note any missing clauses or terms that need attention.",
-    Related_to: "Legal",
-    Created_user: "Carol",
-    Creator_On: "2023-02-05",
-    Creater_remainder: "Check for missing clauses",
-    ASsigned_Start_date: "2023-02-06",
-    Assigned_Complete_date: "2023-02-10",
-    Assigned_User: "Dave",
-    Start_date: "2023-02-06",
-    End_date: "2023-02-10",
-    Completion_date: "",
-    Remind_On: "2023-02-07",
-    Is_Approved: false,
-  },
-  {
-    Task_ID: 3,
-    Task_Name: "System Backup",
-    Task_Description:
-      "Perform the quarterly backup of system data and verify backup integrity.",
-    Related_to: "IT",
-    Created_user: "Eve",
-    Creator_On: "2023-03-01",
-    Creater_remainder: "Verify backup logs",
-    ASsigned_Start_date: "2023-03-02",
-    Assigned_Complete_date: "2023-03-03",
-    Assigned_User: "Frank",
-    Start_date: "2023-03-02",
-    End_date: "2023-03-03",
-    Completion_date: "2023-03-03",
-    Remind_On: "2023-03-02",
-    Is_Approved: true,
-  },
-  {
-    Task_ID: 4,
-    Task_Name: "Data Analysis",
-    Task_Description:
-      "Analyze last month’s sales data to identify trends and anomalies.",
-    Related_to: "Marketing",
-    Created_user: "Grace",
-    Creator_On: "2023-04-05",
-    Creater_remainder: "Double-check figures",
-    ASsigned_Start_date: "2023-04-06",
-    Assigned_Complete_date: "2023-04-10",
-    Assigned_User: "Heidi",
-    Start_date: "2023-04-06",
-    End_date: "2023-04-10",
-    Completion_date: "",
-    Remind_On: "2023-04-07",
-    Is_Approved: false,
-  },
-  // More tasks...
-];
-
-const TaskCard = ({ task, onView }) => {
-  return (
-    <div className=" rounded-xl shadow-md p-4 flex flex-col justify-between hover:shadow-lg transition-shadow duration-200">
-      <div className="mb-3">
-        <h2 className="text-lg font-semibold  truncate">{task.Task_Name}</h2>
-        <div className="flex items-center gap-2 mt-1">
-          <span
-            className={`w-3 h-3 rounded-full ${
-              task.Is_Approved ? "bg-green-500" : "bg-yellow-500"
-            }`}
-            title={task.Is_Approved ? "Approved" : "Pending"}
-          ></span>
-          <span className="text-xs text-gray-600">{task.Creator_On}</span>
-        </div>
-      </div>
-      <div className="flex justify-between items-center text-sm">
-        <div>
-          <p className="text-gray-500">
-            <span className="font-medium">Start:</span>{" "}
-            {task.ASsigned_Start_date}
-          </p>
-          <p className="text-gray-500">
-            <span className="font-medium">Due:</span>{" "}
-            {task.Assigned_Complete_date}
-          </p>
-        </div>
-        <button onClick={() => onView(task)} className="btn btn-xs btn-outline">
-          View Details
-        </button>
-      </div>
-    </div>
-  );
-};
-
-const TaskModal = ({ task, onClose }) => {
-  if (!task) return null;
-
-  return (
-    <>
-      <input
-        type="checkbox"
-        id="task-modal"
-        className="modal-toggle"
-        checked
-        readOnly
-      />
-      <div className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">{task.Task_Name}</h3>
-          <p className="py-2">{task.Task_Description}</p>
-          <div className="text-sm text-gray-600 space-y-1">
-            <p>
-              <span className="font-medium">Assigned User:</span>{" "}
-              {task.Assigned_User}
-            </p>
-            <p>
-              <span className="font-medium">Created By:</span>{" "}
-              {task.Created_user || task.Created_user}
-            </p>
-            <p>
-              <span className="font-medium">Related To:</span> {task.Related_to}
-            </p>
-            <p>
-              <span className="font-medium">Start Date:</span>{" "}
-              {task.ASsigned_Start_date}
-            </p>
-            <p>
-              <span className="font-medium">Due Date:</span>{" "}
-              {task.Assigned_Complete_date}
-            </p>
-            <p>
-              <span className="font-medium">Created On:</span> {task.Creator_On}
-            </p>
-          </div>
-          <div className="modal-action">
-            <button onClick={onClose} className="btn btn-sm">
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
+import { motion } from "framer-motion";
+import { View } from "lucide-react";
+import React, { useCallback, useEffect, useState } from "react";
+import Button from "../components/common/Button";
+import LoadingSpinner from "../components/common/LoadingSpinner";
+import { useAuth } from "../context/AuthContext";
+import { getUserTasks, updateUserTasks } from "../services/taskService";
+import { convertServiceDate, formatDateTime } from "../utils/dateUtils";
+import { capitalizeFirstLetter } from "../utils/stringUtils";
 
 const TaskView = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const { userData } = useAuth();
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortOrder, setSortOrder] = useState("name-asc"); // name-asc, name-desc, date-asc, date-desc
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedTask, setSelectedTask] = useState(null);
-  const itemsPerPage = 4;
+  const [loadingTasks, setLoadingTasks] = useState(false);
+  const [taskData, setTaskData] = useState([]);
+  const [userImages, setUserImages] = useState("");
 
-  const filteredTasks = useMemo(() => {
-    let filtered = tasksData.filter((task) => {
-      // Status filter
-      if (statusFilter === "approved" && !task.Is_Approved) return false;
-      if (statusFilter === "pending" && task.Is_Approved) return false;
-      // Search filter
-      if (
-        !task.Task_Name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        !task.Task_Description.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-        return false;
-      return true;
-    });
-    // Sorting
-    if (sortOrder === "name-asc") {
-      filtered.sort((a, b) => a.Task_Name.localeCompare(b.Task_Name));
-    } else if (sortOrder === "name-desc") {
-      filtered.sort((a, b) => b.Task_Name.localeCompare(a.Task_Name));
-    } else if (sortOrder === "date-asc") {
-      filtered.sort((a, b) => new Date(a.Creator_On) - new Date(b.Creator_On));
-    } else if (sortOrder === "date-desc") {
-      filtered.sort((a, b) => new Date(b.Creator_On) - new Date(a.Creator_On));
+  const fetchUserTasks = useCallback(async () => {
+    setLoadingTasks(true);
+    try {
+      const response = await getUserTasks(
+        userData.currentUserName,
+        userData.currentUserLogin
+      );
+
+      const fetchUserImage = () => {};
+
+      setTaskData(response?.length > 0 ? response : []);
+      setLoadingTasks(false);
+    } catch (error) {
+      console.error("Error fetching dms master:", error);
+      setTaskData([]);
     }
-    return filtered;
-  }, [searchQuery, statusFilter, sortOrder]);
+  }, [userData.currentUserLogin, userData.currentUserName]);
 
-  // Pagination
-  const totalPages = Math.ceil(filteredTasks.length / itemsPerPage);
-  const paginatedTasks = filteredTasks.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  useEffect(() => {
+    fetchUserTasks();
+  }, [fetchUserTasks]);
+
+  const handleUpdateUserTasks = async (taskData, taskStatus) => {
+    try {
+      const updateUserTasksPayload = {
+        taskID: taskData.TASK_ID,
+        taskStatus: taskStatus,
+        statusDateTime: formatDateTime(new Date()),
+        reason: taskData.REASON,
+        userName: userData.currentUserName,
+      };
+
+      console.log(updateUserTasksPayload);
+
+      const updateUserTasksResponse = await updateUserTasks(
+        updateUserTasksPayload,
+        userData.currentUserLogin
+      );
+    } catch (error) {
+      console.error("Task Update failed:", error);
+    }
+  };
 
   return (
     <div className="container mx-auto space-y-6">
@@ -210,11 +67,6 @@ const TaskView = () => {
           type="text"
           placeholder="Search tasks..."
           className="input input-bordered input-sm max-w-xs"
-          value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setCurrentPage(1);
-          }}
         />
         <select
           className="select select-bordered select-sm max-w-xs"
@@ -239,53 +91,118 @@ const TaskView = () => {
           <option value="date-desc">Created: Newest</option>
         </select>
       </div>
-      {/* Card Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {paginatedTasks.length ? (
-          paginatedTasks.map((task) => (
-            <TaskCard key={task.Task_ID} task={task} onView={setSelectedTask} />
-          ))
-        ) : (
-          <p className="col-span-full text-center text-gray-500">
-            No tasks found
-          </p>
-        )}
-      </div>
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2">
-          <button
-            className="btn btn-xs"
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            Prev
-          </button>
-          {Array.from({ length: totalPages }, (_, idx) => (
-            <button
-              key={idx + 1}
-              className={`btn btn-xs ${
-                currentPage === idx + 1 ? "btn-active" : ""
-              }`}
-              onClick={() => setCurrentPage(idx + 1)}
-            >
-              {idx + 1}
-            </button>
-          ))}
-          <button
-            className="btn btn-xs"
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
+
+      {loadingTasks ? (
+        <div className="flex justify-center items-start">
+          <LoadingSpinner className="loading loading-spinner loading-lg" />
         </div>
-      )}
-      {/* Task Detail Modal */}
-      {selectedTask && (
-        <TaskModal task={selectedTask} onClose={() => setSelectedTask(null)} />
+      ) : taskData.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
+          {taskData.map((task, index) => (
+            <motion.div
+              key={index}
+              whileHover={{ scale: 1.04 }}
+              className="card card-compact bg-neutral shadow-xl"
+            >
+              <div className="card-body justify-between">
+                <div>
+                  <div className="flex items-start gap-2">
+                    <div className="w-10 h-10">
+                      <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBa24AAg4zVSuUsL4hJnMC9s3DguLgeQmZA&s"
+                        alt="User Name"
+                        className="rounded-lg"
+                      />
+                    </div>
+
+                    <div className="flex justify-between items-start w-full">
+                      <div>
+                        <h2 className="text-md font-semibold leading-tight truncate">
+                          {capitalizeFirstLetter(task.ASSIGNED_USER)}
+                        </h2>
+                        <p className="text-[10px] text-gray-500 leading-none">
+                          {convertServiceDate(task.CREATED_ON)}
+                        </p>
+                      </div>
+                      <Button
+                        className="btn btn-ghost btn-xs"
+                        icon={<View className="h-4 w-4" />}
+                        onClick={() => handleVerify()}
+                        disabled={false}
+                      />
+                    </div>
+                  </div>
+                  <div className="grid gap-2">
+                    <p className="text-xl font-semibold">
+                      {task.TASK_NAME.length > 25
+                        ? task.TASK_NAME.substring(0, 23) + "..."
+                        : task.TASK_NAME}
+                    </p>
+
+                    <div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <p className="text-xs text-gray-500">Start Date</p>
+                          <p className="font-medium text-sm">
+                            {convertServiceDate(task.START_DATE)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500">End Date</p>
+                          <p className="font-medium text-sm">
+                            {convertServiceDate(task.COMPLETION_DATE)}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <p className="text-xs text-gray-500">Status</p>
+                          <div
+                            className={`badge badge-xs ${
+                              task.STATUS === "ACCEPTED"
+                                ? "badge-success"
+                                : task.STATUS === "NEW"
+                                ? "badge-info"
+                                : "badge-error"
+                            }  `}
+                          >
+                            {task.STATUS}
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500">Assigned to</p>
+                          <p className="font-medium text-sm">
+                            {capitalizeFirstLetter(task.CREATED_USER)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="card-actions">
+                  <Button
+                    className="btn btn-success btn-xs flex-1"
+                    label="Accept"
+                    onClick={() => handleUpdateUserTasks(task, "ACCEPTED")}
+                    disabled={false}
+                  />
+                  <Button
+                    className="btn btn-error btn-xs flex-1"
+                    label="Decline"
+                    onClick={() => handleUpdateUserTasks(task, "REJECTED")}
+                    disabled={false}
+                  />
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      ) : (
+        <div>
+          <p className="text-center text-gray-400">No tasks available.</p>
+        </div>
       )}
     </div>
   );

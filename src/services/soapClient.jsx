@@ -9,8 +9,6 @@ const soapClient = async (url, soapAction, soapBody) => {
       },
     });
 
-    console.log(response);
-
     return response.data;
   } catch (error) {
     console.error("SOAP request error:", error);

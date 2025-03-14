@@ -36,6 +36,18 @@ export const createNewTaskPayload = (taskData) => ({
   RefTaskID: taskData.refSeqNo,
 });
 
+export const getUserTasksPayload = (userName) => ({
+  UserName: userName,
+});
+
+export const updateUserTasksPayload = (taskUpdateData) => ({
+  TaskID: taskUpdateData.taskID,
+  TaskStatus: taskUpdateData.taskStatus,
+  StatusDateTime: taskUpdateData.statusDateTime,
+  Reason: taskUpdateData.reason,
+  UserName: taskUpdateData.userName,
+});
+
 export const createDmsDetailsPayload = ({
   refSeqNo,
   serialNo,
