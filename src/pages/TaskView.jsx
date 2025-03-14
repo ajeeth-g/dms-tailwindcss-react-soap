@@ -5,7 +5,11 @@ import Button from "../components/common/Button";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import { useAuth } from "../context/AuthContext";
 import { getUserTasks, updateUserTasks } from "../services/taskService";
-import { convertServiceDate, formatDateTime } from "../utils/dateUtils";
+import {
+  convertServiceDate,
+  formatDateParts,
+  formatDateTime,
+} from "../utils/dateUtils";
 import { capitalizeFirstLetter } from "../utils/stringUtils";
 
 const TaskView = () => {
@@ -59,6 +63,8 @@ const TaskView = () => {
     }
   };
 
+  console.log(taskData);
+
   return (
     <div className="container mx-auto space-y-6">
       {/* Controls */}
@@ -97,12 +103,12 @@ const TaskView = () => {
           <LoadingSpinner className="loading loading-spinner loading-lg" />
         </div>
       ) : taskData.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-2">
           {taskData.map((task, index) => (
             <motion.div
               key={index}
               whileHover={{ scale: 1.04 }}
-              className="card card-compact bg-neutral shadow-xl"
+              className="card card-compact bg-gray-800 shadow-xl"
             >
               <div className="card-body justify-between">
                 <div>
@@ -114,84 +120,71 @@ const TaskView = () => {
                         className="rounded-lg"
                       />
                     </div>
-
+                    
                     <div className="flex justify-between items-start w-full">
                       <div>
                         <h2 className="text-md font-semibold leading-tight truncate">
                           {capitalizeFirstLetter(task.ASSIGNED_USER)}
                         </h2>
-                        <p className="text-[10px] text-gray-500 leading-none">
-                          {convertServiceDate(task.CREATED_ON)}
+                        <p className="text-xs font-medium text-gray-500 leading-none">
+                          {task.RELATED_ON}
                         </p>
                       </div>
-                      <Button
-                        className="btn btn-ghost btn-xs"
-                        icon={<View className="h-4 w-4" />}
-                        onClick={() => handleVerify()}
-                        disabled={false}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid gap-2">
-                    <p className="text-xl font-semibold">
-                      {task.TASK_NAME.length > 25
-                        ? task.TASK_NAME.substring(0, 23) + "..."
-                        : task.TASK_NAME}
-                    </p>
-
-                    <div>
-                      <div className="grid grid-cols-2 gap-2">
-                        <div>
-                          <p className="text-xs text-gray-500">Start Date</p>
-                          <p className="font-medium text-sm">
-                            {convertServiceDate(task.START_DATE)}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-gray-500">End Date</p>
-                          <p className="font-medium text-sm">
-                            {convertServiceDate(task.COMPLETION_DATE)}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-2">
-                        <div>
-                          <p className="text-xs text-gray-500">Status</p>
-                          <div
-                            className={`badge badge-xs ${
-                              task.STATUS === "ACCEPTED"
-                                ? "badge-success"
-                                : task.STATUS === "NEW"
-                                ? "badge-info"
-                                : "badge-error"
-                            }  `}
-                          >
-                            {task.STATUS}
-                          </div>
-                        </div>
-                        <div>
-                          <p className="text-xs text-gray-500">Assigned to</p>
-                          <p className="font-medium text-sm">
-                            {capitalizeFirstLetter(task.CREATED_USER)}
-                          </p>
-                        </div>
+                      <span className="badge badge-xs badge-success">
+                      {task.STATUS}
+                    </span>
+                      <div>
+                        <p className="text-xs text-gray-500 text-center">
+                          Start Date:
+                        </p>
+                        <p className="font-medium text-sm">
+                          {convertServiceDate(task.START_DATE)}
+                        </p>
                       </div>
                     </div>
                   </div>
+                  <div className="divider m-0"></div>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="h-24 overflow-y-auto flex-1">
+                      <p className="text-lg font-semibold">{task.TASK_NAME}</p>
+
+                      <p className="text-sm font-normal text-gray-500">
+                        {task.TASK_INFO}
+                      </p>
+                    </div>
+
+                    <div className="text-center">
+                      <p className="text-xs text-gray-500 text-center">
+                        Due on:
+                      </p>
+                      <div className="bg-gray-900 px-6 py-2 rounded-lg">
+                        <p className="text-purple-600 font-bold text-xl leading-none">
+                          31
+                        </p>
+                        <p className="text-xs font-medium">Jan</p>
+                        <p className="text-xs font-medium">2025</p>
+                      </div>
+                      <p className="text-red-500 font-medium text-xs">
+                        42 day(s)
+                      </p>
+                    </div>
+                  </div>
+                  <div className="divider m-0"></div>
                 </div>
-
-                <div className="card-actions">
+                <div className="card-actions justify-between items-center">
+                  <div className="flex flex-col">
+                    <p className="text-xs">
+                      Created by: {capitalizeFirstLetter(task.CREATED_USER)}
+                    </p>
+                    <p className="text-xs">
+                      Created on: {convertServiceDate(task.CREATED_ON)}
+                    </p>
+                    
+                  </div>
                   <Button
-                    className="btn btn-success btn-xs flex-1"
-                    label="Accept"
+                    className="btn btn-primary btn-sm"
+                    label="View"
                     onClick={() => handleUpdateUserTasks(task, "ACCEPTED")}
-                    disabled={false}
-                  />
-                  <Button
-                    className="btn btn-error btn-xs flex-1"
-                    label="Decline"
-                    onClick={() => handleUpdateUserTasks(task, "REJECTED")}
                     disabled={false}
                   />
                 </div>

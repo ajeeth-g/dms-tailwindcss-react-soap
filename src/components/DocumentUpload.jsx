@@ -11,6 +11,7 @@ import { getFileIcon } from "../utils/getFileIcon";
 import { readFileAsBase64 } from "../utils/soapUtils";
 import Button from "./common/Button";
 import LoadingSpinner from "./common/LoadingSpinner";
+import axios from "axios";
 
 const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
   const { userData } = useAuth();
@@ -163,6 +164,8 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
     setIsSubmitting(true);
 
     try {
+      const email = userData.currentUserLogin;
+      const refNo = selectedDocument.REF_SEQ_NO;
       // Calculate next serial number
       const maxSerial = existingDocs.reduce(
         (max, doc) => Math.max(max, doc.SERIAL_NO || 0),
@@ -172,6 +175,32 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
 
       for (const [index, file] of files.entries()) {
         currentSerial += 1;
+
+        const formData = new FormData();
+        formData.append("file", file.file);
+
+        console.log(formData);
+
+        const uploadUrl = `http://103.168.19.35:8099/api/megacloud/upload?email=${encodeURIComponent(
+          email
+        )}&refNo=${encodeURIComponent(refNo)}`;
+
+        const uploadResponse = await axios.post(uploadUrl, formData, {
+          headers: {
+            // Let Axios set the correct Content-Type including boundaries
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        if (uploadResponse.status !== 200) {
+          throw new Error(
+            `File upload failed with status ${uploadResponse.status}`
+          );
+        }
+
+        const uploadResult = uploadResponse.data;
+        console.log("File uploaded:", uploadResult);
+
         const base64Data = await readFileAsBase64(file.file);
 
         const payload = {

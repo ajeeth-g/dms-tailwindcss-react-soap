@@ -8,10 +8,20 @@ const soapClient = async (url, soapAction, soapBody) => {
         SOAPAction: soapAction,
       },
     });
-
     return response.data;
   } catch (error) {
-    console.error("SOAP request error:", error);
+    if (error.response) {
+      // Request made and server responded
+      console.error("Response error data:", error.response.data);
+      console.error("Response status:", error.response.status);
+      console.error("Response headers:", error.response.headers);
+    } else if (error.request) {
+      // Request made but no response received
+      console.error("No response received:", error.request);
+    } else {
+      // Something happened in setting up the request
+      console.error("Error setting up the request:", error.message);
+    }
     throw error;
   }
 };
