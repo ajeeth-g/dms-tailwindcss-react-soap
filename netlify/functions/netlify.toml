@@ -1,2 +1,5 @@
 [functions]
   directory = "netlify/functions"
+
+[build.environment]
+  DEFAULT_SOAP_ENDPOINT = "https://istreamserp-001-site1.anytempurl.com/iStreamsSmartPublic.asmx"
