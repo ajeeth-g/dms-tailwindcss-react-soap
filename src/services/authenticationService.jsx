@@ -21,16 +21,13 @@ import soapClient from "./soapClient";
 // const DEFAULT_SOAP_URL = "/api";
 
 // verifyauthentication.
-export const verifyauthentication = async (
-  userDetails,
-  email,
-  endpoint
-) => {
-
+export const verifyauthentication = async (userDetails, email, endpoint) => {
+  const finalEndPoint =
+    "https://cloud.istreams-erp.com:4438/iStreamsSmartService.asmx";
   // Build the payload dynamically using the builder function
   const payload = verifyauthenticationPayload(userDetails);
 
-  const doConnectionResponse = await doConnection(endpoint, email);
+  const doConnectionResponse = await doConnection(finalEndPoint, email);
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
   }
@@ -38,7 +35,7 @@ export const verifyauthentication = async (
   const SOAP_ACTION = "http://tempuri.org/verifyauthentication";
   const soapBody = createSoapEnvelope("verifyauthentication", payload);
 
-  const soapResponse = await soapClient(endpoint, SOAP_ACTION, soapBody);
+  const soapResponse = await soapClient(finalEndPoint, SOAP_ACTION, soapBody);
   const parsedResponse = parseDataModelResponse(
     soapResponse,
     "verifyauthentication"
