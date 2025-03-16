@@ -6,14 +6,13 @@ export default defineConfig({
   server: {
     proxy: {
       "/public": {
-        target: "https://istreamserp-001-site1.anytempurl.com/iStreamsSmartPublic.asmx",
+        target: "https://cloud.istreams-erp.com:4439/iStreamsSmartPublic.asmx",
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/public/, ""),
       },
       "/api": {
-        target:
-          "http://103.168.19.35/iStWebClient_Demo/istreamssmartservice.asmx",
+        target: "https://cloud.istreams-erp.com:4438/iStreamsSmartService.asmx",
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ""),

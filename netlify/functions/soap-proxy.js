@@ -17,7 +17,7 @@ exports.handler = async (event, context) => {
     }
 
     const response = await axios.post(
-      "https://istreamserp-001-site1.anytempurl.com/iStreamsSmartPublic.asmx",
+      "https://cloud.istreams-erp.com:4439/iStreamsSmartPublic.asmx",
       soapBody,
       {
         headers: {
