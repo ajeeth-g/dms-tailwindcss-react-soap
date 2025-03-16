@@ -29,7 +29,8 @@ const ChannelPerformance = ({ daysCount = 30 }) => {
       try {
         const data = await getDashboardChannelSummary(
           daysCount,
-          userData.currentUserLogin
+          userData.currentUserLogin,
+          userData.clientURL
         );
         // Map the service data to the format expected by Recharts
         const formattedData = data.map((item) => ({

@@ -28,7 +28,8 @@ const RejectModal = ({ modalRefReject, selectedDocument }) => {
 
       const response = await updateRejectDmsDetails(
         updateRejectPayload,
-        userData?.currentUserLogin
+        userData?.currentUserLogin,
+        userData.clientURL
       );
 
       if (response) {

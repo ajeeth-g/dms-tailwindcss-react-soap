@@ -16,8 +16,8 @@ export const createNewTask = async (
   const payload = createNewTaskPayload(taskData);
 
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
@@ -44,8 +44,8 @@ export const getUserTasks = async (
   const payload = getUserTasksPayload(userName);
 
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
@@ -75,8 +75,8 @@ export const updateUserTasks = async (
   const payload = updateUserTasksPayload(taskUpdateData);
 
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");

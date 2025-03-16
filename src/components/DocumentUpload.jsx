@@ -39,7 +39,8 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
             whereCondition: `REF_SEQ_NO = ${selectedDocument.REF_SEQ_NO}`,
             orderby: "",
           },
-          userData.currentUserLogin
+          userData.currentUserLogin,
+          userData.clientURL
         );
 
         // Handle different response formats
@@ -56,7 +57,8 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
             whereCondition: "",
             orderby: "",
           },
-          userData.currentUserLogin
+          userData.currentUserLogin,
+          userData.clientURL
         );
 
         const receivedCategories = Array.isArray(categoriesResponse)
@@ -125,7 +127,8 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
           whereCondition: `REF_SEQ_NO = ${selectedDocument.REF_SEQ_NO}`,
           orderby: "",
         },
-        userData.currentUserLogin
+        userData.currentUserLogin,
+        userData.clientURL
       );
       const updatedDocs = Array.isArray(response)
         ? response
@@ -223,7 +226,11 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
           FILE_PATH: "",
         };
 
-        await createAndSaveDMSDetails(payload, userData.currentUserLogin);
+        await createAndSaveDMSDetails(
+          payload,
+          userData.currentUserLogin,
+          userData.clientURL
+        );
       }
 
       await refreshDocuments();
@@ -246,7 +253,8 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
           whereCondition: `REF_SEQ_NO = ${selectedDocs.REF_SEQ_NO} AND SERIAL_NO = ${selectedDocs.SERIAL_NO}`,
           orderby: "",
         },
-        userData.currentUserLogin
+        userData.currentUserLogin,
+        userData.clientURL
       );
 
       if (!response?.length) {
@@ -284,7 +292,8 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
           REF_SEQ_NO: selectedDocument.REF_SEQ_NO,
           SERIAL_NO: doc.SERIAL_NO,
         },
-        userData.currentUserLogin
+        userData.currentUserLogin,
+        userData.clientURL
       );
 
       await refreshDocuments();

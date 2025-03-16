@@ -23,7 +23,11 @@ const DocumentChannelChart = ({ daysCount = 30 }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getDashboardChannelSummary(daysCount, userData.currentUserLogin);
+        const data = await getDashboardChannelSummary(
+          daysCount,
+          userData.currentUserLogin,
+          userData.clientURL
+        );
         const formattedData = data.map((item) => ({
           name: item.CHANNEL_SOURCE,
           channels: Number(item.total_count) || 0,

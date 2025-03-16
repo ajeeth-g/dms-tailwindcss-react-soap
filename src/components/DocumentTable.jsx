@@ -53,7 +53,8 @@ const DocumentTable = ({ fetchDataRef, globalFilter, setGlobalFilter }) => {
 
       const response = await getDocMasterList(
         docsMasterListPayload,
-        CURRENT_USER_LOGIN
+        CURRENT_USER_LOGIN,
+        userData.clientURL
       );
 
       const enriched = (Array.isArray(response) ? response : []).map((doc) => ({
@@ -135,7 +136,11 @@ const DocumentTable = ({ fetchDataRef, globalFilter, setGlobalFilter }) => {
           userName: doc.USER_NAME,
           refSeqNo: doc.REF_SEQ_NO,
         };
-        await deleteDMSMaster(deleteDMSMasterPayload, CURRENT_USER_LOGIN);
+        await deleteDMSMaster(
+          deleteDMSMasterPayload,
+          CURRENT_USER_LOGIN,
+          userData.clientURL
+        );
         setMasterData((prevData) =>
           prevData.filter((item) => item.REF_SEQ_NO !== doc.REF_SEQ_NO)
         );

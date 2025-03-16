@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AIPoweredInsights from "../components/AIPoweredInsights";
 import ChannelPerformance from "../components/ChannelPerformance";
 import DailyReports from "../components/DailyReports";
@@ -8,22 +8,9 @@ import DocumentDistribution from "../components/DocumentDistribution";
 import Greeting from "../components/Greeting";
 import StatCard from "../components/StatCard";
 import TeamDashboard from "../components/TeamDashboard";
-import { useAuth } from "../context/AuthContext";
-import { doConnection } from "../services/connectionService";
 
 export default function DashboardPage() {
   const [filterDays, setFilterDays] = useState("30");
-  const { userData } = useAuth();
-
-  useEffect(() => {
-    const establishDoConnection = async () => {
-      const doConnectionResult = await doConnection(
-        userData.ClientURL,
-        userData.currentUserLogin
-      );
-    };
-    establishDoConnection();
-  }, []);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">

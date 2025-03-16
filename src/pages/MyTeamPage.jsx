@@ -16,7 +16,8 @@ const MyTeamPage = () => {
         // Fetch user data
         const userDetails = await getAllDmsActiveUser(
           "",
-          userData.currentUserLogin
+          userData.currentUserLogin,
+          userData.clientURL
         );
         let usersArray = [];
 
@@ -35,7 +36,8 @@ const MyTeamPage = () => {
             try {
               const imageData = await getEmployeeImage(
                 user.emp_no,
-                userData.currentUserLogin
+                userData.currentUserLogin,
+                userData.clientURL
               );
 
               return {

@@ -16,7 +16,11 @@ export default function TeamDashboard() {
     const fetchUsersAndImages = async () => {
       try {
         // Fetch user data
-        const userDetails = await getAllDmsActiveUser("", userData.currentUserLogin);
+        const userDetails = await getAllDmsActiveUser(
+          "",
+          userData.currentUserLogin,
+          userData.clientURL
+        );
         let usersArray = [];
 
         // Process user data as before
@@ -32,7 +36,11 @@ export default function TeamDashboard() {
         const usersWithImages = await Promise.all(
           usersArray.map(async (user) => {
             try {
-              const imageData = await getEmployeeImage(user.emp_no, userData.currentUserLogin);
+              const imageData = await getEmployeeImage(
+                user.emp_no,
+                userData.currentUserLogin,
+                userData.clientURL
+              );
 
               return {
                 ...user,

@@ -7,8 +7,8 @@ export const getDataModel = async (para, loginUserName, dynamicClientUrl) => {
   const payload = getDataModelPayload(para);
 
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");

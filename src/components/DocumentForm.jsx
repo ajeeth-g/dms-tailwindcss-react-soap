@@ -30,7 +30,8 @@ import LoadingSpinner from "./common/LoadingSpinner";
 import RejectModal from "./RejectModal";
 
 const DocumentForm = ({
-  modalRefForm,  selectedDocument,
+  modalRefForm,
+  selectedDocument,
   docMode,
   onSuccess,
 }) => {
@@ -95,7 +96,8 @@ const DocumentForm = ({
             whereCondition: "",
             orderby: "",
           },
-          userData.currentUserLogin
+          userData.currentUserLogin,
+          userData.clientURL
         );
 
         // Ensure the data is an array.
@@ -125,7 +127,8 @@ const DocumentForm = ({
             whereCondition: "",
             orderby: "",
           },
-          userData.currentUserLogin
+          userData.currentUserLogin,
+          userData.clientURL
         );
         setDmsMasterData(response);
       } catch (err) {
@@ -151,7 +154,8 @@ const DocumentForm = ({
             whereCondition: `REF_SEQ_NO = ${selectedDocument.REF_SEQ_NO}`,
             orderby: "",
           },
-          userData.currentUserLogin
+          userData.currentUserLogin,
+          userData.clientURL
         );
 
         // Handle different response formats
@@ -199,7 +203,8 @@ const DocumentForm = ({
           whereCondition: `REF_SEQ_NO = ${selectedDocs.REF_SEQ_NO} AND SERIAL_NO = ${selectedDocs.SERIAL_NO}`,
           orderby: "",
         },
-        userData.currentUserLogin
+        userData.currentUserLogin,
+        userData.clientURL
       );
 
       if (!response?.length) {
@@ -311,7 +316,8 @@ const DocumentForm = ({
     try {
       const response = await createAndSaveDMSMaster(
         formData,
-        userData.currentUserLogin
+        userData.currentUserLogin,
+        userData.clientURL
       );
       if (response) {
         // Reset form but retain the next reference number

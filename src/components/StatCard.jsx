@@ -20,7 +20,11 @@ const StatCard = ({ daysCount = 30 }) => {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const data = await getDashboardOverallSummary(daysCount, userData.currentUserLogin);
+        const data = await getDashboardOverallSummary(
+          daysCount,
+          userData.currentUserLogin,
+          userData.clientURL
+        );
         // Convert the array into an object for easier lookup:
         // e.g., { "Total Documents": 125, "Verfied Documents": 85, ... }
         const summaryObj = data.reduce((acc, item) => {

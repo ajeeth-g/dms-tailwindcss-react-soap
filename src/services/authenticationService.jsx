@@ -14,7 +14,7 @@ export const verifyauthentication = async (
 ) => {
   const payload = verifyauthenticationPayload(userDetails);
 
-  const doConnectionResponse = await doConnection(dynamicClientUrl, email);
+  const doConnectionResponse = await doConnection(email, dynamicClientUrl);
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
   }

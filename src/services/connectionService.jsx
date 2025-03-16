@@ -2,7 +2,7 @@
 import { createSoapEnvelope, parseDataModelResponse } from "../utils/soapUtils";
 import soapClient from "./soapClient";
 
-export const doConnection = async (dynamicClientUrl, loginUserName) => {
+export const doConnection = async (loginUserName, dynamicClientUrl) => {
   if (!loginUserName) {
     console.error(
       "❌ Login user name is required for doConnection authentication."

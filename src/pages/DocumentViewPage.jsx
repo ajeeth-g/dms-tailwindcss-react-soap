@@ -51,7 +51,8 @@ export default function DocumentViewPage() {
       };
       const response = await getDocMasterList(
         getDocMasterListPayload,
-        userData.currentUserLogin
+        userData.currentUserLogin,
+        userData.clientURL
       );
       setDocsData(response?.length > 0 ? response : []);
       if (!response?.length) setError("No documents available.");
@@ -72,7 +73,8 @@ export default function DocumentViewPage() {
     try {
       const userDetails = await getAllActiveUsers(
         "",
-        userData.currentUserLogin
+        userData.currentUserLogin,
+        userData.clientURL
       );
       setUsers(Array.isArray(userDetails) ? userDetails : []);
     } catch (err) {

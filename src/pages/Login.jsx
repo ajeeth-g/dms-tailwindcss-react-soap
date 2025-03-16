@@ -76,7 +76,7 @@ const Login = () => {
 
         // Step 3: Fetch client connection and employee details in parallel.
         const [clientConnection, employeeData] = await Promise.all([
-          doConnection(clientURL, email),
+          doConnection(email, clientURL),
           getEmployeeNameAndId(userName, email, clientURL),
         ]);
 
@@ -88,7 +88,8 @@ const Login = () => {
 
         const empNo = employeeData[0].EMP_NO;
 
-        const employeeImage = await getEmployeeImage(empNo, clientURL);
+        
+        const employeeImage = await getEmployeeImage(empNo, email, clientURL);
 
         const payload = {
           token: "dummy-token",

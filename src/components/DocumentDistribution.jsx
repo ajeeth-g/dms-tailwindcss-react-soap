@@ -20,7 +20,11 @@ const DocumentDistribution = ({ daysCount = 30 }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getDashboardOverallSummary(daysCount, userData.currentUserLogin);
+        const data = await getDashboardOverallSummary(
+          daysCount,
+          userData.currentUserLogin,
+          userData.clientURL
+        );
         // Convert each object to the expected format for the chart
         const formattedData = data.map((item) => ({
           name: item.CATEGORY,

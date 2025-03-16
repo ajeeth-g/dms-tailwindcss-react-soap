@@ -21,8 +21,8 @@ export const createAndSaveDMSMaster = async (
   const payload = createDmsMasterPayload(formData);
 
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
@@ -49,8 +49,8 @@ export const createAndSaveDMSDetails = async (
   dynamicClientUrl
 ) => {
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
@@ -79,8 +79,8 @@ export const updateDmsVerifiedBy = async (
 
   // Authenticate via doConnection using the chosen dynamicClientUrl.
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
@@ -110,8 +110,8 @@ export const updateDmsAssignedTo = async (
 
   // Authenticate via doConnection using the chosen dynamicClientUrl.
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
@@ -141,8 +141,8 @@ export const updateDmsVerifiedAndAssignedTo = async (
 
   // Authenticate via doConnection using the chosen dynamicClientUrl.
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
@@ -175,8 +175,8 @@ export const updateRejectDmsDetails = async (
 
   // Authenticate via doConnection using the chosen dynamicClientUrl.
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
@@ -205,8 +205,8 @@ export const getDocMasterList = async (
   const payload = getDocMasterListPayloadPayload(parameter);
 
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
@@ -236,8 +236,8 @@ export const deleteDMSMaster = async (
   const payload = deleteDMSMasterPayload(parameter);
 
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
@@ -265,8 +265,8 @@ export const deleteDMSDetails = async (
   const payload = deleteDMSDetailsPayload(parameter);
 
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");

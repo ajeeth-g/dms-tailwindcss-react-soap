@@ -15,8 +15,8 @@ export const getAllDmsActiveUser = async (
   const payload = getAllDmsActiveUserPayload(userName);
 
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
@@ -45,8 +45,8 @@ export const getDashboardOverallSummary = async (
   const payload = getDashboardOverallSummaryPayload(noOfDays);
 
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
@@ -78,8 +78,8 @@ export const getDashboardChannelSummary = async (
   const payload = getDashboardChannelSummaryPayload(noOfDays);
 
   const doConnectionResponse = await doConnection(
-    dynamicClientUrl,
-    loginUserName
+    loginUserName,
+    dynamicClientUrl
   );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");

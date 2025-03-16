@@ -25,7 +25,8 @@ const TaskView = () => {
     try {
       const response = await getUserTasks(
         userData.currentUserName,
-        userData.currentUserLogin
+        userData.currentUserLogin,
+        userData.clientURL
       );
 
       const fetchUserImage = () => {};
@@ -52,18 +53,15 @@ const TaskView = () => {
         userName: userData.currentUserName,
       };
 
-      console.log(updateUserTasksPayload);
-
       const updateUserTasksResponse = await updateUserTasks(
         updateUserTasksPayload,
-        userData.currentUserLogin
+        userData.currentUserLogin,
+        userData.clientURL
       );
     } catch (error) {
       console.error("Task Update failed:", error);
     }
   };
-
-  console.log(taskData);
 
   return (
     <div className="container mx-auto space-y-6">
@@ -120,7 +118,7 @@ const TaskView = () => {
                         className="rounded-lg"
                       />
                     </div>
-                    
+
                     <div className="flex justify-between items-start w-full">
                       <div>
                         <h2 className="text-md font-semibold leading-tight truncate">
@@ -131,8 +129,8 @@ const TaskView = () => {
                         </p>
                       </div>
                       <span className="badge badge-xs badge-success">
-                      {task.STATUS}
-                    </span>
+                        {task.STATUS}
+                      </span>
                       <div>
                         <p className="text-xs text-gray-500 text-center">
                           Start Date:
@@ -179,7 +177,6 @@ const TaskView = () => {
                     <p className="text-xs">
                       Created on: {convertServiceDate(task.CREATED_ON)}
                     </p>
-                    
                   </div>
                   <Button
                     className="btn btn-primary btn-sm"
