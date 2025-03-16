@@ -96,7 +96,7 @@ const Navbar = ({ toggleSidebar }) => {
               <div className="w-10 h-10 rounded-full">
                 <img
                   alt="User avatar"
-                  src={`data:image/jpeg;base64,${userData.currentUserImageData}`}
+                  src={userData.currentUserImageData}
                 />
               </div>
             </div>
@@ -132,7 +132,7 @@ const Navbar = ({ toggleSidebar }) => {
               <div className="w-10 h-10 rounded-full">
                 <img
                   alt="User avatar"
-                  src={`data:image/jpeg;base64,${userData.currentUserImageData}`}
+                  src={userData.currentUserImageData}
                 />
               </div>
             </div>

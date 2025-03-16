@@ -55,7 +55,6 @@ const Login = () => {
           return;
         }
 
-
         // Step 2: Verify authentication.
         const userName = getNameFromEmail(email);
         const userDetails = { User: userName, Pass: password };
@@ -88,7 +87,6 @@ const Login = () => {
 
         const empNo = employeeData[0].EMP_NO;
 
-        
         const employeeImage = await getEmployeeImage(empNo, email, clientURL);
 
         const payload = {
@@ -97,7 +95,11 @@ const Login = () => {
           currentUserLogin: email,
           currentUserName: employeeData[0].USER_NAME,
           currentUserEmpNo: empNo,
-          currentUserImageData: employeeImage,
+          currentUserImageData:
+            employeeImage !== null
+              ? `data:image/jpeg;base64,${employeeImage}`
+              : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBa24AAg4zVSuUsL4hJnMC9s3DguLgeQmZA&s",
+
           clientURL: clientURL,
         };
 

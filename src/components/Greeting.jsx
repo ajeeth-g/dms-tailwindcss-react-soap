@@ -18,7 +18,7 @@ const Greeting = () => {
       <div className="w-20 h-20 rounded-full overflow-hidden shadow-md border-2 border-gray-700">
         <img
           alt="User Avatar"
-          src={`data:image/jpeg;base64,${userData.currentUserImageData}`}
+          src={userData.currentUserImageData}
           className="w-full h-full object-cover"
         />
       </div>
