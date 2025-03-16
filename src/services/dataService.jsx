@@ -22,7 +22,6 @@ export const getDataModel = async (
   loginUserName,
   dynamicURL = DEFAULT_SOAP_URL
 ) => {
-  
   const endpoint = getEndpoint(dynamicURL);
   // Build the payload dynamically using the builder function
   const payload = getDataModelPayload(para);

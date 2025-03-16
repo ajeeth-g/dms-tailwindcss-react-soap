@@ -155,7 +155,7 @@ export default function DocumentViewPage() {
         </div>
       ) : docsData.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
-          {docsData.map((doc) => (
+          {docsData?.map((doc) => (
             <motion.div
               key={doc.REF_SEQ_NO}
               whileHover={{ scale: 1.04 }}

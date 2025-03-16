@@ -16,13 +16,13 @@ import {
 } from "lucide-react";
 
 import React, { useEffect, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { useAuth } from "../context/AuthContext";
 import { getDataModel } from "../services/dataService";
 import {
   createAndSaveDMSMaster,
   updateDmsVerifiedBy,
 } from "../services/dmsService";
+import staticCategoryData from "../staticCategoryData";
 import { convertServiceDate } from "../utils/dateUtils";
 import { getFileIcon } from "../utils/getFileIcon";
 import Button from "./common/Button";
@@ -30,8 +30,7 @@ import LoadingSpinner from "./common/LoadingSpinner";
 import RejectModal from "./RejectModal";
 
 const DocumentForm = ({
-  modalRefForm,
-  selectedDocument,
+  modalRefForm,  selectedDocument,
   docMode,
   onSuccess,
 }) => {
@@ -50,7 +49,7 @@ const DocumentForm = ({
     COMMENTS: "",
     DOC_TAGS: "",
     FOR_THE_USERS: "",
-    EXPIRY_DATE: "",
+    EXPIRY_DATE: new Date().toISOString().split("T")[0],
     REF_TASK_ID: 0,
   };
 
@@ -75,9 +74,13 @@ const DocumentForm = ({
 
   useEffect(() => {
     if (selectedDocument && selectedDocument.REF_SEQ_NO !== -1) {
+      const convertedExpiryDate = convertServiceDate(
+        selectedDocument.EXPIRY_DATE
+      );
       setFormData({
         ...initialFormState,
         ...selectedDocument,
+        EXPIRY_DATE: convertedExpiryDate,
       });
     }
   }, [selectedDocument, userData.currentUserName]);
@@ -100,13 +103,17 @@ const DocumentForm = ({
         if (!Array.isArray(data)) {
           data = [data];
         }
-        setCategoryData(data);
+        if (!data || data.length === 0) {
+          setCategoryData(staticCategoryData);
+        } else {
+          setCategoryData(data);
+        }
       } catch (err) {
         console.error("Error fetching data model:", err);
       }
     };
     fetchCategoryDataModel();
-  }, [userData.currentUserLogin]);
+  }, []);
 
   // Fetch category data on component mount
   useEffect(() => {
@@ -515,13 +522,12 @@ const DocumentForm = ({
                         type="date"
                         name="EXPIRY_DATE"
                         id="EXPIRY_DATE"
-                        value={convertServiceDate(formData.EXPIRY_DATE)}
+                        value={formData.EXPIRY_DATE}
                         onChange={handleChange}
                         className="input input-bordered input-sm w-full"
                         readOnly={isReadOnly}
                       />
                     </div>
-
                     {/* Document Reference Value */}
                     <div className="flex flex-wrap items-center gap-3 w-full">
                       <div className="flex items-center gap-1">

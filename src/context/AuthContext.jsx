@@ -17,7 +17,7 @@ const defaultUserData = {
   currentUserLogin: null,
   currentUserName: null,
   currentUserEmpNo: null,
-  currentUserImageData: null,
+  currentUserImageData: "null",
 };
 
 export const AuthProvider = ({ children }) => {
