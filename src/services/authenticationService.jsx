@@ -7,26 +7,25 @@ import {
 import soapClient from "./soapClient";
 
 // Helper: Use proxy endpoint if in development.
-const getEndpoint = (dynamicURL) => {
-  if (
-    process.env.NODE_ENV === "development" &&
-    dynamicURL &&
-    dynamicURL.includes("103.168.19.35")
-  ) {
-    return "/api";
-  }
-  return dynamicURL;
-};
+// const getEndpoint = (dynamicURL) => {
+//   if (
+//     process.env.NODE_ENV === "development" &&
+//     dynamicURL &&
+//     dynamicURL.includes("103.168.19.35")
+//   ) {
+//     return "/api";
+//   }
+//   return dynamicURL;
+// };
 
-const DEFAULT_SOAP_URL = "/api";
+// const DEFAULT_SOAP_URL = "/api";
 
 // verifyauthentication.
 export const verifyauthentication = async (
   userDetails,
   email,
-  dynamicURL = DEFAULT_SOAP_URL
+  endpoint
 ) => {
-  const endpoint = getEndpoint(dynamicURL);
 
   // Build the payload dynamically using the builder function
   const payload = verifyauthenticationPayload(userDetails);
