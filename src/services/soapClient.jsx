@@ -1,6 +1,9 @@
 import axios from "axios";
 
 const soapClient = async (url, soapAction, soapBody) => {
+
+  console.log(url);
+  
   try {
     const response = await axios.post(url, soapBody, {
       headers: {
@@ -8,8 +11,6 @@ const soapClient = async (url, soapAction, soapBody) => {
         SOAPAction: soapAction,
       },
     });
-
-    console.log(response);
 
     return response.data;
   } catch (error) {
