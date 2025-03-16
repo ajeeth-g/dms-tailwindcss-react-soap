@@ -23,13 +23,11 @@ export const doConnection = async (endpoint, loginUserName) => {
     return "ERROR";
   }
 
-  const finalEndpoint = "https://cloud.istreams-erp.com:4438/iStreamsSmartService.asmx";
-  
   const SOAP_ACTION = "http://tempuri.org/doConnection";
   // Using your connectionPayload builder
   const payload = { LoginUserName: loginUserName }; // or use connectionPayload(loginUserName) if defined
   const soapBody = createSoapEnvelope("doConnection", payload);
-  const responseText = await soapClient(finalEndpoint, SOAP_ACTION, soapBody);
+  const responseText = await soapClient(endpoint, SOAP_ACTION, soapBody);
   const result = parseDataModelResponse(responseText, "doConnection");
   return result;
 };
