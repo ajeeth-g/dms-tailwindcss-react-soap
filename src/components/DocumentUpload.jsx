@@ -179,30 +179,27 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
       for (const [index, file] of files.entries()) {
         currentSerial += 1;
 
-        const formData = new FormData();
-        formData.append("file", file.file);
+        // const formData = new FormData();
+        // formData.append("file", file.file);
 
-        console.log(formData);
+        // const uploadUrl = `http://103.168.19.35:8099/api/megacloud/upload?email=${encodeURIComponent(
+        //   email
+        // )}&refNo=${encodeURIComponent(refNo)}`;
 
-        const uploadUrl = `http://103.168.19.35:8099/api/megacloud/upload?email=${encodeURIComponent(
-          email
-        )}&refNo=${encodeURIComponent(refNo)}`;
+        // const uploadResponse = await axios.post(uploadUrl, formData, {
+        //   headers: {
+        //     // Let Axios set the correct Content-Type including boundaries
+        //     "Content-Type": "multipart/form-data",
+        //   },
+        // });
 
-        const uploadResponse = await axios.post(uploadUrl, formData, {
-          headers: {
-            // Let Axios set the correct Content-Type including boundaries
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        // if (uploadResponse.status !== 200) {
+        //   throw new Error(
+        //     `File upload failed with status ${uploadResponse.status}`
+        //   );
+        // }
 
-        if (uploadResponse.status !== 200) {
-          throw new Error(
-            `File upload failed with status ${uploadResponse.status}`
-          );
-        }
-
-        const uploadResult = uploadResponse.data;
-        console.log("File uploaded:", uploadResult);
+        // const uploadResult = uploadResponse.data;
 
         const base64Data = await readFileAsBase64(file.file);
 

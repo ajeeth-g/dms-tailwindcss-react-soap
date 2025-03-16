@@ -233,15 +233,15 @@ const DocumentForm = ({
 
   const handleVerifyApprove = async () => {
     try {
-      if (userData.currentUserName === selectedDocument?.USER_NAME) {
-        alert("Access Denied: You created this document.");
-        return;
-      } else if (existingDocs.length === 0) {
-        alert(
-          "Warning: No associated documents found. Check with uploader or reject."
-        );
-        return;
-      }
+      // if (userData.currentUserName === selectedDocument?.USER_NAME) {
+      //   alert("Access Denied: You created this document.");
+      //   return;
+      // } else if (existingDocs.length === 0) {
+      //   alert(
+      //     "Warning: No associated documents found. Check with uploader or reject."
+      //   );
+      //   return;
+      // }
 
       const verifyAndAssignPayload = {
         userName: userData.currentUserName,
@@ -250,7 +250,8 @@ const DocumentForm = ({
 
       const responseVerify = await updateDmsVerifiedBy(
         verifyAndAssignPayload,
-        userData.currentUserLogin
+        userData.currentUserLogin,
+        userData.clientURL
       );
 
       if (responseVerify === "SUCCESS") {

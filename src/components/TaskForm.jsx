@@ -30,13 +30,14 @@ const TaskForm = ({
 
       const payload = refSeqNo !== -1 ? { ...rest, refSeqNo } : rest;
 
-      console.log(payload);
-
       const createResponse = await createNewTask(
         payload,
         userData.currentUserLogin,
         userData.clientURL
       );
+
+      console.log(createResponse);
+      
 
       onTaskCreated(taskData);
 

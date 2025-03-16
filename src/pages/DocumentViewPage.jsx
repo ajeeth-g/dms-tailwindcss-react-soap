@@ -99,12 +99,12 @@ export default function DocumentViewPage() {
   }, []);
 
   const handleVerify = useCallback((doc) => {
-    if (userData.currentUserName === doc.USER_NAME) {
-      alert(
-        "Access Denied: You created this document. You cannot verify your own document."
-      );
-      return;
-    }
+    // if (userData.currentUserName === doc.USER_NAME) {
+    //   alert(
+    //     "Access Denied: You created this document. You cannot verify your own document."
+    //   );
+    //   return;
+    // }
     setSelectedDocument(doc);
     setDocFormMode("verify");
     modalRefForm.current?.showModal();
@@ -118,13 +118,13 @@ export default function DocumentViewPage() {
 
   // Handle dropdown select. Now we also pass the document details.
   const handleEmployeeSelect = (doc, event) => {
-    if (userData.currentUserName === doc.USER_NAME) {
-      alert("Access Denied: You created this document.");
-      return;
-    } else if (doc.DOCUMENT_STATUS === "Rejected") {
-      alert("Access Denied: This rejected document cannot be assigned.");
-      return;
-    }
+    // if (userData.currentUserName === doc.USER_NAME) {
+    //   alert("Access Denied: You created this document.");
+    //   return;
+    // } else if (doc.DOCUMENT_STATUS === "Rejected") {
+    //   alert("Access Denied: This rejected document cannot be assigned.");
+    //   return;
+    // }
 
     const { name, value } = event.target;
     setTaskData((prev) => ({
@@ -156,7 +156,7 @@ export default function DocumentViewPage() {
           <LoadingSpinner className="loading loading-spinner loading-lg" />
         </div>
       ) : docsData.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-2">
           {docsData?.map((doc) => (
             <motion.div
               key={doc.REF_SEQ_NO}
@@ -176,12 +176,12 @@ export default function DocumentViewPage() {
 
                   <div className="flex justify-between items-start w-full">
                     <div>
-                      <h2 className="text-md font-semibold leading-tight truncate">
-                        {doc.DOCUMENT_DESCRIPTION.length > 14
-                          ? doc.DOCUMENT_DESCRIPTION.substring(0, 14) + "..."
+                      <h2 className="text-lg font-semibold leading-tight truncate">
+                        {doc.DOCUMENT_DESCRIPTION.length > 25
+                          ? doc.DOCUMENT_DESCRIPTION.substring(0, 25) + "..."
                           : doc.DOCUMENT_DESCRIPTION}
                       </h2>
-                      <p className="text-[10px] text-gray-500 leading-none">
+                      <p className="text-sm text-gray-500 leading-none">
                         {doc.DOCUMENT_NO}
                       </p>
                     </div>
@@ -191,16 +191,16 @@ export default function DocumentViewPage() {
                   </div>
                 </div>
 
-                <div className="flex-col items-center justify-between gap-1">
+                <div className="flex flex-col items-center justify-between gap-3">
                   <div className="flex justify-between items-center w-full">
-                    <span className="text-xs font-medium">{doc.USER_NAME}</span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-sm font-medium">{doc.USER_NAME}</span>
+                    <span className="text-sm text-gray-500">
                       {doc.NO_OF_DOCUMENTS} File(s)
                     </span>
                   </div>
                   <div className="card-actions items-start justify-between gap-2 w-full">
                     <div className="flex-1">
-                      <div className="flex flex-wrap items-center justify-between gap-1 mb-1">
+                      <div className="flex flex-wrap items-center justify-between gap-1 mb-3">
                         {doc.VERIFIED_BY && (
                           <span
                             className={`text-xs text-gray-500 ${
@@ -215,7 +215,7 @@ export default function DocumentViewPage() {
                           </span>
                         )}
                         {!doc.VERIFIED_BY && (
-                          <span className="text-[9px] badge badge-error badge-outline leading-tight px-1">
+                          <span className="text-xs badge badge-error badge-outline leading-tight px-1">
                             Unverified
                           </span>
                         )}
@@ -235,7 +235,7 @@ export default function DocumentViewPage() {
                       />
                     </div>
                     <div className="flex-1">
-                      <p className="text-[12px] text-gray-500 mb-1">
+                      <p className="text-sm text-gray-500 mb-3">
                         Assign to
                       </p>
                       <select
