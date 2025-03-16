@@ -11,12 +11,6 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/public/, ""),
       },
-      "/api": {
-        target: "https://cloud.istreams-erp.com:4438/iStreamsSmartService.asmx",
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ""),
-      },
     },
   },
 });

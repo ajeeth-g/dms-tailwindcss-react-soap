@@ -55,10 +55,15 @@ const Login = () => {
           return;
         }
 
+
         // Step 2: Verify authentication.
         const userName = getNameFromEmail(email);
         const userDetails = { User: userName, Pass: password };
-        const authentication = await verifyauthentication(userDetails, email);
+        const authentication = await verifyauthentication(
+          userDetails,
+          email,
+          clientURL
+        );
 
         if (authentication !== "Authetication passed") {
           setError(authentication);

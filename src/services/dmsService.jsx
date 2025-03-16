@@ -12,31 +12,18 @@ import {
 } from "./payloadBuilders";
 import soapClient from "./soapClient";
 
-// Helper: Use proxy endpoint if in development.
-const getEndpoint = (dynamicURL) => {
-  if (
-    process.env.NODE_ENV === "development" &&
-    dynamicURL &&
-    dynamicURL.includes("103.168.19.35")
-  ) {
-    return "/api";
-  }
-  return dynamicURL;
-};
-
-const DEFAULT_SOAP_URL = "/api";
-
 export const createAndSaveDMSMaster = async (
   formData,
   loginUserName,
-  dynamicURL = DEFAULT_SOAP_URL
+  dynamicClientUrl
 ) => {
-  const endpoint = getEndpoint(dynamicURL);
-
   // Build the payload dynamically using the builder function
   const payload = createDmsMasterPayload(formData);
 
-  const doConnectionResponse = await doConnection(endpoint, loginUserName);
+  const doConnectionResponse = await doConnection(
+    dynamicClientUrl,
+    loginUserName
+  );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
   }
@@ -44,7 +31,11 @@ export const createAndSaveDMSMaster = async (
   const SOAP_ACTION = "http://tempuri.org/DMS_CreateAndSave_DMS_Master";
   const soapBody = createSoapEnvelope("DMS_CreateAndSave_DMS_Master", payload);
 
-  const soapResponse = await soapClient(endpoint, SOAP_ACTION, soapBody);
+  const soapResponse = await soapClient(
+    dynamicClientUrl,
+    SOAP_ACTION,
+    soapBody
+  );
   const parsedResponse = parseDataModelResponse(
     soapResponse,
     "DMS_CreateAndSave_DMS_Master"
@@ -55,18 +46,23 @@ export const createAndSaveDMSMaster = async (
 export const createAndSaveDMSDetails = async (
   payload,
   loginUserName,
-  dynamicURL = DEFAULT_SOAP_URL
+  dynamicClientUrl
 ) => {
-  const endpoint = getEndpoint(dynamicURL);
-
-  const doConnectionResponse = await doConnection(endpoint, loginUserName);
+  const doConnectionResponse = await doConnection(
+    dynamicClientUrl,
+    loginUserName
+  );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
   }
 
   const SOAP_ACTION = "http://tempuri.org/DMS_CreateAndSave_DMS_Details";
   const soapBody = createSoapEnvelope("DMS_CreateAndSave_DMS_Details", payload);
-  const soapResponse = await soapClient(endpoint, SOAP_ACTION, soapBody);
+  const soapResponse = await soapClient(
+    dynamicClientUrl,
+    SOAP_ACTION,
+    soapBody
+  );
   const parsedResponse = parseDataModelResponse(
     soapResponse,
     "DMS_CreateAndSave_DMS_Details"
@@ -77,13 +73,15 @@ export const createAndSaveDMSDetails = async (
 export const updateDmsVerifiedBy = async (
   data,
   loginUserName,
-  dynamicURL = DEFAULT_SOAP_URL
+  dynamicClientUrl
 ) => {
-  const endpoint = getEndpoint(dynamicURL);
   const payload = updateDmsVerifiedByPayload(data);
 
-  // Authenticate via doConnection using the chosen endpoint.
-  const doConnectionResponse = await doConnection(endpoint, loginUserName);
+  // Authenticate via doConnection using the chosen dynamicClientUrl.
+  const doConnectionResponse = await doConnection(
+    dynamicClientUrl,
+    loginUserName
+  );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
   }
@@ -91,7 +89,11 @@ export const updateDmsVerifiedBy = async (
   const SOAP_ACTION = "http://tempuri.org/DMS_Update_VerifiedBy";
   const soapBody = createSoapEnvelope("DMS_Update_VerifiedBy", payload);
 
-  const soapResponse = await soapClient(endpoint, SOAP_ACTION, soapBody);
+  const soapResponse = await soapClient(
+    dynamicClientUrl,
+    SOAP_ACTION,
+    soapBody
+  );
   const parsedResponse = parseDataModelResponse(
     soapResponse,
     "DMS_Update_VerifiedBy"
@@ -102,13 +104,15 @@ export const updateDmsVerifiedBy = async (
 export const updateDmsAssignedTo = async (
   data,
   loginUserName,
-  dynamicURL = DEFAULT_SOAP_URL
+  dynamicClientUrl
 ) => {
-  const endpoint = getEndpoint(dynamicURL);
   const payload = updateDmsAssignedToPayload(data);
 
-  // Authenticate via doConnection using the chosen endpoint.
-  const doConnectionResponse = await doConnection(endpoint, loginUserName);
+  // Authenticate via doConnection using the chosen dynamicClientUrl.
+  const doConnectionResponse = await doConnection(
+    dynamicClientUrl,
+    loginUserName
+  );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
   }
@@ -116,7 +120,11 @@ export const updateDmsAssignedTo = async (
   const SOAP_ACTION = "http://tempuri.org/DMS_Update_AssignedTo";
   const soapBody = createSoapEnvelope("DMS_Update_AssignedTo", payload);
 
-  const soapResponse = await soapClient(endpoint, SOAP_ACTION, soapBody);
+  const soapResponse = await soapClient(
+    dynamicClientUrl,
+    SOAP_ACTION,
+    soapBody
+  );
   const parsedResponse = parseDataModelResponse(
     soapResponse,
     "DMS_Update_AssignedTo"
@@ -127,13 +135,15 @@ export const updateDmsAssignedTo = async (
 export const updateDmsVerifiedAndAssignedTo = async (
   data,
   loginUserName,
-  dynamicURL = DEFAULT_SOAP_URL
+  dynamicClientUrl
 ) => {
-  const endpoint = getEndpoint(dynamicURL);
   const payload = updateDmsVerifiedAndAssignedToPayload(data);
 
-  // Authenticate via doConnection using the chosen endpoint.
-  const doConnectionResponse = await doConnection(endpoint, loginUserName);
+  // Authenticate via doConnection using the chosen dynamicClientUrl.
+  const doConnectionResponse = await doConnection(
+    dynamicClientUrl,
+    loginUserName
+  );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
   }
@@ -144,7 +154,11 @@ export const updateDmsVerifiedAndAssignedTo = async (
     payload
   );
 
-  const soapResponse = await soapClient(endpoint, SOAP_ACTION, soapBody);
+  const soapResponse = await soapClient(
+    dynamicClientUrl,
+    SOAP_ACTION,
+    soapBody
+  );
   const parsedResponse = parseDataModelResponse(
     soapResponse,
     "DMS_Update_VerifiedAndAssignedTo"
@@ -155,13 +169,15 @@ export const updateDmsVerifiedAndAssignedTo = async (
 export const updateRejectDmsDetails = async (
   rejectData,
   loginUserName,
-  dynamicURL = DEFAULT_SOAP_URL
+  dynamicClientUrl
 ) => {
-  const endpoint = getEndpoint(dynamicURL);
   const payload = updateRejectDmsDetailsPayload(rejectData);
 
-  // Authenticate via doConnection using the chosen endpoint.
-  const doConnectionResponse = await doConnection(endpoint, loginUserName);
+  // Authenticate via doConnection using the chosen dynamicClientUrl.
+  const doConnectionResponse = await doConnection(
+    dynamicClientUrl,
+    loginUserName
+  );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
   }
@@ -169,7 +185,11 @@ export const updateRejectDmsDetails = async (
   const SOAP_ACTION = "http://tempuri.org/DMS_Update_Rejection";
   const soapBody = createSoapEnvelope("DMS_Update_Rejection", payload);
 
-  const soapResponse = await soapClient(endpoint, SOAP_ACTION, soapBody);
+  const soapResponse = await soapClient(
+    dynamicClientUrl,
+    SOAP_ACTION,
+    soapBody
+  );
   const parsedResponse = parseDataModelResponse(
     soapResponse,
     "DMS_Update_Rejection"
@@ -180,12 +200,14 @@ export const updateRejectDmsDetails = async (
 export const getDocMasterList = async (
   parameter,
   loginUserName,
-  dynamicURL = DEFAULT_SOAP_URL
+  dynamicClientUrl
 ) => {
-  const endpoint = getEndpoint(dynamicURL);
   const payload = getDocMasterListPayloadPayload(parameter);
 
-  const doConnectionResponse = await doConnection(endpoint, loginUserName);
+  const doConnectionResponse = await doConnection(
+    dynamicClientUrl,
+    loginUserName
+  );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
   }
@@ -193,7 +215,11 @@ export const getDocMasterList = async (
   const SOAP_ACTION = "http://tempuri.org/DMS_GetDocMaster_List";
   const soapBody = createSoapEnvelope("DMS_GetDocMaster_List", payload);
 
-  const soapResponse = await soapClient(endpoint, SOAP_ACTION, soapBody);
+  const soapResponse = await soapClient(
+    dynamicClientUrl,
+    SOAP_ACTION,
+    soapBody
+  );
 
   const parsedResponse = parseDataModelResponse(
     soapResponse,
@@ -205,19 +231,25 @@ export const getDocMasterList = async (
 export const deleteDMSMaster = async (
   parameter,
   loginUserName,
-  dynamicURL = DEFAULT_SOAP_URL
+  dynamicClientUrl
 ) => {
-  const endpoint = getEndpoint(dynamicURL);
   const payload = deleteDMSMasterPayload(parameter);
 
-  const doConnectionResponse = await doConnection(endpoint, loginUserName);
+  const doConnectionResponse = await doConnection(
+    dynamicClientUrl,
+    loginUserName
+  );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
   }
 
   const SOAP_ACTION = "http://tempuri.org/DMS_Delete_DMS_Master";
   const soapBody = createSoapEnvelope("DMS_Delete_DMS_Master", payload);
-  const soapResponse = await soapClient(endpoint, SOAP_ACTION, soapBody);
+  const soapResponse = await soapClient(
+    dynamicClientUrl,
+    SOAP_ACTION,
+    soapBody
+  );
   const parsedResponse = parseDataModelResponse(
     soapResponse,
     "DMS_Delete_DMS_Master"
@@ -228,19 +260,25 @@ export const deleteDMSMaster = async (
 export const deleteDMSDetails = async (
   parameter,
   loginUserName,
-  dynamicURL = DEFAULT_SOAP_URL
+  dynamicClientUrl
 ) => {
-  const endpoint = getEndpoint(dynamicURL);
   const payload = deleteDMSDetailsPayload(parameter);
 
-  const doConnectionResponse = await doConnection(endpoint, loginUserName);
+  const doConnectionResponse = await doConnection(
+    dynamicClientUrl,
+    loginUserName
+  );
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
   }
 
   const SOAP_ACTION = "http://tempuri.org/DMS_Delete_DMS_Detail";
   const soapBody = createSoapEnvelope("DMS_Delete_DMS_Detail", payload);
-  const soapResponse = await soapClient(endpoint, SOAP_ACTION, soapBody);
+  const soapResponse = await soapClient(
+    dynamicClientUrl,
+    SOAP_ACTION,
+    soapBody
+  );
   const parsedResponse = parseDataModelResponse(
     soapResponse,
     "DMS_Delete_DMS_Detail"
