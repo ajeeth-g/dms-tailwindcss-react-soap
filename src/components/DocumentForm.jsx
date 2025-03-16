@@ -144,7 +144,6 @@ const DocumentForm = ({
       if (!selectedDocument?.REF_SEQ_NO) return;
 
       setIsLoadingDocs(true);
-      // setFetchError("");
 
       try {
         // Fetch existing documents
