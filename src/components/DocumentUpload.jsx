@@ -156,91 +156,6 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
     return "";
   };
 
-  const handleUpload = async () => {
-    const editError = canCurrentUserEdit(selectedDocument);
-    if (editError) {
-      alert(editError);
-      return;
-    }
-
-    setErrorMsg("");
-    setIsSubmitting(true);
-
-    try {
-      const email = userData.currentUserLogin;
-      const refNo = selectedDocument.REF_SEQ_NO;
-      // Calculate next serial number
-      const maxSerial = existingDocs.reduce(
-        (max, doc) => Math.max(max, doc.SERIAL_NO || 0),
-        0
-      );
-      let currentSerial = maxSerial;
-
-      for (const [index, file] of files.entries()) {
-        currentSerial += 1;
-
-        const formData = new FormData();
-        formData.append("file", file.file);
-
-        const uploadUrl = `https://103.168.19.35/api/megacloud/upload?email=${encodeURIComponent(
-          email
-        )}&refNo=${encodeURIComponent(refNo)}`;
-
-        const uploadResponse = await axios.post(uploadUrl, formData, {
-          headers: {
-            // Let Axios set the correct Content-Type including boundaries
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        if (uploadResponse.status !== 200) {
-          throw new Error(
-            `File upload failed with status ${uploadResponse.status}`
-          );
-        }
-
-        const uploadResult = uploadResponse.data;
-
-        const base64Data = await readFileAsBase64(file.file);
-
-        const payload = {
-          REF_SEQ_NO: selectedDocument.REF_SEQ_NO,
-          SERIAL_NO: currentSerial,
-          DOCUMENT_NO: selectedDocument.DOCUMENT_NO || "",
-          DOCUMENT_DESCRIPTION: selectedDocument.DOCUMENT_DESCRIPTION || "",
-          DOC_SOURCE_FROM: selectedDocument.DOC_SOURCE_FROM || "",
-          DOC_RELATED_TO: selectedDocument.DOC_RELATED_TO || "",
-          DOC_RELATED_CATEGORY: file.DOC_RELATED_CATEGORY || "",
-          DOC_REF_VALUE: selectedDocument.DOC_REF_VALUE || "",
-          USER_NAME: userData.currentUserName,
-          COMMENTS: selectedDocument.COMMENTS || "",
-          DOC_TAGS: selectedDocument.DOC_TAGS || "",
-          FOR_THE_USERS: selectedDocument.FOR_THE_USERS || "",
-          EXPIRY_DATE: file.EXPIRY_DATE || "",
-          DOC_DATA: base64Data,
-          DOC_NAME: file.name,
-          DOC_EXT: file.name.split(".").pop(),
-          FILE_PATH: "",
-        };
-
-        await createAndSaveDMSDetails(
-          payload,
-          userData.currentUserLogin,
-          userData.clientURL
-        );
-      }
-
-      await refreshDocuments();
-      setFiles([]);
-      modalRefUpload.current?.close();
-    } catch (error) {
-      console.error("Upload error:", error);
-      setErrorMsg(`Upload failed: ${error.message}`);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   // Download & view documents
   const handleViewDocs = async (selectedDocs) => {
     try {
@@ -297,6 +212,93 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
     } catch (err) {
       console.error("Delete error:", err);
       alert("Failed to delete document");
+    }
+  };
+
+  const handleUpload = async () => {
+    const editError = canCurrentUserEdit(selectedDocument);
+    if (editError) {
+      alert(editError);
+      return;
+    }
+
+    setErrorMsg("");
+    setIsSubmitting(true);
+
+    try {
+      const email = userData.currentUserLogin;
+      const refNo = selectedDocument.REF_SEQ_NO;
+      // Calculate next serial number
+      const maxSerial = existingDocs.reduce(
+        (max, doc) => Math.max(max, doc.SERIAL_NO || 0),
+        0
+      );
+      let currentSerial = maxSerial;
+
+      for (const [index, file] of files.entries()) {
+        currentSerial += 1;
+
+        const formData = new FormData();
+        formData.append("file", file.file);
+
+        const uploadUrl = `https://103.168.19.35:443/api/megacloud/upload?email=${encodeURIComponent(
+          email
+        )}&refNo=${encodeURIComponent(refNo)}`;
+
+        const uploadResponse = await axios.post(uploadUrl, formData, {
+          headers: {
+            // Let Axios set the correct Content-Type including boundaries
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        if (uploadResponse.status !== 200) {
+          throw new Error(
+            `File upload failed with status ${uploadResponse.status}`
+          );
+        }
+
+        const uploadResult = uploadResponse.data;
+
+        console.log(uploadResult);
+
+        const base64Data = await readFileAsBase64(file.file);
+
+        const payload = {
+          REF_SEQ_NO: selectedDocument.REF_SEQ_NO,
+          SERIAL_NO: currentSerial,
+          DOCUMENT_NO: selectedDocument.DOCUMENT_NO || "",
+          DOCUMENT_DESCRIPTION: selectedDocument.DOCUMENT_DESCRIPTION || "",
+          DOC_SOURCE_FROM: selectedDocument.DOC_SOURCE_FROM || "",
+          DOC_RELATED_TO: selectedDocument.DOC_RELATED_TO || "",
+          DOC_RELATED_CATEGORY: file.DOC_RELATED_CATEGORY || "",
+          DOC_REF_VALUE: selectedDocument.DOC_REF_VALUE || "",
+          USER_NAME: userData.currentUserName,
+          COMMENTS: selectedDocument.COMMENTS || "",
+          DOC_TAGS: selectedDocument.DOC_TAGS || "",
+          FOR_THE_USERS: selectedDocument.FOR_THE_USERS || "",
+          EXPIRY_DATE: file.EXPIRY_DATE || "",
+          DOC_DATA: base64Data,
+          DOC_NAME: file.name,
+          DOC_EXT: file.name.split(".").pop(),
+          FILE_PATH: "",
+        };
+
+        await createAndSaveDMSDetails(
+          payload,
+          userData.currentUserLogin,
+          userData.clientURL
+        );
+      }
+
+      await refreshDocuments();
+      setFiles([]);
+      modalRefUpload.current?.close();
+    } catch (error) {
+      console.error("Upload error:", error);
+      setErrorMsg(`Upload failed: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
