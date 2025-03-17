@@ -200,7 +200,9 @@ const DocumentTable = ({ fetchDataRef, globalFilter, setGlobalFilter }) => {
           <div className="flex items-center gap-1">
             <div>
               <p className="text-xs font-semibold">
-                {row.getValue("CHANNEL_SOURCE")}
+                {row.getValue("CHANNEL_SOURCE") === " "
+                  ? userData.organization
+                  : row.getValue("CHANNEL_SOURCE")}
               </p>
             </div>
           </div>

@@ -46,9 +46,6 @@ const DocumentUpload = ({
           userData.clientURL
         );
 
-        console.log(docsResponse);
-        
-
         // Handle different response formats
         const receivedDocs = Array.isArray(docsResponse)
           ? docsResponse
@@ -184,14 +181,20 @@ const DocumentUpload = ({
   };
 
   const handleDelete = async (doc) => {
+    const editError = canCurrentUserEdit(doc);
+    if (editError) {
+      alert(editError);
+      return;
+    }
+
     if (!window.confirm(`Delete ${doc.DOC_NAME}?`)) return;
 
     try {
       await deleteDMSDetails(
         {
-          USER_NAME: userData.currentUserLogin,
-          REF_SEQ_NO: selectedDocument.REF_SEQ_NO,
-          SERIAL_NO: doc.SERIAL_NO,
+          userName: userData.currentUserName,
+          refSeqNo: selectedDocument.REF_SEQ_NO,
+          serialNo: doc.SERIAL_NO,
         },
         userData.currentUserLogin,
         userData.clientURL
@@ -415,8 +418,8 @@ const DocumentUpload = ({
                           />
                           <div className="flex flex-col items-start">
                             <span className="text-md font-medium truncate">
-                              {file.name.length > 26
-                                ? file.name.substring(0, 26) + "..."
+                              {file.name.length > 24
+                                ? file.name.substring(0, 24) + "..."
                                 : file.name}
                             </span>
                             <span className="text-xs text-gray-500">

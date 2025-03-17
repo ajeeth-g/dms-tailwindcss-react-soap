@@ -12,6 +12,10 @@ export const getDefaultCompanyNamePayload = () => ({
   BranchCode: 1,
 });
 
+export const getCategoriesSummaryPayload = (noOfDays) => ({
+  NoOfDays: noOfDays,
+});
+
 export const createDmsMasterPayload = (formData) => ({
   REF_SEQ_NO: formData.REF_SEQ_NO, // long
   DOCUMENT_NO: formData.DOCUMENT_NO, // string

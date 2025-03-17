@@ -4,6 +4,7 @@ import {
   createDmsMasterPayload,
   deleteDMSDetailsPayload,
   deleteDMSMasterPayload,
+  getCategoriesSummaryPayload,
   getDefaultCompanyNamePayload,
   getDocMasterListPayloadPayload,
   updateDmsAssignedToPayload,
@@ -42,6 +43,39 @@ export const getDefaultCompanyName = async (
   const parsedResponse = parseDataModelResponse(
     soapResponse,
     "General_Get_DefaultCompanyName"
+  );
+  return parsedResponse;
+};
+
+export const getCategoriesSummary = async (
+  noOfDays,
+  loginUserName,
+  dynamicClientUrl
+) => {
+  const payload = getCategoriesSummaryPayload(noOfDays);
+
+  const doConnectionResponse = await doConnection(
+    loginUserName,
+    dynamicClientUrl
+  );
+  if (doConnectionResponse === "ERROR") {
+    throw new Error("Connection failed: Unable to authenticate.");
+  }
+
+  const SOAP_ACTION = "http://tempuri.org/DMS_GetDashboard_CategoriesSummary";
+  const soapBody = createSoapEnvelope(
+    "DMS_GetDashboard_CategoriesSummary",
+    payload
+  );
+
+  const soapResponse = await soapClient(
+    dynamicClientUrl,
+    SOAP_ACTION,
+    soapBody
+  );
+  const parsedResponse = parseDataModelResponse(
+    soapResponse,
+    "DMS_GetDashboard_CategoriesSummary"
   );
   return parsedResponse;
 };
