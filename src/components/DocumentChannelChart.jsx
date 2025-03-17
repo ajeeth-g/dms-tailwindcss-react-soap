@@ -30,7 +30,7 @@ const DocumentChannelChart = ({ daysCount = 30 }) => {
         );
         const formattedData = data.map((item) => ({
           name: item.CHANNEL_SOURCE,
-          channels: Number(item.total_count) || 0,
+          Channels: Number(item.total_count) || 0,
         }));
         setChannelData(formattedData);
       } catch (error) {
@@ -67,7 +67,7 @@ const DocumentChannelChart = ({ daysCount = 30 }) => {
               itemStyle={{ color: "#E5E7EB" }}
             />
             <Legend />
-            <Bar dataKey={"channels"} fill="#8884d8">
+            <Bar dataKey={"Channels"} fill="#8884d8">
               {channelData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}

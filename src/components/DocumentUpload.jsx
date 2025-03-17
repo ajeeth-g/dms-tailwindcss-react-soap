@@ -200,7 +200,7 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
     try {
       await deleteDMSDetails(
         {
-          USER_NAME: selectedDocument.USER_NAME || userData.currentUserLogin,
+          USER_NAME: userData.currentUserLogin,
           REF_SEQ_NO: selectedDocument.REF_SEQ_NO,
           SERIAL_NO: doc.SERIAL_NO,
         },
@@ -369,7 +369,9 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
                           />
                           <div className="flex-1">
                             <h5 className="text-md font-medium truncate">
-                              {doc.DOC_NAME}
+                              {doc.DOC_NAME.length > 26
+                                ? doc.DOC_NAME.substring(0, 26) + "..."
+                                : doc.DOC_NAME}
                             </h5>
                             <div className="text-xs text-gray-500">
                               <span>Type: {doc.DOC_EXT}</span>
@@ -422,7 +424,7 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
                             className="w-8 h-8 object-cover rounded"
                           />
                           <div className="flex flex-col items-start">
-                            <span className="text-md font-medium truncate">
+                            <span className="text-lg font-medium truncate">
                               {file.name}
                             </span>
                             <span className="text-xs text-gray-500">
