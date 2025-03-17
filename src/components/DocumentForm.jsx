@@ -263,10 +263,10 @@ const DocumentForm = ({
   };
 
   const handleReject = async () => {
-    if (userData.currentUserName === selectedDocument?.USER_NAME) {
-      alert("Access Denied: You created this document.");
-      return;
-    }
+    // if (userData.currentUserName === selectedDocument?.USER_NAME) {
+    //   alert("Access Denied: You created this document.");
+    //   return;
+    // }
 
     if (!showRejectModal) {
       setShowRejectModal(true);
