@@ -34,7 +34,7 @@ export default function DocumentViewPage() {
     creatorReminderOn: formatDateTime(new Date(Date.now() + 2 * 86400000)), // +2 day
     assignedDate: formatDateTime(new Date()),
     targetDate: formatDateTime(new Date(Date.now() + 86400000)), // +1 day
-    remindOnDate: formatDateTime(new Date(Date.now() + 2 * 86400000)), // +2 day
+    remindOnDate: formatDateTime(new Date(Date.now())),
     refTaskID: -1,
     verifiedBy: userData.currentUserName,
   });

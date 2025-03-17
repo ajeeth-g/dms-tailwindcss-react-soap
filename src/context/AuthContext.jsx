@@ -12,6 +12,7 @@ const AuthContext = createContext(null);
 // Default userData object with standardized keys
 const defaultUserData = {
   serviceUrl: "http://103.168.19.35/iStWebPublic/iStreamsSmartPublic.asmx",
+  organization: null,
   clientURL: null,
   doConnectionParameter: null,
   currentUserLogin: null,

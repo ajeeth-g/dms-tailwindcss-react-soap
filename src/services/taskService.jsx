@@ -19,6 +19,7 @@ export const createNewTask = async (
     loginUserName,
     dynamicClientUrl
   );
+
   if (doConnectionResponse === "ERROR") {
     throw new Error("Connection failed: Unable to authenticate.");
   }
@@ -26,6 +27,8 @@ export const createNewTask = async (
   const SOAP_ACTION = "http://tempuri.org/IM_Task_Create";
   const soapBody = createSoapEnvelope("IM_Task_Create", payload);
 
+  console.log(soapBody);
+  
   const soapResponse = await soapClient(
     dynamicClientUrl,
     SOAP_ACTION,

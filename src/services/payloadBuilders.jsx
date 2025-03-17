@@ -7,6 +7,11 @@ export const verifyauthenticationPayload = (userDetails) => ({
   password: userDetails.Pass,
 });
 
+export const getDefaultCompanyNamePayload = () => ({
+  CompanyCode: 1,
+  BranchCode: 1,
+});
+
 export const createDmsMasterPayload = (formData) => ({
   REF_SEQ_NO: formData.REF_SEQ_NO, // long
   DOCUMENT_NO: formData.DOCUMENT_NO, // string
@@ -33,7 +38,7 @@ export const createNewTaskPayload = (taskData) => ({
   StartDate: taskData.assignedDate,
   CompDate: taskData.targetDate,
   RemindTheUserOn: taskData.remindOnDate,
-  RefTaskID: taskData.refSeqNo,
+  RefTaskID: taskData.refTaskID,
 });
 
 export const getUserTasksPayload = (userName) => ({

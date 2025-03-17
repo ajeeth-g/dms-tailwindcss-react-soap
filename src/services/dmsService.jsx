@@ -4,6 +4,7 @@ import {
   createDmsMasterPayload,
   deleteDMSDetailsPayload,
   deleteDMSMasterPayload,
+  getDefaultCompanyNamePayload,
   getDocMasterListPayloadPayload,
   updateDmsAssignedToPayload,
   updateDmsVerifiedAndAssignedToPayload,
@@ -11,6 +12,39 @@ import {
   updateRejectDmsDetailsPayload,
 } from "./payloadBuilders";
 import soapClient from "./soapClient";
+
+export const getDefaultCompanyName = async (
+  formData,
+  loginUserName,
+  dynamicClientUrl
+) => {
+  const payload = getDefaultCompanyNamePayload();
+
+  const doConnectionResponse = await doConnection(
+    loginUserName,
+    dynamicClientUrl
+  );
+  if (doConnectionResponse === "ERROR") {
+    throw new Error("Connection failed: Unable to authenticate.");
+  }
+
+  const SOAP_ACTION = "http://tempuri.org/General_Get_DefaultCompanyName";
+  const soapBody = createSoapEnvelope(
+    "General_Get_DefaultCompanyName",
+    payload
+  );
+
+  const soapResponse = await soapClient(
+    dynamicClientUrl,
+    SOAP_ACTION,
+    soapBody
+  );
+  const parsedResponse = parseDataModelResponse(
+    soapResponse,
+    "General_Get_DefaultCompanyName"
+  );
+  return parsedResponse;
+};
 
 export const createAndSaveDMSMaster = async (
   formData,
@@ -68,7 +102,6 @@ export const createAndSaveDMSDetails = async (
     "DMS_CreateAndSave_DMS_Details"
   );
 
-  
   return parsedResponse;
 };
 
@@ -260,11 +293,11 @@ export const deleteDMSMaster = async (
 };
 
 export const deleteDMSDetails = async (
-  parameter,
+  deleteDMSDetails,
   loginUserName,
   dynamicClientUrl
 ) => {
-  const payload = deleteDMSDetailsPayload(parameter);
+  const payload = deleteDMSDetailsPayload(deleteDMSDetails);
 
   const doConnectionResponse = await doConnection(
     loginUserName,

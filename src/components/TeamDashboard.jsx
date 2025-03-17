@@ -46,7 +46,7 @@ export default function TeamDashboard() {
                 ...user,
                 image: imageData
                   ? `data:image/jpeg;base64,${imageData}`
-                  : "https://placehold.co/600x400/000000/FFFFFF.png",
+                  : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBa24AAg4zVSuUsL4hJnMC9s3DguLgeQmZA&s",
               };
             } catch (error) {
               console.error(

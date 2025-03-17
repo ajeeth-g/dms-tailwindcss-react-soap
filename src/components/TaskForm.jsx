@@ -25,19 +25,11 @@ const TaskForm = ({
     e.preventDefault();
 
     try {
-      // Conditionally exclude refSeqNo if it's 0
-      const { refSeqNo, ...rest } = taskData;
-
-      const payload = refSeqNo !== -1 ? { ...rest, refSeqNo } : rest;
-
       const createResponse = await createNewTask(
-        payload,
+        taskData,
         userData.currentUserLogin,
         userData.clientURL
       );
-
-      console.log(createResponse);
-      
 
       onTaskCreated(taskData);
 
@@ -54,6 +46,8 @@ const TaskForm = ({
           userData.currentUserLogin,
           userData.clientURL
         );
+
+        console.log(updateResponse);
       }
     } catch (error) {
       console.error("❌ Error creating task:", error);

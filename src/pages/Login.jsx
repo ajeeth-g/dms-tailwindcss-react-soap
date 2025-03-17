@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import { useAuth } from "../context/AuthContext";
 import { verifyauthentication } from "../services/authenticationService";
-import { doConnection } from "../services/connectionService";
+import { getDefaultCompanyName } from "../services/dmsService";
 import {
   getEmployeeImage,
   getEmployeeNameAndId,
@@ -71,13 +71,13 @@ const Login = () => {
         }
 
         // Optionally update userData with the client URL immediately.
-        setUserData((prev) => ({ ...prev, ClientURL: clientURL }));
+        setUserData((prev) => ({ ...prev, clientURL: clientURL }));
 
-        // Step 3: Fetch client connection and employee details in parallel.
-        const [clientConnection, employeeData] = await Promise.all([
-          doConnection(email, clientURL),
-          getEmployeeNameAndId(userName, email, clientURL),
-        ]);
+        const employeeData = await getEmployeeNameAndId(
+          userName,
+          email,
+          clientURL
+        );
 
         if (!employeeData || !employeeData.length) {
           setError("Employee details not found.");
@@ -87,11 +87,17 @@ const Login = () => {
 
         const empNo = employeeData[0].EMP_NO;
 
-        const employeeImage = await getEmployeeImage(empNo, email, clientURL);
+        let employeeImage = null;
+        if (empNo) {
+          employeeImage = await getEmployeeImage(empNo, email, clientURL);
+        }
+
+        const organization = await getDefaultCompanyName("", email, clientURL);
 
         const payload = {
           token: "dummy-token",
           email,
+          organization: organization,
           currentUserLogin: email,
           currentUserName: employeeData[0].USER_NAME,
           currentUserEmpNo: empNo,

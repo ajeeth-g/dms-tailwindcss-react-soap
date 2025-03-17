@@ -34,7 +34,7 @@ const ChannelPerformance = ({ daysCount = 30 }) => {
         );
         // Map the service data to the format expected by Recharts
         const formattedData = data.map((item) => ({
-          name: item.CHANNEL_SOURCE,
+          name: item.CHANNEL_SOURCE === " " ? userData.organization : item.CHANNEL_SOURCE,
           value: Number(item.total_count) || 0,
         }));
         setChannelData(formattedData);

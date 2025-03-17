@@ -28,9 +28,11 @@ const DocumentChannelChart = ({ daysCount = 30 }) => {
           userData.currentUserLogin,
           userData.clientURL
         );
+
         const formattedData = data.map((item) => ({
-          name: item.CHANNEL_SOURCE,
-          Channels: Number(item.total_count) || 0,
+          Name:
+            item.CHANNEL_SOURCE === " " ? userData.organization : item.CHANNEL_SOURCE,
+          Counts: Number(item.total_count) || 0,
         }));
         setChannelData(formattedData);
       } catch (error) {
@@ -57,7 +59,7 @@ const DocumentChannelChart = ({ daysCount = 30 }) => {
         <ResponsiveContainer>
           <BarChart data={channelData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#4B5563" />
-            <XAxis dataKey="name" stroke="#9CA3AF" />
+            <XAxis dataKey="Name" stroke="#9CA3AF" />
             <YAxis stroke="#9CA3AF" />
             <Tooltip
               contentStyle={{
@@ -66,8 +68,7 @@ const DocumentChannelChart = ({ daysCount = 30 }) => {
               }}
               itemStyle={{ color: "#E5E7EB" }}
             />
-            <Legend />
-            <Bar dataKey={"Channels"} fill="#8884d8">
+            <Bar dataKey={"Counts"} fill="#8884d8">
               {channelData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}

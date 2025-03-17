@@ -1,14 +1,21 @@
 import { FilePlus2, RefreshCcw, SearchIcon } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../components/common/Button";
 import DocumentForm from "../components/DocumentForm";
 import DocumentTable from "../components/DocumentTable";
+import { useLocation } from "react-router-dom";
 
 const DocumentListPage = () => {
+  const location = useLocation();
   const [globalFilter, setGlobalFilter] = useState("");
-
   const modalRefForm = useRef(null);
   const fetchDataRef = useRef(null);
+
+  useEffect(() => {
+    if (location.state?.categoryName) {
+      setGlobalFilter(location.state.categoryName);
+    }
+  }, [location.state]);
 
   return (
     <div className="grid grid-cols-1 gap-4">

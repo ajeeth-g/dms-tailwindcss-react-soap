@@ -141,6 +141,7 @@ const DocumentTable = ({ fetchDataRef, globalFilter, setGlobalFilter }) => {
           CURRENT_USER_LOGIN,
           userData.clientURL
         );
+
         setMasterData((prevData) =>
           prevData.filter((item) => item.REF_SEQ_NO !== doc.REF_SEQ_NO)
         );
@@ -450,6 +451,7 @@ const DocumentTable = ({ fetchDataRef, globalFilter, setGlobalFilter }) => {
       <DocumentUpload
         modalRefUpload={modalRefUpload}
         selectedDocument={selectedDocument}
+        onUploadSuccess={fetchDocsMasterList}
       />
     </>
   );

@@ -64,7 +64,7 @@ const Navbar = ({ toggleSidebar }) => {
       {/* Desktop navbar end */}
       <div className="hidden sm:flex items-center gap-2">
         <div className="border border-gray-700 px-2 py-2 rounded-lg font-semibold">
-          Company name goes here..
+          {userData.organization}
         </div>
         <button className="btn btn-ghost btn-circle">
           <label className="swap swap-rotate">
@@ -94,10 +94,7 @@ const Navbar = ({ toggleSidebar }) => {
           >
             <div className="avatar">
               <div className="w-10 h-10 rounded-full">
-                <img
-                  alt="User avatar"
-                  src={userData.currentUserImageData}
-                />
+                <img alt="User avatar" src={userData.currentUserImageData} />
               </div>
             </div>
             <div className="flex flex-col items-start">
@@ -130,10 +127,7 @@ const Navbar = ({ toggleSidebar }) => {
           >
             <div className="avatar">
               <div className="w-10 h-10 rounded-full">
-                <img
-                  alt="User avatar"
-                  src={userData.currentUserImageData}
-                />
+                <img alt="User avatar" src={userData.currentUserImageData} />
               </div>
             </div>
             <div className="flex flex-col items-start">

@@ -13,7 +13,11 @@ import Button from "./common/Button";
 import LoadingSpinner from "./common/LoadingSpinner";
 import axios from "axios";
 
-const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
+const DocumentUpload = ({
+  modalRefUpload,
+  selectedDocument,
+  onUploadSuccess,
+}) => {
   const { userData } = useAuth();
   const [existingDocs, setExistingDocs] = useState([]);
   const [isLoadingDocs, setIsLoadingDocs] = useState(false);
@@ -21,7 +25,6 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
   const [files, setFiles] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [categoryData, setCategoryData] = useState([]);
 
   // Fetch existing documents and categories
   useEffect(() => {
@@ -35,13 +38,16 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
         // Fetch existing documents
         const docsResponse = await getDataModel(
           {
-            dataModelName: "SYNM_DMS_DETAILS",
+            dataModelName: "synmview_dms_details_all",
             whereCondition: `REF_SEQ_NO = ${selectedDocument.REF_SEQ_NO}`,
             orderby: "",
           },
-          userData.currentUserLogin,
+          selectedDocument.USER_NAME,
           userData.clientURL
         );
+
+        console.log(docsResponse);
+        
 
         // Handle different response formats
         const receivedDocs = Array.isArray(docsResponse)
@@ -49,26 +55,9 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
           : docsResponse?.Data || [];
 
         setExistingDocs(receivedDocs);
-
-        // Fetch document categories
-        const categoriesResponse = await getDataModel(
-          {
-            dataModelName: "SYNM_DMS_DOC_CATEGORIES",
-            whereCondition: "",
-            orderby: "",
-          },
-          userData.currentUserLogin,
-          userData.clientURL
-        );
-
-        const receivedCategories = Array.isArray(categoriesResponse)
-          ? categoriesResponse.filter((item) => item?.CATEGORY_NAME)
-          : [];
-
-        setCategoryData(receivedCategories);
       } catch (err) {
-        console.error("Fetch error:", err);
-        setFetchError("Failed to load documents");
+        console.error("Fetch existing docs error:", err);
+        setFetchError("Failed to load existing documents");
       } finally {
         setIsLoadingDocs(false);
       }
@@ -244,7 +233,7 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
         const uploadUrl = `https://cloud.istreams-erp.com:4440/api/megacloud/upload?email=${encodeURIComponent(
           email
         )}&refNo=${encodeURIComponent(refNo)}`;
-        
+
         const uploadResponse = await axios.post(uploadUrl, formData, {
           headers: {
             // Let Axios set the correct Content-Type including boundaries
@@ -259,8 +248,6 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
         }
 
         const uploadResult = uploadResponse.data;
-
-        console.log(uploadResult);
 
         const base64Data = await readFileAsBase64(file.file);
 
@@ -294,6 +281,9 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
       await refreshDocuments();
       setFiles([]);
       modalRefUpload.current?.close();
+      if (onUploadSuccess) {
+        onUploadSuccess();
+      }
     } catch (error) {
       console.error("Upload error:", error);
       setErrorMsg(`Upload failed: ${error.message}`);
@@ -369,8 +359,8 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
                           />
                           <div className="flex-1">
                             <h5 className="text-md font-medium truncate">
-                              {doc.DOC_NAME.length > 26
-                                ? doc.DOC_NAME.substring(0, 26) + "..."
+                              {doc.DOC_NAME.length > 24
+                                ? doc.DOC_NAME.substring(0, 24) + "..."
                                 : doc.DOC_NAME}
                             </h5>
                             <div className="text-xs text-gray-500">
@@ -424,8 +414,10 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
                             className="w-8 h-8 object-cover rounded"
                           />
                           <div className="flex flex-col items-start">
-                            <span className="text-lg font-medium truncate">
-                              {file.name}
+                            <span className="text-md font-medium truncate">
+                              {file.name.length > 26
+                                ? file.name.substring(0, 26) + "..."
+                                : file.name}
                             </span>
                             <span className="text-xs text-gray-500">
                               {file.size}
