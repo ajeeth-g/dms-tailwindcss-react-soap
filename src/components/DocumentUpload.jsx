@@ -241,10 +241,10 @@ const DocumentUpload = ({ modalRefUpload, selectedDocument }) => {
         const formData = new FormData();
         formData.append("file", file.file);
 
-        const uploadUrl = `https://103.168.19.35:443/api/megacloud/upload?email=${encodeURIComponent(
+        const uploadUrl = `https://cloud.istreams-erp.com:4440/api/megacloud/upload?email=${encodeURIComponent(
           email
         )}&refNo=${encodeURIComponent(refNo)}`;
-
+        
         const uploadResponse = await axios.post(uploadUrl, formData, {
           headers: {
             // Let Axios set the correct Content-Type including boundaries
