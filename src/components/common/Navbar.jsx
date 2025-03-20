@@ -49,7 +49,7 @@ const Navbar = ({ toggleSidebar }) => {
   };
 
   return (
-    <nav className="navbar bg-base-300 text-base-content h-16 flex items-center justify-between">
+    <nav className="navbar shadow-xl h-16 flex items-center justify-between">
       {/* Navbar start */}
       <div className="flex items-center gap-2">
         <button className="btn btn-ghost btn-circle" onClick={toggleSidebar}>

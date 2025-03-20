@@ -50,7 +50,7 @@ const CategoryViewPage = () => {
         <motion.div
           key={category.DOC_RELATED_CATEGORY}
           whileHover={{ scale: 1.04 }}
-          className="card card-compact bg-neutral shadow-xl"
+          className="card card-compact bg-base-100 shadow-xl"
         >
           <div className="card-body">
             <h2 className="card-title">{category.DOC_RELATED_CATEGORY}</h2>

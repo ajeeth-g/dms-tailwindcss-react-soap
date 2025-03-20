@@ -39,7 +39,7 @@ const TeamCard = ({ user }) => {
 
   return (
     <motion.div
-      className="p-3 rounded-lg shadow-sm flex flex-col border border-gray-700 bg-gray-900"
+      className="p-3 rounded-lg  flex flex-col bg-base-100 shadow-xl"
       whileHover={{ scale: 1.02 }}
     >
       {/* Employee Info */}
@@ -51,10 +51,10 @@ const TeamCard = ({ user }) => {
             e.target.onerror = null;
             e.target.src = "/placeholder-user.png";
           }}
-          className="w-10 h-10 rounded-full border border-gray-600"
+          className="w-10 h-10 rounded-full "
         />
         <div>
-          <h3 className="text-sm font-medium text-white">
+          <h3 className="text-sm font-medium ">
             {user_name || domain_user_name}
           </h3>
           <p className="text-xs text-gray-400">{designation}</p>
@@ -81,7 +81,7 @@ const TeamCard = ({ user }) => {
 
         <div className="flex items-start justify-between w-full gap-1">
           {/* Task Overview */}
-          <div className="text-xs text-gray-300">
+          <div className="text-xs">
             <h6 className="font-semibold mb-1">Task Overview</h6>
             <p className="truncate">📄 {overall_total_tasks} Total Tasks</p>
             <p className="truncate">✅ {overall_completed_tasks} Completed</p>
@@ -89,8 +89,8 @@ const TeamCard = ({ user }) => {
           </div>
 
           {/* Month Overview */}
-          <div className="p-2 bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg shadow flex flex-col items-center">
-            <h6 className="text-xs font-semibold text-white">Month Overview</h6>
+          <div className="p-2 bg-base-100 rounded-lg shadow flex flex-col items-center">
+            <h6 className="text-xs font-semibold ">Month Overview</h6>
 
             <div className="flex items-end">
               <div className="relative mt-1">
@@ -107,7 +107,6 @@ const TeamCard = ({ user }) => {
                   />
                   {/* Donut progress: dynamic strokeDasharray */}
                   <path
-                    className="text-white"
                     strokeWidth="3"
                     strokeDasharray={strokeDasharray}
                     strokeDashoffset="0"
@@ -121,12 +120,10 @@ const TeamCard = ({ user }) => {
                 </svg>
                 {/* Centered text */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-lg font-bold leading-none text-white">
+                  <span className="text-lg font-bold leading-none">
                     {month_completed_tasks}
                   </span>
-                  <span className="text-[10px] text-white/80">
-                    / {month_total_tasks}
-                  </span>
+                  <span className="text-[10px]">/ {month_total_tasks}</span>
                 </div>
               </div>
             </div>

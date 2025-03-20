@@ -6,8 +6,8 @@ import TaskForm from "../components/TaskForm";
 import Button from "../components/common/Button";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import { useAuth } from "../context/AuthContext";
+import { getAllDmsActiveUser } from "../services/dashboardService";
 import { getDocMasterList } from "../services/dmsService";
-import { getAllActiveUsers } from "../services/employeeService";
 import { formatDateTime } from "../utils/dateUtils";
 
 export default function DocumentViewPage() {
@@ -36,6 +36,7 @@ export default function DocumentViewPage() {
     targetDate: formatDateTime(new Date(Date.now() + 86400000)), // +1 day
     remindOnDate: formatDateTime(new Date(Date.now())),
     refTaskID: -1,
+    dmsSeqNo: 0,
     verifiedBy: userData.currentUserName,
   });
 
@@ -71,8 +72,8 @@ export default function DocumentViewPage() {
   // Fetch all active users list
   const fetchUsers = useCallback(async () => {
     try {
-      const userDetails = await getAllActiveUsers(
-        "",
+      const userDetails = await getAllDmsActiveUser(
+        userData.currentUserName,
         userData.currentUserLogin,
         userData.clientURL
       );
@@ -132,6 +133,7 @@ export default function DocumentViewPage() {
       taskName: doc.DOCUMENT_DESCRIPTION,
       relatedTo: doc.DOC_RELATED_TO,
       refSeqNo: doc.REF_SEQ_NO,
+      dmsSeqNo: doc.REF_SEQ_NO,
       verifiedBy: doc.VERIFIED_BY,
       [name]: value,
     }));
@@ -161,7 +163,7 @@ export default function DocumentViewPage() {
             <motion.div
               key={doc.REF_SEQ_NO}
               whileHover={{ scale: 1.04 }}
-              className="card card-compact bg-neutral shadow-xl"
+              className="card card-compact bg-base-100 shadow-xl"
             >
               <div className="card-body">
                 <div
@@ -235,9 +237,7 @@ export default function DocumentViewPage() {
                       />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm text-gray-500 mb-3">
-                        Assign to
-                      </p>
+                      <p className="text-sm text-gray-500 mb-3">Assign to</p>
                       <select
                         name="assignedTo"
                         className="select select-bordered select-xs text-center w-full"

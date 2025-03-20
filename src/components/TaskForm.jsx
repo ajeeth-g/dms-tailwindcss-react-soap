@@ -15,10 +15,7 @@ const TaskForm = ({
 
   // Use a local change handler that formats date inputs before passing to parent.
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    const newValue =
-      type === "datetime-local" ? formatDateTime(new Date(value)) : value;
-    onTaskChange({ target: { name, value: newValue, type } });
+    onTaskChange(e);
   };
 
   const handleCreateTask = async (e) => {
@@ -34,11 +31,15 @@ const TaskForm = ({
       onTaskCreated(taskData);
 
       // Call update if refSeqNo exists
-      if (refSeqNo !== -1 && refSeqNo !== 0 && createResponse === "SUCCESS") {
+      if (
+        taskData.refSeqNo !== -1 &&
+        taskData.refSeqNo !== 0 &&
+        createResponse === "SUCCESS"
+      ) {
         const updatePayload = {
           userName: userData.currentUserName,
           assignedTo: taskData.assignedTo,
-          refSeqNo: refSeqNo,
+          refSeqNo: taskData.refSeqNo,
         };
 
         const updateResponse = await updateDmsAssignedTo(

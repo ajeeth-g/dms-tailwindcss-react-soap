@@ -16,7 +16,7 @@ const Sidebar = ({ isOpen }) => {
     <aside
       className={`${
         isOpen ? "w-full max-w-48" : "w-0"
-      } min-h-screen bg-base-300 text-base-content transition-all duration-300 overflow-hidden`}
+      } min-h-screen  overflow-hidden`}
     >
       <Link
         to="https://cloud.istreams-erp.com/"
@@ -42,10 +42,7 @@ const Sidebar = ({ isOpen }) => {
         <ul className="menu menu-md w-full p-0">
           <li className="menu-title text-xs">MENU</li>
           <li>
-            <Link
-              to="/"
-              className="text-sm rounded-full py-3 px-5 mb-2 hover:bg-gray-800 transition"
-            >
+            <Link to="/" className="text-sm rounded-full py-3 px-5 mb-2 ">
               <LayoutDashboard className="h-5 w-5" />
               Dashboard
             </Link>
@@ -53,7 +50,7 @@ const Sidebar = ({ isOpen }) => {
           <li>
             <Link
               to="/my-team"
-              className="text-sm rounded-full py-3 px-5 mb-2 hover:bg-gray-800 transition"
+              className="text-sm rounded-full py-3 px-5 mb-2 "
             >
               <Users className="h-5 w-5" />
               My Team
@@ -62,7 +59,7 @@ const Sidebar = ({ isOpen }) => {
           <li>
             <Link
               to="/category-view"
-              className="text-sm rounded-full py-3 px-5 mb-2 hover:bg-gray-800 transition"
+              className="text-sm rounded-full py-3 px-5 mb-2 "
             >
               <LayoutGrid className="h-5 w-5" />
               Category View
@@ -71,7 +68,7 @@ const Sidebar = ({ isOpen }) => {
           <li>
             <Link
               to="/document-list"
-              className="text-sm rounded-full py-3 px-5 mb-2 hover:bg-gray-800 transition"
+              className="text-sm rounded-full py-3 px-5 mb-2 "
             >
               <FileText className="h-5 w-5" />
               Document List
@@ -80,7 +77,7 @@ const Sidebar = ({ isOpen }) => {
           <li>
             <Link
               to="/document-view"
-              className="text-sm rounded-full py-3 px-5 mb-2 hover:bg-gray-800 transition"
+              className="text-sm rounded-full py-3 px-5 mb-2 "
             >
               <FileSearch className="h-5 w-5" />
               Document View
@@ -89,7 +86,7 @@ const Sidebar = ({ isOpen }) => {
           <li>
             <Link
               to="/task-view"
-              className="text-sm rounded-full py-3 px-5 mb-2 hover:bg-gray-800 transition"
+              className="text-sm rounded-full py-3 px-5 mb-2 "
             >
               <ClipboardListIcon className="h-5 w-5" />
               Task View

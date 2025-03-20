@@ -236,13 +236,12 @@ export const updateDmsVerifiedAndAssignedTo = async (
 };
 
 export const updateRejectDmsDetails = async (
-  rejectData,
+  rejectionParameters,
   loginUserName,
   dynamicClientUrl
 ) => {
-  const payload = updateRejectDmsDetailsPayload(rejectData);
+  const payload = updateRejectDmsDetailsPayload(rejectionParameters);
 
-  // Authenticate via doConnection using the chosen dynamicClientUrl.
   const doConnectionResponse = await doConnection(
     loginUserName,
     dynamicClientUrl

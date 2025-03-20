@@ -9,14 +9,12 @@ const RejectModal = ({ modalRefReject, selectedDocument }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleReject = async () => {
+  const handleReject = async (selectedDocument) => {
     if (!remarks.trim()) {
       alert("Please enter remarks!");
       return;
     }
-
     setIsLoading(true);
-
     try {
       const updateRejectPayload = {
         ref_Seq_No: selectedDocument?.REF_SEQ_NO,
@@ -26,21 +24,21 @@ const RejectModal = ({ modalRefReject, selectedDocument }) => {
         rejectionRemarks: remarks,
       };
 
-      const response = await updateRejectDmsDetails(
+      const rejectionResponse = await updateRejectDmsDetails(
         updateRejectPayload,
         userData?.currentUserLogin,
         userData.clientURL
       );
 
-      if (response) {
+      if (rejectionResponse) {
         alert("Document rejected successfully!");
         modalRefReject?.current?.close();
-        setRemarks(""); // Reset remarks on successful rejection
+        setRemarks("");
       } else {
         setError("Failed to reject document. Please try again.");
       }
     } catch (error) {
-      setError("Failed to reject document. Please try again.");
+      setError("Failed to reject document. Please try again.", error);
     } finally {
       setIsLoading(false);
     }
@@ -77,7 +75,7 @@ const RejectModal = ({ modalRefReject, selectedDocument }) => {
           <button
             type="button"
             className="btn btn-error px-4 py-2"
-            onClick={handleReject}
+            onClick={handleReject(selectedDocument)}
             disabled={isLoading}
           >
             {isLoading ? "Rejecting..." : "Reject"}

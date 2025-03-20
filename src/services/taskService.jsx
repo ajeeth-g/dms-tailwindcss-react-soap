@@ -3,6 +3,7 @@ import { doConnection } from "./connectionService";
 import {
   createNewTaskPayload,
   getUserTasksPayload,
+  transferUserTasksPayload,
   updateUserTasksPayload,
 } from "./payloadBuilders";
 import soapClient from "./soapClient";
@@ -12,8 +13,8 @@ export const createNewTask = async (
   loginUserName,
   dynamicClientUrl
 ) => {
-  // Build the payload dynamically using the builder function
   const payload = createNewTaskPayload(taskData);
+  console.table(payload);
 
   const doConnectionResponse = await doConnection(
     loginUserName,
@@ -27,8 +28,6 @@ export const createNewTask = async (
   const SOAP_ACTION = "http://tempuri.org/IM_Task_Create";
   const soapBody = createSoapEnvelope("IM_Task_Create", payload);
 
-  console.log(soapBody);
-  
   const soapResponse = await soapClient(
     dynamicClientUrl,
     SOAP_ACTION,
@@ -95,5 +94,38 @@ export const updateUserTasks = async (
   );
 
   const parsedResponse = parseDataModelResponse(soapResponse, "IM_Task_Update");
+  return parsedResponse;
+};
+
+export const transferUserTasks = async (
+  taskTransferData,
+  loginUserName,
+  dynamicClientUrl
+) => {
+  const payload = transferUserTasksPayload(taskTransferData);
+
+  const doConnectionResponse = await doConnection(
+    loginUserName,
+    dynamicClientUrl
+  );
+  if (doConnectionResponse === "ERROR") {
+    throw new Error("Connection failed: Unable to authenticate.");
+  }
+
+  const SOAP_ACTION = "http://tempuri.org/IM_Task_Transfer";
+  const soapBody = createSoapEnvelope("IM_Task_Transfer", payload);
+
+  const soapResponse = await soapClient(
+    dynamicClientUrl,
+    SOAP_ACTION,
+    soapBody
+  );
+
+  console.log(soapResponse);
+
+  const parsedResponse = parseDataModelResponse(
+    soapResponse,
+    "IM_Task_Transfer"
+  );
   return parsedResponse;
 };

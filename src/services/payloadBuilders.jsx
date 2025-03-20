@@ -43,6 +43,7 @@ export const createNewTaskPayload = (taskData) => ({
   CompDate: taskData.targetDate,
   RemindTheUserOn: taskData.remindOnDate,
   RefTaskID: taskData.refTaskID,
+  DMSSeqNo: taskData.dmsSeqNo,
 });
 
 export const getUserTasksPayload = (userName) => ({
@@ -55,6 +56,20 @@ export const updateUserTasksPayload = (taskUpdateData) => ({
   StatusDateTime: taskUpdateData.statusDateTime,
   Reason: taskUpdateData.reason,
   UserName: taskUpdateData.userName,
+});
+
+export const transferUserTasksPayload = (taskTransferData) => ({
+  TaskID: taskTransferData.taskID,
+  UserName: taskTransferData.userName,
+  NotCompletionReason: taskTransferData.notCompletionReason,
+  Subject: taskTransferData.subject,
+  Details: taskTransferData.details,
+  RelatedTo: taskTransferData.relatedTo,
+  CreatorReminderOn: taskTransferData.creatorReminderOn,
+  StartDate: taskTransferData.startDate,
+  CompDate: taskTransferData.compDate,
+  RemindTheUserOn: taskTransferData.remindTheUserOn,
+  NewUser: taskTransferData.newUser,
 });
 
 export const createDmsDetailsPayload = ({
@@ -142,12 +157,12 @@ export const updateDmsVerifiedAndAssignedToPayload = (data) => ({
   REF_SEQ_NO: data.refSeqNo,
 });
 
-export const updateRejectDmsDetailsPayload = (data) => ({
-  REF_SEQ_NO: data.ref_Seq_No,
-  CURRENT_USER_NAME: data.currentUserName,
-  DOCUMENT_DESCRIPTION: data.documentDescription,
-  DOCUMENT_USER_NAME: data.documentUserName,
-  REJECTION_REMARKS: data.rejectionRemarks,
+export const updateRejectDmsDetailsPayload = (rejectionParameters) => ({
+  REF_SEQ_NO: rejectionParameters.ref_Seq_No,
+  CURRENT_USER_NAME: rejectionParameters.currentUserName,
+  DOCUMENT_DESCRIPTION: rejectionParameters.documentDescription,
+  DOCUMENT_USER_NAME: rejectionParameters.documentUserName,
+  REJECTION_REMARKS: rejectionParameters.rejectionRemarks,
 });
 
 export const getDocMasterListPayloadPayload = (para) => ({

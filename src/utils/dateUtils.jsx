@@ -17,8 +17,6 @@ export function formatDateTime(date) {
 
 // Formats the date into { day, month, year, daysRemaining }
 export const formatDateParts = (dateString) => {
-  console.log(dateString);
-
   if (!dateString) return null;
 
   const date = new Date(dateString);
