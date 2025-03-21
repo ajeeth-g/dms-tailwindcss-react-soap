@@ -39,7 +39,7 @@ const TeamCard = ({ user }) => {
 
   return (
     <motion.div
-      className="p-3 rounded-lg  flex flex-col bg-base-100 shadow-xl"
+      className="p-3 rounded-lg flex flex-col bg-base-200 shadow-md"
       whileHover={{ scale: 1.02 }}
     >
       {/* Employee Info */}
@@ -89,7 +89,7 @@ const TeamCard = ({ user }) => {
           </div>
 
           {/* Month Overview */}
-          <div className="p-2 bg-base-100 rounded-lg shadow flex flex-col items-center">
+          <div className="p-2 bg-base-300 rounded-lg shadow flex flex-col items-center">
             <h6 className="text-xs font-semibold ">Month Overview</h6>
 
             <div className="flex items-end">
@@ -137,7 +137,7 @@ const TeamCard = ({ user }) => {
           <span>Task Progress</span>
           <span>{progress}%</span>
         </div>
-        <div className="w-full h-1.5 bg-gray-700 rounded-full mt-1">
+        <div className="w-full h-1.5 bg-base-300 rounded-full mt-1">
           <div
             className="h-1.5 rounded-full"
             style={{

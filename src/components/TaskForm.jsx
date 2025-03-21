@@ -5,7 +5,7 @@ import { updateDmsAssignedTo } from "../services/dmsService";
 import { createNewTask } from "../services/taskService";
 
 const TaskForm = ({
-  modalRef,
+  modalRefTask,
   users,
   taskData,
   onTaskChange,
@@ -53,12 +53,12 @@ const TaskForm = ({
     } catch (error) {
       console.error("❌ Error creating task:", error);
     }
-    modalRef.current.close();
+    modalRefTask.current.close();
   };
 
   return (
     <dialog
-      ref={modalRef}
+      ref={modalRefTask}
       id="create-task-form"
       name="create-task-form"
       className="modal"
@@ -75,7 +75,7 @@ const TaskForm = ({
             <button
               type="button"
               className="btn btn-sm btn-circle btn-ghost"
-              onClick={() => modalRef.current.close()}
+              onClick={() => modalRefTask.current.close()}
             >
               <X />
             </button>

@@ -240,21 +240,21 @@ const DocumentForm = ({
       //   alert(
       //     "Warning: No associated documents found. Check with uploader or reject."
       //   );
-      //   return;
+      //   return; isVAndVProcess
       // }
 
-      const verifyAndAssignPayload = {
+      const verifyDmsPayload = {
         userName: userData.currentUserName,
         refSeqNo: selectedDocument.REF_SEQ_NO,
       };
 
-      const responseVerify = await updateDmsVerifiedBy(
-        verifyAndAssignPayload,
+      const verifyResponse = await updateDmsVerifiedBy(
+        verifyDmsPayload,
         userData.currentUserLogin,
         userData.clientURL
       );
 
-      if (responseVerify === "SUCCESS") {
+      if (verifyResponse === "SUCCESS") {
         onSuccess(selectedDocument.REF_SEQ_NO, userData.currentUserName);
       }
     } catch (error) {
@@ -596,7 +596,7 @@ const DocumentForm = ({
               </div>
 
               {/* Right Side - Activity Section */}
-              <div className="col-span-1 rounded-lg p-4 shadow-2xl max-h-[400px] overflow-y-auto min-h-0">
+              <div className="col-span-1 rounded-lg p-4 bg-base-200 max-h-[400px] overflow-y-auto min-h-0">
                 <h2 className="text-base font-medium mb-3">Others Details:</h2>
 
                 {/* Fields Section */}

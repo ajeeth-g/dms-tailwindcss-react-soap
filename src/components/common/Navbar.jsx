@@ -10,26 +10,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 const Navbar = ({ toggleSidebar }) => {
-  const { userData, logout } = useAuth();
+  const { userData, logout, theme, toggleTheme } = useAuth();
   const navigate = useNavigate();
 
-  // Default to dark if no theme is stored.
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
   const [isFullscreen, setIsFullscreen] = useState(false);
-
-  // Update localStorage and HTML attribute when theme changes.
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
-  const handleToggle = (e) => {
-    if (e.target.checked) {
-      setTheme("dark");
-    } else {
-      setTheme("cmyk");
-    }
-  };
 
   const toggleFullScreen = () => {
     if (!document.fullscreenElement) {
@@ -49,7 +33,7 @@ const Navbar = ({ toggleSidebar }) => {
   };
 
   return (
-    <nav className="navbar shadow-xl h-16 flex items-center justify-between">
+    <nav className="navbar h-16 flex items-center justify-between shadow">
       {/* Navbar start */}
       <div className="flex items-center gap-2">
         <button className="btn btn-ghost btn-circle" onClick={toggleSidebar}>
@@ -72,7 +56,7 @@ const Navbar = ({ toggleSidebar }) => {
               type="checkbox"
               className="theme-controller"
               value="synthwave"
-              onChange={handleToggle}
+              onChange={toggleTheme}
               checked={theme === "dark"}
             />
             <CloudSun className="swap-off h-5 w-5" />
@@ -150,7 +134,7 @@ const Navbar = ({ toggleSidebar }) => {
                     type="checkbox"
                     className="theme-controller"
                     value="synthwave"
-                    onChange={handleToggle}
+                    onChange={toggleTheme}
                     checked={theme === "dark"}
                   />
                   <CloudSun className="swap-off h-5 w-5" />

@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
+import { ArrowUpRight, ArrowDownLeft, IterationCwIcon } from "lucide-react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Button from "../components/common/Button";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import ConfirmationTaskModal from "../components/ConfirmationTaskModal";
+import TranferTaskModal from "../components/TranferTaskModal";
 import UpdateTaskModal from "../components/UpdateTaskModal";
 import { useAuth } from "../context/AuthContext";
 import { getEmployeeImage } from "../services/employeeService";
@@ -17,11 +19,12 @@ import {
   formatDateTime,
 } from "../utils/dateUtils";
 import { capitalizeFirstLetter } from "../utils/stringUtils";
-import TranferTaskModal from "../components/TranferTaskModal";
 
 const TaskView = () => {
   const { userData } = useAuth();
   const [statusFilter, setStatusFilter] = useState("all");
+  // New assignment filter: "all", "assignedByMe", "assignedToMe"
+  const [assignmentFilter, setAssignmentFilter] = useState("all");
   const [sortOrder, setSortOrder] = useState("name-asc"); // name-asc, name-desc, date-asc, date-desc
   const [searchText, setSearchText] = useState("");
   const [loadingTasks, setLoadingTasks] = useState(false);
@@ -91,7 +94,7 @@ const TaskView = () => {
     fetchUserTasks();
   }, [fetchUserTasks]);
 
-  // Filter tasks based on search text and status filter.
+  // Filter tasks based on search text, status filter, and assignment filter.
   const filteredTasks = useMemo(() => {
     return taskData.filter((task) => {
       // Filter by status if filter is not "all"
@@ -106,14 +109,28 @@ const TaskView = () => {
           task.STATUS === (statusMapping[statusFilter] || statusFilter);
       }
 
+      // Filter by assignment filter
+      let assignmentMatch = true;
+      if (assignmentFilter === "assignedByMe") {
+        assignmentMatch = task.CREATED_USER === userData.currentUserName;
+      } else if (assignmentFilter === "assignedToMe") {
+        assignmentMatch = task.ASSIGNED_USER === userData.currentUserName;
+      }
+
       // Filter by search text: search in TASK_NAME and TASK_INFO (case-insensitive)
       const searchMatch =
-        task.TASK_NAME.toLowerCase().includes(searchText.toLowerCase()) ||
-        task.TASK_INFO.toLowerCase().includes(searchText.toLowerCase());
+        task.TASK_NAME?.toLowerCase().includes(searchText.toLowerCase()) ||
+        task.TASK_INFO?.toLowerCase().includes(searchText.toLowerCase());
 
-      return statusMatch && searchMatch;
+      return statusMatch && assignmentMatch && searchMatch;
     });
-  }, [taskData, statusFilter, searchText]);
+  }, [
+    taskData,
+    statusFilter,
+    assignmentFilter,
+    searchText,
+    userData.currentUserName,
+  ]);
 
   // Sort tasks based on sortOrder.
   const sortedTasks = useMemo(() => {
@@ -223,6 +240,14 @@ const TaskView = () => {
             onClick={() => handleAcceptAndDeclineTask(task)}
           />
         );
+      } else if (task.CREATED_USER === userData.currentUserName) {
+        return (
+          <Button
+            className="btn btn-primary btn-sm"
+            label="Update"
+            onClick={() => handleUpdateTask(task)}
+          />
+        );
       }
 
     if (task.STATUS === "ACCEPTED") {
@@ -256,6 +281,8 @@ const TaskView = () => {
     return null; // No buttons if conditions don't match
   };
 
+  console.log(taskData);
+
   return (
     <div className="container mx-auto space-y-6">
       {/* Controls */}
@@ -281,25 +308,35 @@ const TaskView = () => {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Assignment Filter Controls */}
           <div className="join">
-            <input
-              className="join-item btn btn-sm"
-              type="radio"
-              name="options"
-              aria-label="All tasks"
-            />
-            <input
-              className="join-item btn btn-sm"
-              type="radio"
-              name="options"
-              aria-label="Assigned by me"
-            />
-            <input
-              className="join-item btn btn-sm"
-              type="radio"
-              name="options"
-              aria-label="Assigned to me"
-            />
+            <button
+              type="button"
+              className={`join-item btn btn-sm ${
+                assignmentFilter === "all" && "btn-active"
+              }`}
+              onClick={() => setAssignmentFilter("all")}
+            >
+              All tasks
+            </button>
+            <button
+              type="button"
+              className={`join-item btn btn-sm ${
+                assignmentFilter === "assignedByMe" && "btn-active"
+              }`}
+              onClick={() => setAssignmentFilter("assignedByMe")}
+            >
+              Assigned by me
+            </button>
+            <button
+              type="button"
+              className={`join-item btn btn-sm ${
+                assignmentFilter === "assignedToMe" && "btn-active"
+              }`}
+              onClick={() => setAssignmentFilter("assignedToMe")}
+            >
+              Assigned to me
+            </button>
           </div>
 
           <select
@@ -307,7 +344,7 @@ const TaskView = () => {
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
-            <option value="all">Status</option>
+            <option value="all">All Status</option>
             <option value="accepted">Accepted</option>
             <option value="pending">Pending</option>
             <option value="rejected">Rejected</option>
@@ -320,7 +357,7 @@ const TaskView = () => {
           <LoadingSpinner className="loading loading-spinner loading-lg" />
         </div>
       ) : sortedTasks.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-2">
           {sortedTasks.map((task, index) => {
             const { day, month, year, daysRemaining } = formatDateParts(
               convertServiceDate(task.COMPLETION_DATE)
@@ -329,7 +366,7 @@ const TaskView = () => {
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.04 }}
-                className="card card-compact bg-base-100 shadow-xl"
+                className="card card-compact bg-base-200 shadow-md"
               >
                 <div className="card-body justify-between">
                   <div>
@@ -338,7 +375,7 @@ const TaskView = () => {
                         Task ID: {task.TASK_ID}
                       </span>
                       <span
-                        className={`badge badge-xs ${
+                        className={`badge badge-xs badge-outline ${
                           task.STATUS === "ACCEPTED"
                             ? "badge-success"
                             : task.STATUS === "REJECTED"
@@ -359,15 +396,53 @@ const TaskView = () => {
                           className="rounded-lg"
                         />
                       </div>
-                      <div className="flex justify-between items-start w-full">
-                        <div>
-                          <h2 className="text-md font-semibold leading-tight truncate">
-                            {capitalizeFirstLetter(task.ASSIGNED_USER)}
-                          </h2>
-                          <p className="text-xs font-medium text-gray-500 leading-none">
-                            {task.RELATED_ON}
-                          </p>
+                      <div className="flex justify-between items-start gap-1 w-full">
+                        <div className="flex-1">
+                          {userData.currentUserName.toUpperCase() ===
+                            task.ASSIGNED_USER.toUpperCase() &&
+                          task.ASSIGNED_USER.toUpperCase() ===
+                            task.CREATED_USER.toUpperCase() ? (
+                            // Self Assigned: Task created and assigned by the current user
+                            <>
+                              <span className="text-xs font-medium text-gray-500 leading-none flex items-center gap-1">
+                                Self Assigned
+                                <IterationCwIcon className="h-4 w-4 text-indigo-500" />
+                              </span>
+                              <h2 className="text-md font-semibold leading-tight truncate">
+                                {capitalizeFirstLetter(task.ASSIGNED_USER)}
+                              </h2>
+                            </>
+                          ) : task.CREATED_USER.toUpperCase() ===
+                              userData.currentUserName.toUpperCase() &&
+                            task.ASSIGNED_USER.toUpperCase() !==
+                              userData.currentUserName.toUpperCase() ? (
+                            // I Assigned: Task created by current user but assigned to someone else
+                            <>
+                              <span className="text-xs font-medium text-gray-500 leading-none flex items-center gap-1">
+                                Assigned to
+                                <ArrowUpRight className="h-4 w-4 text-orange-500" />
+                              </span>
+                              <h2 className="text-md font-semibold leading-tight truncate">
+                                {capitalizeFirstLetter(task.ASSIGNED_USER)}
+                              </h2>
+                            </>
+                          ) : task.ASSIGNED_USER.toUpperCase() ===
+                              userData.currentUserName.toUpperCase() &&
+                            task.CREATED_USER.toUpperCase() !==
+                              userData.currentUserName.toUpperCase() ? (
+                            // Assigned to Me: Task created by someone else but assigned to the current user
+                            <>
+                              <span className="text-xs font-medium text-gray-500 leading-none flex items-center gap-1">
+                                Assigned to Me
+                                <ArrowDownLeft className="h-4 w-4 text-teal-500" />
+                              </span>
+                              <h2 className="text-md font-semibold leading-tight truncate">
+                                {capitalizeFirstLetter(task.ASSIGNED_USER)}
+                              </h2>
+                            </>
+                          ) : null}
                         </div>
+
                         <div>
                           <p className="text-xs text-gray-500 text-center">
                             Start Date:
@@ -392,7 +467,7 @@ const TaskView = () => {
                         <p className="text-xs text-gray-500 text-center">
                           Due on:
                         </p>
-                        <div className="bg-base-100 px-6 py-2 rounded-lg shadow-xl">
+                        <div className="bg-base-300 px-6 py-2 rounded-lg">
                           <p className="text-purple-600 font-bold text-xl leading-none">
                             {day}
                           </p>
@@ -409,7 +484,10 @@ const TaskView = () => {
                   <div className="card-actions justify-between items-center">
                     <div className="flex flex-col">
                       <p className="text-xs">
-                        Created by: {capitalizeFirstLetter(task.CREATED_USER)}
+                        Created by:{" "}
+                        {capitalizeFirstLetter(task.CREATED_USER) === "***00***"
+                          ? "System"
+                          : capitalizeFirstLetter(task.CREATED_USER)}
                       </p>
                       <p className="text-xs">
                         Created on: {convertServiceDate(task.CREATED_ON)}

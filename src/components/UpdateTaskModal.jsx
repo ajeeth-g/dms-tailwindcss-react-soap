@@ -18,6 +18,7 @@ const UpdateTaskModal = ({ isOpen, onAction, onClose }) => {
   const requiresRemarks = [
     "POSTPONED",
     "UNABLE TO COMPLETE",
+    "COMPLETED",
     "CANCELLED",
   ].includes(status);
 
@@ -27,8 +28,9 @@ const UpdateTaskModal = ({ isOpen, onAction, onClose }) => {
       alert("Please enter a date.");
       return;
     }
-    if (requiresRemarks && !remarks.trim()) {
-      alert("Remarks are mandatory for the selected option.");
+
+    if (requiresRemarks && remarks.trim().length < 10) {
+      alert("Remarks are mandatory and must be at least 10 characters.");
       return;
     }
 
@@ -111,19 +113,38 @@ const UpdateTaskModal = ({ isOpen, onAction, onClose }) => {
         );
       case "COMPLETED":
         return (
-          <div className="flex flex-wrap items-center gap-3 w-full">
-            <div className="flex items-center gap-1">
-              <CalendarDays className="h-4 w-4" />
-              <label className="text-xs">Completed on</label>
+          <>
+            <div className="flex flex-wrap items-center gap-3 w-full">
+              <div className="flex items-center gap-1">
+                <CalendarDays className="h-4 w-4" />
+                <label className="text-xs">Completed on</label>
+              </div>
+              <input
+                type="datetime-local"
+                name="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="input input-bordered input-sm w-full"
+              />
             </div>
-            <input
-              type="datetime-local"
-              name="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="input input-bordered input-sm w-full"
-            />
-          </div>
+
+            <div className="flex flex-col gap-2 mt-2">
+              <div className="flex items-center gap-1">
+                <MessageSquare className="h-4 w-4" />
+                <label htmlFor="COMMENTS" className="text-xs">
+                  Remarks
+                </label>
+              </div>
+              <textarea
+                name="COMMENTS"
+                id="COMMENTS"
+                value={remarks}
+                onChange={(e) => setRemarks(e.target.value)}
+                placeholder="Add remarks for action has been taken"
+                className="textarea textarea-bordered textarea-xs w-full"
+              ></textarea>
+            </div>
+          </>
         );
       case "CANCELLED":
         return (

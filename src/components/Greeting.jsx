@@ -13,11 +13,11 @@ const Greeting = () => {
   });
 
   return (
-    <div className="flex items-center gap-4 p-7 rounded-2xl shadow-xl">
+    <div className="flex items-center gap-4 p-7 rounded-2xl shadow">
       {/* Avatar Section */}
-      <div className="w-20 h-20 rounded-full overflow-hidden shadow-md ">
+      <div className="w-20 h-20 rounded-full overflow-hidden">
         <img
-          alt="User Avatar"
+          alt={userData.currentUserName}
           src={userData.currentUserImageData}
           className="w-full h-full object-cover"
         />

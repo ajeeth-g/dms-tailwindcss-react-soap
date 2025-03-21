@@ -1,40 +1,38 @@
 import {
-  ClipboardList,
   ClipboardListIcon,
   FileSearch,
   FileText,
   LayoutDashboard,
   LayoutGrid,
-  UserCheck,
   Users,
 } from "lucide-react";
-import { Link } from "react-router-dom";
-import Logo from "../../assets/logo-transparent.png";
+import { Link, NavLink } from "react-router-dom";
+import LogoDark from "../../assets/logo-dark.png";
+import LogoLight from "../../assets/logo-light.png";
+import { useAuth } from "../../context/AuthContext";
 
 const Sidebar = ({ isOpen }) => {
+  const { theme } = useAuth();
   return (
     <aside
       className={`${
         isOpen ? "w-full max-w-48" : "w-0"
       } min-h-screen  overflow-hidden`}
     >
-      <Link
-        to="https://cloud.istreams-erp.com/"
-        target="_blank"
+      <NavLink
+        to="#"
         rel="noopener noreferrer"
-        className="flex items-start gap-2"
+        className="flex items-start h-16 shadow"
       >
         {/* Logo Container */}
-        <div className="h-17 w-full rounded-md overflow-hidden flex justify-center items-center">
+        <div className="h-full w-full">
           <img
-            src={Logo}
+            src={theme === "dark" ? LogoDark : LogoLight}
             alt="iStreams ERP Solutions"
-            className="h-full w-full object-contain"
+            className="h-full w-full object-cover"
           />
         </div>
-      </Link>
-
-      <div className="divider m-0"></div>
+      </NavLink>
 
       <div className="px-2">
         {/* Navigation Menu */}
@@ -42,55 +40,82 @@ const Sidebar = ({ isOpen }) => {
         <ul className="menu menu-md w-full p-0">
           <li className="menu-title text-xs">MENU</li>
           <li>
-            <Link to="/" className="text-sm rounded-full py-3 px-5 mb-2 ">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `text-sm rounded-full py-2 px-4 mb-2 ${
+                  isActive ? "active " : ""
+                }`
+              }
+            >
               <LayoutDashboard className="h-5 w-5" />
               Dashboard
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
               to="/my-team"
-              className="text-sm rounded-full py-3 px-5 mb-2 "
+              className={({ isActive }) =>
+                `text-sm rounded-full py-2 px-4 mb-2 ${
+                  isActive ? "active" : ""
+                }`
+              }
             >
               <Users className="h-5 w-5" />
               My Team
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
               to="/category-view"
-              className="text-sm rounded-full py-3 px-5 mb-2 "
+              className={({ isActive }) =>
+                `text-sm rounded-full py-2 px-4 mb-2 ${
+                  isActive ? "active" : ""
+                }`
+              }
             >
               <LayoutGrid className="h-5 w-5" />
               Category View
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
               to="/document-list"
-              className="text-sm rounded-full py-3 px-5 mb-2 "
+              className={({ isActive }) =>
+                `text-sm rounded-full py-2 px-4 mb-2 ${
+                  isActive ? "active" : ""
+                }`
+              }
             >
               <FileText className="h-5 w-5" />
               Document List
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
               to="/document-view"
-              className="text-sm rounded-full py-3 px-5 mb-2 "
+              className={({ isActive }) =>
+                `text-sm rounded-full py-2 px-4 mb-2 ${
+                  isActive ? "active" : ""
+                }`
+              }
             >
               <FileSearch className="h-5 w-5" />
               Document View
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
               to="/task-view"
-              className="text-sm rounded-full py-3 px-5 mb-2 "
+              className={({ isActive }) =>
+                `text-sm rounded-full py-2 px-4 mb-2 ${
+                  isActive ? "active" : ""
+                }`
+              }
             >
               <ClipboardListIcon className="h-5 w-5" />
               Task View
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </div>

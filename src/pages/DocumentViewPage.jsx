@@ -7,34 +7,37 @@ import Button from "../components/common/Button";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import { useAuth } from "../context/AuthContext";
 import { getAllDmsActiveUser } from "../services/dashboardService";
-import { getDocMasterList } from "../services/dmsService";
+import { getDocMasterList, updateDmsAssignedTo } from "../services/dmsService";
 import { formatDateTime } from "../utils/dateUtils";
 
 export default function DocumentViewPage() {
   const [docsData, setDocsData] = useState([]);
   const [loadingDocs, setLoadingDocs] = useState(false);
-  const [loadingDownload, setLoadingDownload] = useState([]);
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([]);
-  const [verifierName, setVerifierName] = useState("");
-  const [assignEnabled, setAssignEnabled] = useState({});
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [docFormMode, setDocFormMode] = useState("view");
-  const modalRef = useRef(null);
+  const [isVAndVProcess, setIsVAndVProcess] = useState(false);
+  // verifyEnabled keyed by doc id so each Verify button works independently
+  const [verifyEnabled, setVerifyEnabled] = useState({});
+  // assignedUsers holds the selected employee for each document
+  const [assignedUsers, setAssignedUsers] = useState({});
+
+  const modalRefTask = useRef(null);
   const modalRefForm = useRef(null);
   const { userData } = useAuth();
 
-  // Task assignment state
+  // Task assignment state (for TaskForm modal)
   const [taskData, setTaskData] = useState({
     userName: userData.currentUserName,
     taskName: "",
     taskSubject: "",
     relatedTo: "",
     assignedTo: "",
-    creatorReminderOn: formatDateTime(new Date(Date.now() + 2 * 86400000)), // +2 day
+    creatorReminderOn: formatDateTime(new Date(Date.now() + 2 * 86400000)), // +2 days
     assignedDate: formatDateTime(new Date()),
     targetDate: formatDateTime(new Date(Date.now() + 86400000)), // +1 day
-    remindOnDate: formatDateTime(new Date(Date.now())),
+    remindOnDate: formatDateTime(new Date()),
     refTaskID: -1,
     dmsSeqNo: 0,
     verifiedBy: userData.currentUserName,
@@ -63,7 +66,7 @@ export default function DocumentViewPage() {
     } finally {
       setLoadingDocs(false);
     }
-  }, [userData.currentUserLogin]);
+  }, [userData.currentUserLogin, userData.clientURL]);
 
   useEffect(() => {
     fetchDmsMaster();
@@ -82,11 +85,25 @@ export default function DocumentViewPage() {
       console.error("Error fetching all active users:", err);
       setUsers([]);
     }
-  }, [userData.currentUserLogin]);
+  }, [userData.currentUserLogin, userData.clientURL, userData.currentUserName]);
 
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
+
+  // When docsData changes, pre-populate assignedUsers and verifyEnabled based on data from the server
+  useEffect(() => {
+    const newAssigned = {};
+    const newVerify = {};
+    docsData.forEach((doc) => {
+      if (doc.ASSIGNED_USER) {
+        newAssigned[doc.REF_SEQ_NO] = doc.ASSIGNED_USER;
+        newVerify[doc.REF_SEQ_NO] = true;
+      }
+    });
+    setAssignedUsers(newAssigned);
+    setVerifyEnabled(newVerify);
+  }, [docsData]);
 
   const handleVerifySuccess = useCallback((refSeqNo, verifierName) => {
     setDocsData((prevDocs) =>
@@ -97,19 +114,17 @@ export default function DocumentViewPage() {
       )
     );
     modalRefForm.current?.close();
+    modalRefTask.current?.showModal();
   }, []);
 
-  const handleVerify = useCallback((doc) => {
-    // if (userData.currentUserName === doc.USER_NAME) {
-    //   alert(
-    //     "Access Denied: You created this document. You cannot verify your own document."
-    //   );
-    //   return;
-    // }
-    setSelectedDocument(doc);
-    setDocFormMode("verify");
-    modalRefForm.current?.showModal();
-  }, []);
+  const handleVerify = useCallback(
+    (doc) => {
+      setSelectedDocument(doc);
+      setDocFormMode("verify");
+      modalRefForm.current?.showModal();
+    },
+    [userData.currentUserName]
+  );
 
   const handleView = useCallback((doc) => {
     setSelectedDocument(doc);
@@ -117,17 +132,11 @@ export default function DocumentViewPage() {
     modalRefForm.current?.showModal();
   }, []);
 
-  // Handle dropdown select. Now we also pass the document details.
-  const handleEmployeeSelect = (doc, event) => {
-    // if (userData.currentUserName === doc.USER_NAME) {
-    //   alert("Access Denied: You created this document.");
-    //   return;
-    // } else if (doc.DOCUMENT_STATUS === "Rejected") {
-    //   alert("Access Denied: This rejected document cannot be assigned.");
-    //   return;
-    // }
-
+  // Handle dropdown select for each document.
+  const handleEmployeeSelect = async (doc, event) => {
     const { name, value } = event.target;
+
+    // Update task data with document-specific info
     setTaskData((prev) => ({
       ...prev,
       taskName: doc.DOCUMENT_DESCRIPTION,
@@ -138,7 +147,30 @@ export default function DocumentViewPage() {
       [name]: value,
     }));
 
-    modalRef.current?.showModal();
+    // Call the service to assign the document
+    const assignPayload = {
+      userName: userData.currentUserName,
+      assignedTo: value,
+      refSeqNo: doc.REF_SEQ_NO,
+    };
+
+    try {
+      await updateDmsAssignedTo(
+        assignPayload,
+        userData.currentUserLogin,
+        userData.clientURL
+      );
+      // On successful assignment:
+      // - Store the selected employee so the dropdown shows that name.
+      // - Disable the dropdown.
+      // - Enable the Verify button.
+      setAssignedUsers((prev) => ({ ...prev, [doc.REF_SEQ_NO]: value }));
+      setVerifyEnabled((prev) => ({ ...prev, [doc.REF_SEQ_NO]: true }));
+    } catch (error) {
+      console.error("Error assigning document to user:", error);
+      // On error, keep the dropdown enabled and disable Verify.
+      setVerifyEnabled((prev) => ({ ...prev, [doc.REF_SEQ_NO]: false }));
+    }
   };
 
   const handleTaskChange = (e) => {
@@ -147,7 +179,6 @@ export default function DocumentViewPage() {
   };
 
   const handleTaskCreated = (newTask) => {
-    // Update the state with the new task
     setTaskData((prevTasks) => ({ ...prevTasks, newTask }));
   };
 
@@ -159,11 +190,11 @@ export default function DocumentViewPage() {
         </div>
       ) : docsData.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-2">
-          {docsData?.map((doc) => (
+          {docsData.map((doc) => (
             <motion.div
               key={doc.REF_SEQ_NO}
               whileHover={{ scale: 1.04 }}
-              className="card card-compact bg-base-100 shadow-xl"
+              className="card card-compact bg-base-200 shadow-md"
             >
               <div className="card-body">
                 <div
@@ -175,7 +206,6 @@ export default function DocumentViewPage() {
                   <div className="bg-neutral-100 p-2 rounded-lg">
                     <FileSearch className="w-4 h-4 text-neutral-900" />
                   </div>
-
                   <div className="flex justify-between items-start w-full">
                     <div>
                       <h2 className="text-lg font-semibold leading-tight truncate">
@@ -192,7 +222,6 @@ export default function DocumentViewPage() {
                     </span>
                   </div>
                 </div>
-
                 <div className="flex flex-col items-center justify-between gap-3">
                   <div className="flex justify-between items-center w-full">
                     <span className="text-sm font-medium">{doc.USER_NAME}</span>
@@ -203,7 +232,7 @@ export default function DocumentViewPage() {
                   <div className="card-actions items-start justify-between gap-2 w-full">
                     <div className="flex-1">
                       <div className="flex flex-wrap items-center justify-between gap-1 mb-3">
-                        {doc.VERIFIED_BY && (
+                        {doc.VERIFIED_BY ? (
                           <span
                             className={`text-xs text-gray-500 ${
                               doc.DOCUMENT_STATUS === "Rejected"
@@ -215,25 +244,23 @@ export default function DocumentViewPage() {
                               ? "Rejected by"
                               : "Verified by"}
                           </span>
-                        )}
-                        {!doc.VERIFIED_BY && (
+                        ) : (
                           <span className="text-xs badge badge-error badge-outline leading-tight px-1">
                             Unverified
                           </span>
                         )}
                       </div>
-
                       <Button
                         className={`${
                           !doc.VERIFIED_BY
                             ? "btn btn-success btn-xs w-full"
                             : "btn btn-xs btn-active btn-ghost w-full"
-                        } `}
+                        }`}
                         label={doc.VERIFIED_BY || "Verify"}
                         onClick={
                           !doc.VERIFIED_BY ? () => handleVerify(doc) : undefined
                         }
-                        disabled={!doc.VERIFIED_BY}
+                        disabled={!verifyEnabled[doc.REF_SEQ_NO]}
                       />
                     </div>
                     <div className="flex-1">
@@ -242,8 +269,10 @@ export default function DocumentViewPage() {
                         name="assignedTo"
                         className="select select-bordered select-xs text-center w-full"
                         onChange={(e) => handleEmployeeSelect(doc, e)}
-                        defaultValue={doc.ASSIGNED_USER || ""}
-                        disabled={!doc.VERIFIED_BY}
+                        value={assignedUsers[doc.REF_SEQ_NO] || ""}
+                        // Disable dropdown if an assignee exists (or if the document is verified)
+                        disabled={!!assignedUsers[doc.REF_SEQ_NO] || !!doc.VERIFIED_BY}
+                        // disabled={!!doc.VERIFIED_BY}
                       >
                         <option value="" disabled>
                           Assign to
@@ -269,7 +298,7 @@ export default function DocumentViewPage() {
 
       {/* Task Form Modal */}
       <TaskForm
-        modalRef={modalRef}
+        modalRefTask={modalRefTask}
         users={users}
         taskData={taskData}
         onTaskChange={handleTaskChange}
@@ -280,6 +309,7 @@ export default function DocumentViewPage() {
         modalRefForm={modalRefForm}
         selectedDocument={selectedDocument}
         docMode={docFormMode}
+        isVAndVProcess={isVAndVProcess}
         onSuccess={handleVerifySuccess}
       />
     </>

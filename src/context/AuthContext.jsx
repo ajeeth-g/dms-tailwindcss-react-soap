@@ -22,6 +22,17 @@ const defaultUserData = {
 };
 
 export const AuthProvider = ({ children }) => {
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  // Apply theme on mount
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  // Toggle theme function
+  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
+
   // auth only stores token and email for authentication
   const [auth, setAuth] = useState(() => {
     try {
@@ -87,7 +98,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ auth, login, logout, userData, setUserData }}
+      value={{ auth, login, logout, userData, setUserData, theme, toggleTheme }}
     >
       {children}
     </AuthContext.Provider>
