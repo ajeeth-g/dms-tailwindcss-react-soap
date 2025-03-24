@@ -36,60 +36,60 @@ const TaskView = () => {
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
-  const fetchUserTasks = useCallback(async () => {
-    setLoadingTasks(true);
-    try {
-      const taskDataResponse = await getUserTasks(
-        userData.currentUserName,
-        userData.currentUserLogin,
-        userData.clientURL
-      );
+  const DEFAULT_IMAGE =
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBa24AAg4zVSuUsL4hJnMC9s3DguLgeQmZA&s";
 
-      let taskDataArray = [];
-      if (taskDataResponse && Array.isArray(taskDataResponse)) {
-        taskDataArray = taskDataResponse;
-      } else {
-        taskDataArray = taskDataResponse ? [taskDataResponse] : [];
+    const fetchUserTasks = useCallback(async () => {
+      setLoadingTasks(true);
+      try {
+        const taskDataResponse = await getUserTasks(
+          userData.currentUserName,
+          userData.currentUserLogin,
+          userData.clientURL
+        );
+  
+        const taskDataArray = Array.isArray(taskDataResponse)
+          ? taskDataResponse
+          : taskDataResponse
+          ? [taskDataResponse]
+          : [];
+  
+        const tasksWithImages = await Promise.all(
+          taskDataArray.map(async (task) => {
+            try {
+              const imageData = await getEmployeeImage(
+                task.ASSIGNED_EMP_NO,
+                userData.currentUserLogin,
+                userData.clientURL
+              );
+              return {
+                ...task,
+                // If imageData is available, return the image data URL, else default image
+                assignedEmpImage: imageData
+                  ? `data:image/jpeg;base64,${imageData}`
+                  : DEFAULT_IMAGE,
+              };
+            } catch (error) {
+              console.error(
+                `Error fetching image for assigned user ${task.ASSIGNED_EMP_NO}:`,
+                error
+              );
+              return {
+                ...task,
+                assignedEmpImage: DEFAULT_IMAGE,
+              };
+            }
+          })
+        );
+  
+        setTaskData(tasksWithImages);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+        setTaskData([]);
+      } finally {
+        setLoadingTasks(false);
       }
-
-      const tasksWithImages = await Promise.all(
-        taskDataArray.map(async (task) => {
-          try {
-            const imageData = await getEmployeeImage(
-              task.ASSIGNED_EMP_NO,
-              userData.currentUserLogin,
-              userData.clientURL
-            );
-
-            return {
-              ...task,
-              assignedEmpImage: imageData
-                ? `data:image/jpeg;base64,${imageData}`
-                : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBa24AAg4zVSuUsL4hJnMC9s3DguLgeQmZA&s",
-            };
-          } catch (error) {
-            console.error(
-              `Error fetching image for assigned user ${task.ASSIGNED_EMP_NO}:`,
-              error
-            );
-            return {
-              ...task,
-              assignedEmpImage:
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBa24AAg4zVSuUsL4hJnMC9s3DguLgeQmZA&s",
-            };
-          }
-        })
-      );
-
-      setTaskData(tasksWithImages);
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-      setTaskData([]);
-    } finally {
-      setLoadingTasks(false);
-    }
-  }, [userData.currentUserLogin, userData.currentUserName, userData.clientURL]);
-
+    }, [userData.currentUserLogin, userData.currentUserName, userData.clientURL]);
   useEffect(() => {
     fetchUserTasks();
   }, [fetchUserTasks]);
@@ -366,7 +366,7 @@ const TaskView = () => {
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.04 }}
-                className="card card-compact bg-base-200 shadow-md"
+                className="card card-compact bg-base-300 shadow-md"
               >
                 <div className="card-body justify-between">
                   <div>
@@ -399,42 +399,33 @@ const TaskView = () => {
                       <div className="flex justify-between items-start gap-1 w-full">
                         <div className="flex-1">
                           {userData.currentUserName.toUpperCase() ===
-                            task.ASSIGNED_USER.toUpperCase() &&
-                          task.ASSIGNED_USER.toUpperCase() ===
-                            task.CREATED_USER.toUpperCase() ? (
-                            // Self Assigned: Task created and assigned by the current user
+                          task.ASSIGNED_USER.toUpperCase() ? (
                             <>
+                              {/* When current user is the ASSIGNED_USER, display the CREATED_USER */}
                               <span className="text-xs font-medium text-gray-500 leading-none flex items-center gap-1">
-                                Self Assigned
-                                <IterationCwIcon className="h-4 w-4 text-indigo-500" />
+                                {task.CREATED_USER.toUpperCase() ===
+                                userData.currentUserName.toUpperCase()
+                                  ? "Self Assigned" // Both created and assigned by current user
+                                  : "Assigned to Me"}{" "}
+                                {/* Current user is the assignee but not the creator */}
+                                {task.CREATED_USER.toUpperCase() ===
+                                userData.currentUserName.toUpperCase() ? (
+                                  <IterationCwIcon className="h-4 w-4 text-indigo-500" />
+                                ) : (
+                                  <ArrowDownLeft className="h-4 w-4 text-teal-500" />
+                                )}
                               </span>
                               <h2 className="text-md font-semibold leading-tight truncate">
-                                {capitalizeFirstLetter(task.ASSIGNED_USER)}
+                                {capitalizeFirstLetter(task.CREATED_USER)}
                               </h2>
                             </>
-                          ) : task.CREATED_USER.toUpperCase() ===
-                              userData.currentUserName.toUpperCase() &&
-                            task.ASSIGNED_USER.toUpperCase() !==
-                              userData.currentUserName.toUpperCase() ? (
-                            // I Assigned: Task created by current user but assigned to someone else
+                          ) : userData.currentUserName.toUpperCase() ===
+                            task.CREATED_USER.toUpperCase() ? (
                             <>
+                              {/* When current user is the creator but not the assignee, show the assigned user */}
                               <span className="text-xs font-medium text-gray-500 leading-none flex items-center gap-1">
                                 Assigned to
                                 <ArrowUpRight className="h-4 w-4 text-orange-500" />
-                              </span>
-                              <h2 className="text-md font-semibold leading-tight truncate">
-                                {capitalizeFirstLetter(task.ASSIGNED_USER)}
-                              </h2>
-                            </>
-                          ) : task.ASSIGNED_USER.toUpperCase() ===
-                              userData.currentUserName.toUpperCase() &&
-                            task.CREATED_USER.toUpperCase() !==
-                              userData.currentUserName.toUpperCase() ? (
-                            // Assigned to Me: Task created by someone else but assigned to the current user
-                            <>
-                              <span className="text-xs font-medium text-gray-500 leading-none flex items-center gap-1">
-                                Assigned to Me
-                                <ArrowDownLeft className="h-4 w-4 text-teal-500" />
                               </span>
                               <h2 className="text-md font-semibold leading-tight truncate">
                                 {capitalizeFirstLetter(task.ASSIGNED_USER)}
@@ -453,6 +444,7 @@ const TaskView = () => {
                         </div>
                       </div>
                     </div>
+
                     <div className="divider m-0"></div>
                     <div className="flex items-start justify-between gap-2">
                       <div className="h-24 overflow-y-auto flex-1">

@@ -39,7 +39,7 @@ const TeamCard = ({ user }) => {
 
   return (
     <motion.div
-      className="p-3 rounded-lg flex flex-col bg-base-200 shadow-md"
+      className="p-3 rounded-lg flex flex-col bg-base-300 shadow-md"
       whileHover={{ scale: 1.02 }}
     >
       {/* Employee Info */}

@@ -72,9 +72,9 @@ export default function TeamDashboard() {
     fetchUsersAndImages();
   }, [userData.currentUserLogin]);
   return (
-    <div className="bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg rounded-2xl p-6 border border-gray-700">
+    <div className="bg-base-300 shadow-md rounded-2xl p-6">
       <div className="flex items-center justify-between gap-2 mb-8">
-        <h2 className="text-xl font-semibold text-gray-100 mb-4">My Team</h2>
+        <h2 className="text-xl font-semibold mb-4">My Team</h2>
         <SearchInput />
       </div>
       {loading ? (

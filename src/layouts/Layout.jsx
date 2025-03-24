@@ -17,9 +17,9 @@ const Layout = () => {
       <Sidebar isOpen={isSidebarOpen} />
       <div className="flex flex-col flex-1">
         <Navbar toggleSidebar={toggleSidebar} />
-        <div className="flex-grow p-5 overflow-auto h-screen">
+        <div className="flex-grow p-5 overflow-auto h-screen bg-base-200">
           <Breadcrumb />
-          <main>
+          <main >
             <Outlet />
           </main>
         </div>

@@ -34,7 +34,10 @@ const ChannelPerformance = ({ daysCount = 30 }) => {
         );
         // Map the service data to the format expected by Recharts
         const formattedData = data.map((item) => ({
-          name: item.CHANNEL_SOURCE === " " ? userData.organization : item.CHANNEL_SOURCE,
+          name:
+            item.CHANNEL_SOURCE === " "
+              ? userData.organization
+              : item.CHANNEL_SOURCE,
           value: Number(item.total_count) || 0,
         }));
         setChannelData(formattedData);
@@ -50,14 +53,12 @@ const ChannelPerformance = ({ daysCount = 30 }) => {
 
   return (
     <motion.div
-      className="bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg rounded-2xl p-6 border border-gray-700"
+      className="bg-base-300 shadow-md rounded-2xl p-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
     >
-      <h2 className="text-xl font-semibold text-gray-100 mb-4">
-        Channel Performance
-      </h2>
+      <h2 className="text-xl font-semibold mb-4">Channel Performance</h2>
       <div style={{ width: "100%", height: 300 }}>
         <ResponsiveContainer>
           <PieChart>

@@ -61,6 +61,7 @@ const DocumentTable = ({ fetchDataRef, globalFilter, setGlobalFilter }) => {
         ...doc,
         uploadedDocs: Array.isArray(doc.uploadedDocs) ? doc.uploadedDocs : [],
         uuid: uuidv4(),
+        IsPrimaryDocument: "",
       }));
 
       setMasterData(enriched);

@@ -194,7 +194,7 @@ export default function DocumentViewPage() {
             <motion.div
               key={doc.REF_SEQ_NO}
               whileHover={{ scale: 1.04 }}
-              className="card card-compact bg-base-200 shadow-md"
+              className="card card-compact bg-base-300 shadow-md"
             >
               <div className="card-body">
                 <div

@@ -119,10 +119,7 @@ const StatCard = ({ daysCount = 30 }) => {
           key={stat.title}
           className={`
             ${index === stats.length - 5 ? "sm:col-span-2" : ""}
-            bg-gradient-to-br from-gray-800 to-gray-900
-            shadow-lg rounded-2xl p-4 border border-gray-700
-            transition-transform transform hover:scale-105 hover:shadow-2xl
-          `}
+           bg-base-300 shadow-md rounded-2xl p-4`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1, duration: 0.4 }}
@@ -133,7 +130,7 @@ const StatCard = ({ daysCount = 30 }) => {
               <h3 className="text-xs font-semibold text-gray-400 tracking-wide">
                 {stat.title}
               </h3>
-              <p className="text-4xl font-bold text-white leading-tight">
+              <p className="text-4xl font-bold  leading-tight">
                 {stat.count}
               </p>
             </div>
@@ -143,7 +140,7 @@ const StatCard = ({ daysCount = 30 }) => {
               className="w-14 h-14 p-4 rounded-xl flex items-center justify-center bg-opacity-50 shadow-md"
               style={{ backgroundColor: stat.color }}
             >
-              <stat.icon className="w-10 h-10 text-white" />
+              <stat.icon className="w-10 h-10" />
             </div>
           </div>
 

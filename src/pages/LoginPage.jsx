@@ -12,7 +12,7 @@ import {
 import { doConnectionPublic, getServiceURL } from "../services/publicService";
 import { getNameFromEmail } from "../utils/emailHelpers";
 
-const Login = () => {
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -124,9 +124,11 @@ const Login = () => {
   );
 
   return (
-    <div className="flex min-h-screen items-center justify-center primary-content">
-      <div className="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-2xl shadow-lg max-w-sm w-full text-white">
-        <h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
+    <div className="flex min-h-screen items-center justify-center primary-content dark:bg-gray-900">
+      <div className=" dark:bg-gray-800 bg-opacity-10 backdrop-blur-lg p-8 rounded-2xl shadow-lg max-w-sm w-full ">
+        <h2 className="text-2xl font-semibold text-center mb-4 dark:text-gray-200">
+          Login
+        </h2>
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="relative">
             <label className="input input-bordered flex items-center gap-2">
@@ -177,15 +179,9 @@ const Login = () => {
             )}
           </button>
         </form>
-        {/* <p className="text-center text-gray-300 text-sm mt-4">
-          Don't have an account?{" "}
-          <a href="#" className="text-blue-300">
-            Sign up
-          </a>
-        </p> */}
       </div>
     </div>
   );
 };
 
-export default Login;
+export default LoginPage;

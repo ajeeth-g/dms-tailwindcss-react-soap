@@ -38,12 +38,12 @@ const INSIGHTS = [
 const AIPoweredInsights = () => {
   return (
     <motion.div
-      className="bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg rounded-2xl p-6 border border-gray-700"
+      className="bg-base-300 shadow-md rounded-2xl p-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1.0 }}
     >
-      <h2 className="text-xl font-semibold text-gray-100 mb-4">
+      <h2 className="text-xl font-semibold mb-4">
         AI-Powered Insights
       </h2>
       <div className="space-y-4">
@@ -52,7 +52,7 @@ const AIPoweredInsights = () => {
             <div className={`p-2 rounded-full ${item.color} bg-opacity-20`}>
               <item.icon className={`size-6 ${item.color}`} />
             </div>
-            <p className="text-gray-300">{item.insight}</p>
+            <p>{item.insight}</p>
           </div>
         ))}
       </div>

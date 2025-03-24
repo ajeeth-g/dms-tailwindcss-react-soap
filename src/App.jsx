@@ -4,15 +4,15 @@ import CategoryViewPage from "./pages/CategoryViewPage";
 import DashboardPage from "./pages/DashboardPage";
 import DocumentListPage from "./pages/DocumentListPage";
 import DocumentViewPage from "./pages/DocumentViewPage";
-import Login from "./pages/Login";
 import MyTeamPage from "./pages/MyTeamPage";
 import NotFound from "./pages/NotFound";
 import TaskView from "./pages/TaskView";
+import LoginPage from "./pages/LoginPage";
 
 const App = () => {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/" element={<ProtectedLayout />}>
         <Route path="/" element={<DashboardPage />} />
         <Route path="my-team" element={<MyTeamPage />} />

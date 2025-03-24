@@ -31,7 +31,9 @@ const DocumentChannelChart = ({ daysCount = 30 }) => {
 
         const formattedData = data.map((item) => ({
           Name:
-            item.CHANNEL_SOURCE === " " ? userData.organization : item.CHANNEL_SOURCE,
+            item.CHANNEL_SOURCE === " "
+              ? userData.organization
+              : item.CHANNEL_SOURCE,
           Counts: Number(item.total_count) || 0,
         }));
         setChannelData(formattedData);
@@ -47,14 +49,12 @@ const DocumentChannelChart = ({ daysCount = 30 }) => {
 
   return (
     <motion.div
-      className="bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg rounded-2xl p-6 border border-gray-700"
+      className="bg-base-300 shadow-md rounded-2xl p-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4 }}
     >
-      <h2 className="text-lg font-medium mb-4 text-gray-100">
-        Documents by channel
-      </h2>
+      <h2 className="text-lg font-medium mb-4">Documents by channel</h2>
       <div style={{ width: "100%", height: 300 }}>
         <ResponsiveContainer>
           <BarChart data={channelData}>

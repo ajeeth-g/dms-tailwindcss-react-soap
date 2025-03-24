@@ -76,7 +76,6 @@ const DocumentUpload = ({
     accept: allowedMimeTypes,
     multiple: true,
     onDrop: (acceptedFiles) => {
-      // Process accepted files as before
       setFiles((prev) => [
         ...prev,
         ...acceptedFiles.map((file) => {
@@ -86,6 +85,7 @@ const DocumentUpload = ({
             name: file.name,
             size: (file.size / 1024).toFixed(2) + " KB",
             docExtension: ext,
+            isPrimary: false,
           };
         }),
       ]);
@@ -104,6 +104,15 @@ const DocumentUpload = ({
       });
     },
   });
+
+  const handleSetPrimary = (index) => {
+    setFiles((prevFiles) =>
+      prevFiles.map((file, i) => ({
+        ...file,
+        isPrimaryDocument: i === index,
+      }))
+    );
+  };
 
   const refreshDocuments = async () => {
     try {
@@ -214,6 +223,14 @@ const DocumentUpload = ({
       return;
     }
 
+    const hasPrimary = files.some((file) => file.isPrimaryDocument);
+    if (!hasPrimary) {
+      setErrorMsg("Please select a primary document before uploading.");
+      alert("Please select a primary document before uploading.");
+      setIsSubmitting(false);
+      return;
+    }
+
     setErrorMsg("");
     setIsSubmitting(true);
 
@@ -272,6 +289,7 @@ const DocumentUpload = ({
           DOC_NAME: file.name,
           DOC_EXT: file.name.split(".").pop(),
           FILE_PATH: "",
+          IsPrimaryDocument: file.isPrimaryDocument,
         };
 
         await createAndSaveDMSDetails(
@@ -366,8 +384,15 @@ const DocumentUpload = ({
                                 ? doc.DOC_NAME.substring(0, 24) + "..."
                                 : doc.DOC_NAME}
                             </h5>
-                            <div className="text-xs text-gray-500">
-                              <span>Type: {doc.DOC_EXT}</span>
+                            <div className="text-xs flex items-end gap-2">
+                              <span className="text-gray-500">
+                                Type: {doc.DOC_EXT}
+                              </span>
+                              {doc.IS_PRIMARY_DOCUMENT === "T" ? (
+                                <span className="badge badge-primary badge-xs">
+                                  Primary
+                                </span>
+                              ) : null}
                             </div>
                           </div>
                         </div>
@@ -436,6 +461,21 @@ const DocumentUpload = ({
                         >
                           <X className="h-4 w-4" />
                         </button>
+                      </div>
+
+                      <div className="mt-2">
+                        <label className="label cursor-pointer p-0">
+                          <span className="label-text text-xs">
+                            Primary Document
+                          </span>
+                          <input
+                            type="radio"
+                            name="primaryDoc"
+                            checked={file.isPrimaryDocument}
+                            onChange={() => handleSetPrimary(index)}
+                            className="radio radio-primary radio-sm"
+                          />
+                        </label>
                       </div>
                     </div>
                   </div>
