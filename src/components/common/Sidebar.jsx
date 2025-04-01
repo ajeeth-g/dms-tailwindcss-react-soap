@@ -15,21 +15,20 @@ const Sidebar = ({ isOpen }) => {
   const { theme } = useAuth();
   return (
     <aside
-      className={`${
-        isOpen ? "w-full max-w-48" : "w-0"
-      } min-h-screen  overflow-hidden`}
+      className={`${isOpen ? "w-full max-w-48" : "w-0"
+        } min-h-screen  overflow-hidden`}
     >
       <NavLink
         to="#"
         rel="noopener noreferrer"
-        className="flex items-start h-16 shadow"
+        className="flex items-center justify-center h-16 shadow"
       >
         {/* Logo Container */}
-        <div className="h-full w-full">
+        <div>
           <img
             src={theme === "dark" ? LogoDark : LogoLight}
             alt="iStreams ERP Solutions"
-            className="h-full w-full object-cover"
+            className="object-cover"
           />
         </div>
       </NavLink>
@@ -43,8 +42,7 @@ const Sidebar = ({ isOpen }) => {
             <NavLink
               to="/"
               className={({ isActive }) =>
-                `text-sm rounded-full py-2 px-4 mb-2 ${
-                  isActive ? "active " : ""
+                `text-sm rounded-full py-2 px-4 mb-2 ${isActive ? "active " : ""
                 }`
               }
             >
@@ -56,8 +54,7 @@ const Sidebar = ({ isOpen }) => {
             <NavLink
               to="/my-team"
               className={({ isActive }) =>
-                `text-sm rounded-full py-2 px-4 mb-2 ${
-                  isActive ? "active" : ""
+                `text-sm rounded-full py-2 px-4 mb-2 ${isActive ? "active" : ""
                 }`
               }
             >
@@ -69,8 +66,7 @@ const Sidebar = ({ isOpen }) => {
             <NavLink
               to="/category-view"
               className={({ isActive }) =>
-                `text-sm rounded-full py-2 px-4 mb-2 ${
-                  isActive ? "active" : ""
+                `text-sm rounded-full py-2 px-4 mb-2 ${isActive ? "active" : ""
                 }`
               }
             >
@@ -82,8 +78,7 @@ const Sidebar = ({ isOpen }) => {
             <NavLink
               to="/document-list"
               className={({ isActive }) =>
-                `text-sm rounded-full py-2 px-4 mb-2 ${
-                  isActive ? "active" : ""
+                `text-sm rounded-full py-2 px-4 mb-2 ${isActive ? "active" : ""
                 }`
               }
             >
@@ -95,8 +90,7 @@ const Sidebar = ({ isOpen }) => {
             <NavLink
               to="/document-view"
               className={({ isActive }) =>
-                `text-sm rounded-full py-2 px-4 mb-2 ${
-                  isActive ? "active" : ""
+                `text-sm rounded-full py-2 px-4 mb-2 ${isActive ? "active" : ""
                 }`
               }
             >
@@ -108,8 +102,7 @@ const Sidebar = ({ isOpen }) => {
             <NavLink
               to="/task-view"
               className={({ isActive }) =>
-                `text-sm rounded-full py-2 px-4 mb-2 ${
-                  isActive ? "active" : ""
+                `text-sm rounded-full py-2 px-4 mb-2 ${isActive ? "active" : ""
                 }`
               }
             >
