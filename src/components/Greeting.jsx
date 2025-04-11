@@ -25,14 +25,14 @@ const Greeting = () => {
 
       {/* Welcome Message */}
       <div className="animate-fade-in">
-        <h2 className="text-4xl font-semibold">
+        <h2 className="text-md md:text-4xl font-semibold">
           Welcome Back,{" "}
           <span className="text-indigo-400">
             {capitalizeFirstLetter(userData.currentUserName)}
           </span>{" "}
           👋
         </h2>
-        <p className="text-sm text-gray-500 mt-1">Today is {currentDate}</p>
+        <p className="text-xs md:text-sm text-gray-500 mt-1">Today is {currentDate}</p>
       </div>
     </div>
   );
