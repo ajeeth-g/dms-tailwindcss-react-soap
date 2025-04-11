@@ -73,7 +73,7 @@ export default function TeamDashboard() {
   }, [userData.currentUserLogin]);
   return (
     <div className="bg-base-300 shadow-md rounded-2xl p-6">
-      <div className="flex items-center justify-between gap-2 mb-8">
+      <div className="flex items-center justify-between flex-wrap gap-2 mb-8">
         <h2 className="text-xl font-semibold mb-4">My Team</h2>
         <SearchInput />
       </div>

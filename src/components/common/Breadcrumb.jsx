@@ -39,7 +39,7 @@ const Breadcrumb = () => {
   };
 
   return (
-    <div className="flex items-end justify-between mb-5">
+    <div className="flex items-end justify-between flex-wrap gap-3 mb-5 ">
       <h1 className="text-3xl font-medium">
         {breadcrumbNames[location.pathname.split("/").pop()] ||
           location.pathname.split("/").pop()?.replace("-", " ") ||

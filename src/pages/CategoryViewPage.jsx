@@ -42,8 +42,8 @@ const CategoryViewPage = () => {
       <LoadingSpinner className="loading loading-spinner loading-lg" />
     </div>
   ) : (
-    <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-      <div className="col-span-4 flex justify-end">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+      <div className="col-span-1 md:col-span-2 lg:col-span-4 flex justify-end">
         <DashboardFilter onFilterChange={setFilterDays} />
       </div>
       {categories.map((category) => (
