@@ -102,8 +102,8 @@ const Navbar = ({ toggleSidebar }) => {
       </div>
 
       {/* Mobile navbar end */}
-      <div className="flex items-center sm:hidden">
-        <div className="dropdown dropdown-end">
+      <div className="flex items-center sm:hidden bg-base-100 ">
+        <div className="dropdown dropdown-end bg-base-100">
           <div
             tabIndex={0}
             role="button"

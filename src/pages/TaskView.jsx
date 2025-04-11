@@ -39,57 +39,57 @@ const TaskView = () => {
   const DEFAULT_IMAGE =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBa24AAg4zVSuUsL4hJnMC9s3DguLgeQmZA&s";
 
-    const fetchUserTasks = useCallback(async () => {
-      setLoadingTasks(true);
-      try {
-        const taskDataResponse = await getUserTasks(
-          userData.currentUserName,
-          userData.currentUserLogin,
-          userData.clientURL
-        );
-  
-        const taskDataArray = Array.isArray(taskDataResponse)
-          ? taskDataResponse
-          : taskDataResponse
+  const fetchUserTasks = useCallback(async () => {
+    setLoadingTasks(true);
+    try {
+      const taskDataResponse = await getUserTasks(
+        userData.currentUserName,
+        userData.currentUserLogin,
+        userData.clientURL
+      );
+
+      const taskDataArray = Array.isArray(taskDataResponse)
+        ? taskDataResponse
+        : taskDataResponse
           ? [taskDataResponse]
           : [];
-  
-        const tasksWithImages = await Promise.all(
-          taskDataArray.map(async (task) => {
-            try {
-              const imageData = await getEmployeeImage(
-                task.ASSIGNED_EMP_NO,
-                userData.currentUserLogin,
-                userData.clientURL
-              );
-              return {
-                ...task,
-                // If imageData is available, return the image data URL, else default image
-                assignedEmpImage: imageData
-                  ? `data:image/jpeg;base64,${imageData}`
-                  : DEFAULT_IMAGE,
-              };
-            } catch (error) {
-              console.error(
-                `Error fetching image for assigned user ${task.ASSIGNED_EMP_NO}:`,
-                error
-              );
-              return {
-                ...task,
-                assignedEmpImage: DEFAULT_IMAGE,
-              };
-            }
-          })
-        );
-  
-        setTaskData(tasksWithImages);
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
-        setTaskData([]);
-      } finally {
-        setLoadingTasks(false);
-      }
-    }, [userData.currentUserLogin, userData.currentUserName, userData.clientURL]);
+
+      const tasksWithImages = await Promise.all(
+        taskDataArray.map(async (task) => {
+          try {
+            const imageData = await getEmployeeImage(
+              task.ASSIGNED_EMP_NO,
+              userData.currentUserLogin,
+              userData.clientURL
+            );
+            return {
+              ...task,
+              // If imageData is available, return the image data URL, else default image
+              assignedEmpImage: imageData
+                ? `data:image/jpeg;base64,${imageData}`
+                : DEFAULT_IMAGE,
+            };
+          } catch (error) {
+            console.error(
+              `Error fetching image for assigned user ${task.ASSIGNED_EMP_NO}:`,
+              error
+            );
+            return {
+              ...task,
+              assignedEmpImage: DEFAULT_IMAGE,
+            };
+          }
+        })
+      );
+
+      setTaskData(tasksWithImages);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+      setTaskData([]);
+    } finally {
+      setLoadingTasks(false);
+    }
+  }, [userData.currentUserLogin, userData.currentUserName, userData.clientURL]);
   useEffect(() => {
     fetchUserTasks();
   }, [fetchUserTasks]);
@@ -185,8 +185,6 @@ const TaskView = () => {
         userData.currentUserLogin,
         userData.clientURL
       );
-
-      console.log(updateResponse);
     } catch (error) {
       console.error("Task update failed:", error);
     }
@@ -215,8 +213,6 @@ const TaskView = () => {
         userData.currentUserLogin,
         userData.clientURL
       );
-
-      console.log(transferUserTasksResponse);
     } catch (error) {
       console.error("Task transfer failed:", error);
     }
@@ -281,22 +277,21 @@ const TaskView = () => {
     return null; // No buttons if conditions don't match
   };
 
-  console.log(taskData);
-
   return (
     <div className="container mx-auto space-y-6">
       {/* Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col lg:flex-row md:justify-between gap-4">
+        {/* Search and Sorting Inputs */}
+        <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
           <input
             type="text"
             placeholder="Search tasks..."
-            className="input input-bordered input-sm max-w-xs"
+            className="input input-bordered input-sm w-full md:max-w-xs"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
           <select
-            className="select select-bordered select-sm max-w-xs"
+            className="select select-bordered select-sm w-full md:max-w-xs"
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
           >
@@ -307,40 +302,36 @@ const TaskView = () => {
           </select>
         </div>
 
-        <div className="flex items-center gap-2">
-          {/* Assignment Filter Controls */}
-          <div className="join">
+        {/* Filter Controls */}
+        <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto items-center">
+          {/* Assignment Filter Buttons */}
+          <div className="btn-group flex flex-wrap">
             <button
               type="button"
-              className={`join-item btn btn-sm ${
-                assignmentFilter === "all" && "btn-active"
-              }`}
+              className={`btn btn-sm ${assignmentFilter === "all" ? "btn-active" : ""}`}
               onClick={() => setAssignmentFilter("all")}
             >
               All tasks
             </button>
             <button
               type="button"
-              className={`join-item btn btn-sm ${
-                assignmentFilter === "assignedByMe" && "btn-active"
-              }`}
+              className={`btn btn-sm ${assignmentFilter === "assignedByMe" ? "btn-active" : ""}`}
               onClick={() => setAssignmentFilter("assignedByMe")}
             >
               Assigned by me
             </button>
             <button
               type="button"
-              className={`join-item btn btn-sm ${
-                assignmentFilter === "assignedToMe" && "btn-active"
-              }`}
+              className={`btn btn-sm ${assignmentFilter === "assignedToMe" ? "btn-active" : ""}`}
               onClick={() => setAssignmentFilter("assignedToMe")}
             >
               Assigned to me
             </button>
           </div>
 
+          {/* Status Filter Select */}
           <select
-            className="select select-bordered select-sm max-w-xs"
+            className="select select-bordered select-sm w-full md:w-auto"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -351,6 +342,7 @@ const TaskView = () => {
           </select>
         </div>
       </div>
+
 
       {loadingTasks ? (
         <div className="flex justify-center items-start">
@@ -375,13 +367,12 @@ const TaskView = () => {
                         Task ID: {task.TASK_ID}
                       </span>
                       <span
-                        className={`badge badge-xs badge-outline ${
-                          task.STATUS === "ACCEPTED"
-                            ? "badge-success"
-                            : task.STATUS === "REJECTED"
+                        className={`badge badge-xs badge-outline ${task.STATUS === "ACCEPTED"
+                          ? "badge-success"
+                          : task.STATUS === "REJECTED"
                             ? "badge-error"
                             : "badge-primary"
-                        }`}
+                          }`}
                       >
                         {task.STATUS === "NEW"
                           ? "Awaiting for Acceptance"
@@ -399,17 +390,17 @@ const TaskView = () => {
                       <div className="flex justify-between items-start gap-1 w-full">
                         <div className="flex-1">
                           {userData.currentUserName.toUpperCase() ===
-                          task.ASSIGNED_USER.toUpperCase() ? (
+                            task.ASSIGNED_USER.toUpperCase() ? (
                             <>
                               {/* When current user is the ASSIGNED_USER, display the CREATED_USER */}
                               <span className="text-xs font-medium text-gray-500 leading-none flex items-center gap-1">
                                 {task.CREATED_USER.toUpperCase() ===
-                                userData.currentUserName.toUpperCase()
+                                  userData.currentUserName.toUpperCase()
                                   ? "Self Assigned" // Both created and assigned by current user
                                   : "Assigned to Me"}{" "}
                                 {/* Current user is the assignee but not the creator */}
                                 {task.CREATED_USER.toUpperCase() ===
-                                userData.currentUserName.toUpperCase() ? (
+                                  userData.currentUserName.toUpperCase() ? (
                                   <IterationCwIcon className="h-4 w-4 text-indigo-500" />
                                 ) : (
                                   <ArrowDownLeft className="h-4 w-4 text-teal-500" />
