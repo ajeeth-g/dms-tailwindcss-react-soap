@@ -40,7 +40,7 @@ const Navbar = ({ toggleSidebar }) => {
           <AlignLeft />
         </button>
         {/* This link is hidden on mobile devices */}
-        <Link to="/" className="btn btn-ghost text-xl hidden sm:flex ">
+        <Link to="/" className="btn btn-ghost text-xl hidden lg:flex">
           Document Management System
         </Link>
       </div>

@@ -70,13 +70,12 @@ const MyTeamPage = () => {
     fetchUsersAndImages();
   }, [userData.currentUserLogin]);
 
-  // Rest of the component remains the same
   return loading ? (
     <div className="flex justify-center items-start">
       <LoadingSpinner className="loading loading-spinner loading-lg" />
     </div>
   ) : usersData.length > 0 ? (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
       {usersData.map((user, index) => (
         <TeamCard key={index} user={user} />
       ))}

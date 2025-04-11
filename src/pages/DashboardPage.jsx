@@ -20,16 +20,16 @@ export default function DashboardPage() {
       <div className="col-span-2 flex justify-end">
         <DashboardFilter onFilterChange={setFilterDays} />
       </div>
-      <div className="col-span-2 md:col-span-1 lg:col-span-1">
+      <div className="col-span-2 md:col-span-2 lg:col-span-1">
         <DocumentDistribution filterDays={filterDays} />
       </div>
-      <div className="md:col-span-1 lg:col-span-1">
+      <div className="md:col-span-2 lg:col-span-1">
         <StatCard filterDays={filterDays} />
       </div>
-      <div className="col-span-2 md:col-span-1 lg:col-span-1">
+      <div className="col-span-2 md:col-span-2 lg:col-span-1">
         <ChannelPerformance filterDays={filterDays} />
       </div>
-      <div className="col-span-2 md:col-span-1 lg:col-span-1">
+      <div className="col-span-2 md:col-span-2 lg:col-span-1">
         <DocumentChannelChart filterDays={filterDays} />
       </div>
       <div className="col-span-2">

@@ -15,8 +15,8 @@ const Sidebar = ({ isOpen }) => {
   const { theme } = useAuth();
   return (
     <aside
-      className={`${isOpen ? "w-full max-w-48" : "w-0"
-        } min-h-screen  overflow-hidden`}
+      className={`${isOpen ? "w-full max-w-48" : "w-0 overflow-hidden"
+        } min-h-screen`}
     >
       <NavLink
         to="#"
