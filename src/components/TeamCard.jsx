@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
 import React from "react";
 import { Cell, Pie, PieChart, Tooltip } from "recharts";
@@ -38,9 +37,8 @@ const TeamCard = ({ user }) => {
   const strokeDasharray = `${monthProgress}, 100`;
 
   return (
-    <motion.div
-      className="p-3 rounded-lg flex flex-col bg-base-300 shadow-md"
-      whileHover={{ scale: 1.02 }}
+    <div
+      className="p-3 rounded-lg flex flex-col cust-card-group"
     >
       {/* Employee Info */}
       <div className="flex items-center gap-3 mb-2">
@@ -165,7 +163,7 @@ const TeamCard = ({ user }) => {
           {priority}
         </p>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

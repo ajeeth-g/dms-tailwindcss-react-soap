@@ -5,11 +5,11 @@ import {
   Maximize,
   Minimize,
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
-const Navbar = ({ toggleSidebar }) => {
+const Header = ({ toggleSidebar }) => {
   const { userData, logout, theme, toggleTheme } = useAuth();
   const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ const Navbar = ({ toggleSidebar }) => {
   };
 
   return (
-    <nav className="navbar h-16 flex items-center justify-between shadow">
+    <nav className="relative z-10 flex p-3 items-center justify-between bg-white shadow-md transition-colors dark:bg-slate-900">
       {/* Navbar start */}
       <div className="flex items-center gap-2">
         <button className="btn btn-ghost btn-circle" onClick={toggleSidebar}>
@@ -54,8 +54,6 @@ const Navbar = ({ toggleSidebar }) => {
           <label className="swap swap-rotate">
             <input
               type="checkbox"
-              className="theme-controller"
-              value="synthwave"
               onChange={toggleTheme}
               checked={theme === "dark"}
             />
@@ -152,4 +150,4 @@ const Navbar = ({ toggleSidebar }) => {
   );
 };
 
-export default Navbar;
+export default Header;

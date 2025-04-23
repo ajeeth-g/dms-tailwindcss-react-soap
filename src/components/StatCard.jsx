@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -9,8 +7,9 @@ import {
   FileText,
   Loader,
 } from "lucide-react";
-import { getDashboardOverallSummary } from "../services/dashboardService";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { getDashboardOverallSummary } from "../services/dashboardService";
 
 const StatCard = ({ daysCount = 30 }) => {
   const [summaryData, setSummaryData] = useState(null);
@@ -117,14 +116,11 @@ const StatCard = ({ daysCount = 30 }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
       {stats.map((stat, index) => (
-        <motion.div
+        <div
           key={stat.title}
           className={`
             ${index === stats.length - 5 ? "sm:col-span-2" : ""}
-           bg-base-300 shadow-md rounded-2xl p-4`}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1, duration: 0.4 }}
+           cust-card-group p-4`}
         >
           <div className="flex items-center justify-between h-14">
             {/* Text Section */}
@@ -163,7 +159,7 @@ const StatCard = ({ daysCount = 30 }) => {
               <span className="ml-1 text-xs text-gray-500">on {stat.name}</span>
             </div>
           )}
-        </motion.div>
+        </div>
       ))}
     </div>
   );

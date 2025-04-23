@@ -24,14 +24,18 @@ const defaultUserData = {
 export const AuthProvider = ({ children }) => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
-  // Apply theme on mount
+  // Single effect: sync data-theme + .dark class + localStorage
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
+    const root = document.documentElement;
+    root.setAttribute("data-theme", theme);
+    if (theme === "dark") root.classList.add("dark");
+    else root.classList.remove("dark");
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // Toggle theme function
-  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
+  const toggleTheme = () =>
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+
 
   // auth only stores token and email for authentication
   const [auth, setAuth] = useState(() => {

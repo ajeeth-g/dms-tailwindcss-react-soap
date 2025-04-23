@@ -13,7 +13,7 @@ const Greeting = () => {
   });
 
   return (
-    <div className="flex items-center gap-4 p-7 rounded-2xl bg-base-300 shadow-md">
+    <div className="flex items-center gap-4 cust-card-group">
       {/* Avatar Section */}
       <div className="w-20 h-20 rounded-full overflow-hidden">
         <img

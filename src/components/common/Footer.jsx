@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="footer footer-center p-4 shadow-inner">
+    <footer className="bg-white shadow-md transition-colors dark:bg-slate-900 text-sm text-center p-4">
       <aside>
         <p>
           Copyright © {new Date().getFullYear()}{" "}

@@ -1,15 +1,14 @@
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import {
-  PieChart,
-  Pie,
   Cell,
+  Legend,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
-  Legend,
 } from "recharts";
-import { getDashboardOverallSummary } from "../services/dashboardService";
 import { useAuth } from "../context/AuthContext";
+import { getDashboardOverallSummary } from "../services/dashboardService";
 
 const DocumentDistribution = ({ daysCount = 30 }) => {
   const [overallSummaryData, setOverallSummaryData] = useState([]);
@@ -42,8 +41,8 @@ const DocumentDistribution = ({ daysCount = 30 }) => {
   }, [daysCount]);
 
   return (
-    <motion.div
-      className="bg-base-300 shadow-md rounded-2xl p-6"
+    <div
+      className="cust-card-group"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
@@ -83,7 +82,7 @@ const DocumentDistribution = ({ daysCount = 30 }) => {
           </PieChart>
         </ResponsiveContainer>
       </div>
-    </motion.div>
+    </div>
   );
 };
 export default DocumentDistribution;

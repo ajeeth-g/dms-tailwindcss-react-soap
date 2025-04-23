@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { FileSearch } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import DocumentForm from "../components/DocumentForm";
@@ -191,16 +190,14 @@ export default function DocumentViewPage() {
       ) : docsData.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
           {docsData.map((doc) => (
-            <motion.div
+            <div
               key={doc.REF_SEQ_NO}
-              whileHover={{ scale: 1.04 }}
-              className="card card-compact bg-base-300 shadow-md"
+              className="card card-compact cust-card-group p-2 "
             >
               <div className="card-body">
                 <div
-                  className={`flex items-start gap-2 ${
-                    doc.VERIFIED_BY ? "cursor-pointer" : ""
-                  }`}
+                  className={`flex items-start gap-2 ${doc.VERIFIED_BY ? "cursor-pointer" : ""
+                    }`}
                   onClick={doc.VERIFIED_BY ? () => handleView(doc) : undefined}
                 >
                   <div className="bg-neutral-100 p-2 rounded-lg">
@@ -234,11 +231,10 @@ export default function DocumentViewPage() {
                       <div className="flex flex-wrap items-center justify-between gap-1 mb-3">
                         {doc.VERIFIED_BY ? (
                           <span
-                            className={`text-xs text-gray-500 ${
-                              doc.DOCUMENT_STATUS === "Rejected"
-                                ? "text-red-500"
-                                : ""
-                            }`}
+                            className={`text-xs text-gray-500 ${doc.DOCUMENT_STATUS === "Rejected"
+                              ? "text-red-500"
+                              : ""
+                              }`}
                           >
                             {doc.DOCUMENT_STATUS === "Rejected"
                               ? "Rejected by"
@@ -251,11 +247,10 @@ export default function DocumentViewPage() {
                         )}
                       </div>
                       <Button
-                        className={`${
-                          !doc.VERIFIED_BY
-                            ? "btn btn-success btn-xs w-full"
-                            : "btn btn-xs btn-active btn-ghost w-full"
-                        }`}
+                        className={`${!doc.VERIFIED_BY
+                          ? "btn btn-success btn-xs w-full"
+                          : "btn btn-xs btn-active btn-ghost w-full"
+                          }`}
                         label={doc.VERIFIED_BY || "Verify"}
                         onClick={
                           !doc.VERIFIED_BY ? () => handleVerify(doc) : undefined
@@ -272,7 +267,7 @@ export default function DocumentViewPage() {
                         value={assignedUsers[doc.REF_SEQ_NO] || ""}
                         // Disable dropdown if an assignee exists (or if the document is verified)
                         disabled={!!assignedUsers[doc.REF_SEQ_NO] || !!doc.VERIFIED_BY}
-                        // disabled={!!doc.VERIFIED_BY}
+                      // disabled={!!doc.VERIFIED_BY}
                       >
                         <option value="" disabled>
                           Assign to
@@ -287,7 +282,7 @@ export default function DocumentViewPage() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       ) : (

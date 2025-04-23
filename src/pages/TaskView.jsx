@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { ArrowUpRight, ArrowDownLeft, IterationCwIcon } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, IterationCwIcon } from "lucide-react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Button from "../components/common/Button";
 import LoadingSpinner from "../components/common/LoadingSpinner";
@@ -355,10 +354,9 @@ const TaskView = () => {
               convertServiceDate(task.COMPLETION_DATE)
             );
             return (
-              <motion.div
+              <div
                 key={index}
-                whileHover={{ scale: 1.04 }}
-                className="card card-compact bg-base-300 shadow-md"
+                className="card card-compact cust-card-group p-1"
               >
                 <div className="card-body justify-between">
                   <div>
@@ -481,7 +479,7 @@ const TaskView = () => {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

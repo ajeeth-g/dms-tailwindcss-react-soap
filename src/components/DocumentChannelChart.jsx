@@ -1,15 +1,13 @@
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
   CartesianGrid,
   Cell,
-  Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis,
+  YAxis
 } from "recharts";
 import { useAuth } from "../context/AuthContext";
 import { getDashboardChannelSummary } from "../services/dashboardService";
@@ -48,11 +46,8 @@ const DocumentChannelChart = ({ daysCount = 30 }) => {
   }, [daysCount]);
 
   return (
-    <motion.div
-      className="bg-base-300 shadow-md rounded-2xl p-6"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4 }}
+    <div
+      className="cust-card-group"
     >
       <h2 className="text-lg font-medium mb-4">Documents by channel</h2>
       <div style={{ width: "100%", height: 300 }}>
@@ -79,7 +74,7 @@ const DocumentChannelChart = ({ daysCount = 30 }) => {
           </BarChart>
         </ResponsiveContainer>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

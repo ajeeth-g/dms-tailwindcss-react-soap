@@ -6,7 +6,7 @@ import {
   LayoutGrid,
   Users,
 } from "lucide-react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import LogoDark from "../../assets/logo-dark.png";
 import LogoLight from "../../assets/logo-light.png";
 import { useAuth } from "../../context/AuthContext";
@@ -15,23 +15,18 @@ const Sidebar = ({ isOpen }) => {
   const { theme } = useAuth();
   return (
     <aside
-      className={`${isOpen ? "w-full max-w-48" : "w-0 overflow-hidden"
+      className={`bg-white shadow-md transition-colors dark:bg-slate-900 border-r border-slate-300 dark:border-slate-700 ${isOpen ? "w-full max-w-48" : "w-0 overflow-hidden"
         } min-h-screen`}
     >
-      <NavLink
-        to="#"
-        rel="noopener noreferrer"
-        className="flex items-center justify-center h-16 shadow"
-      >
-        {/* Logo Container */}
-        <div>
-          <img
-            src={theme === "dark" ? LogoDark : LogoLight}
-            alt="iStreams ERP Solutions"
-            className="object-cover"
-          />
-        </div>
-      </NavLink>
+
+      {/* Logo Container */}
+      <div className="flex items-center justify-center h-16 shadow">
+        <img
+          src={theme === "dark" ? LogoDark : LogoLight}
+          alt="iStreams ERP Solutions"
+          className="object-cover"
+        />
+      </div>
 
       <div className="px-2">
         {/* Navigation Menu */}
@@ -78,7 +73,7 @@ const Sidebar = ({ isOpen }) => {
             <NavLink
               to="/document-list"
               className={({ isActive }) =>
-                `text-sm rounded-full py-2 px-4 mb-2 ${isActive ? "active" : ""
+                `text-sm  rounded-full py-2 px-4 mb-2 ${isActive ? "active" : ""
                 }`
               }
             >

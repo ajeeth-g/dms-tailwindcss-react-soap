@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Sidebar from "../components/common/Sidebar";
-import Navbar from "../components/common/Navbar";
 import { Outlet } from "react-router-dom";
-import Footer from "../components/common/Footer";
 import Breadcrumb from "../components/common/Breadcrumb";
+import Footer from "../components/common/Footer";
+import Header from "../components/common/Header";
+import Sidebar from "../components/common/Sidebar";
 
 const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -13,19 +13,24 @@ const Layout = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-slate-100 transition-colors dark:bg-slate-950">
       <Sidebar isOpen={isSidebarOpen} />
-      <div className="flex flex-col flex-1">
-        <Navbar toggleSidebar={toggleSidebar} />
-        <div className="flex-grow p-5 overflow-auto h-screen bg-base-200">
+
+      <div className="flex flex-col flex-1 overflow-hidden">
+        <Header toggleSidebar={toggleSidebar} />
+
+        {/* content area */}
+        <div className="flex-1 overflow-auto p-5">
           <Breadcrumb />
-          <main >
+          <main className="py-6">
             <Outlet />
           </main>
         </div>
+
         <Footer />
       </div>
     </div>
+
   );
 };
 

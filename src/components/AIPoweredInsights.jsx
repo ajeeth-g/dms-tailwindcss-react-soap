@@ -1,13 +1,8 @@
-import { motion } from "framer-motion";
 import {
-  TrendingUp,
-  Users,
-  ShoppingBag,
-  IndianRupee,
-  FileText,
   CheckCircle,
   Clock,
-  Trash2,
+  FileText,
+  Trash2
 } from "lucide-react";
 
 const INSIGHTS = [
@@ -37,11 +32,8 @@ const INSIGHTS = [
 
 const AIPoweredInsights = () => {
   return (
-    <motion.div
-      className="bg-base-300 shadow-md rounded-2xl p-6"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 1.0 }}
+    <div
+      className="cust-card-group"
     >
       <h2 className="text-xl font-semibold mb-4">
         AI-Powered Insights
@@ -56,7 +48,7 @@ const AIPoweredInsights = () => {
           </div>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 };
 export default AIPoweredInsights;

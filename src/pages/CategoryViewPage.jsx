@@ -1,10 +1,10 @@
-import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import DashboardFilter from "../components/DashboardFilter";
 import { useAuth } from "../context/AuthContext";
 import { getCategoriesSummary } from "../services/dmsService";
+import { ChevronRight } from "lucide-react";
 
 const CategoryViewPage = () => {
   const [categories, setCategories] = useState([]);
@@ -33,10 +33,6 @@ const CategoryViewPage = () => {
     fetchData();
   }, [filterDays]);
 
-  const handleViewDocument = (categoryName) => {
-    navigate("/document-list", { state: { categoryName } });
-  };
-
   return loading ? (
     <div className="flex justify-center items-start">
       <LoadingSpinner className="loading loading-spinner loading-lg" />
@@ -47,26 +43,24 @@ const CategoryViewPage = () => {
         <DashboardFilter onFilterChange={setFilterDays} />
       </div>
       {categories.map((category) => (
-        <motion.div
+        <div
           key={category.DOC_RELATED_CATEGORY}
-          whileHover={{ scale: 1.04 }}
-          className="card card-compact bg-base-300 shadow-md"
+          className="cust-card-group"
         >
-          <div className="card-body">
-            <h2 className="card-title">{category.DOC_RELATED_CATEGORY}</h2>
-            <p> {category.total_count} documents attached</p>
-            <div className="card-actions">
-              <button
-                className="btn btn-primary btn-sm btn-outline w-full"
-                onClick={() =>
-                  handleViewDocument(category.DOC_RELATED_CATEGORY)
-                }
-              >
+          <div className="text-center">
+            <h1 className="text-6xl font-bold"> {category.total_count}</h1>
+            <h6 className="text-sm" >{category.DOC_RELATED_CATEGORY}</h6>
+            <div>
+              <Link
+                to="/document-list"
+                state={{ categoryName: category.DOC_RELATED_CATEGORY }}
+                className="mt-2 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-blue-600 decoration-2 hover:text-blue-700 hover:underline focus:underline focus:outline-hidden focus:text-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-600 dark:focus:text-blue-600">
                 View Documents
-              </button>
+                <ChevronRight size={18} />
+              </Link>
             </div>
           </div>
-        </motion.div>
+        </div>
       ))}
     </div>
   );

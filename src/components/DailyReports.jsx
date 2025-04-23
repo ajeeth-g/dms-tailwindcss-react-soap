@@ -1,13 +1,12 @@
-import { motion } from "framer-motion";
 import {
-  LineChart,
+  CartesianGrid,
+  Legend,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
 } from "recharts";
 
 const dailyOrdersData = [
@@ -22,11 +21,8 @@ const dailyOrdersData = [
 
 const DailyReports = () => {
   return (
-    <motion.div
-      className="bg-base-300 shadow-md rounded-2xl p-6"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
+    <div
+      className="cust-card-group"
     >
       <h2 className="text-xl font-semibold mb-4">
         Daily Reports
@@ -55,7 +51,7 @@ const DailyReports = () => {
           </LineChart>
         </ResponsiveContainer>
       </div>
-    </motion.div>
+    </div>
   );
 };
 export default DailyReports;
