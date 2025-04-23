@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { CalendarDays, MessageSquare, X } from "lucide-react";
-import { formatDateTime } from "../utils/dateUtils";
+import { useState } from "react";
 
 const UpdateTaskModal = ({ isOpen, onAction, onClose }) => {
   const [status, setStatus] = useState("");

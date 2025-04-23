@@ -21,16 +21,16 @@ export default function DashboardPage() {
         <DashboardFilter onFilterChange={setFilterDays} />
       </div>
       <div className="col-span-2 md:col-span-2 lg:col-span-1">
-        <DocumentDistribution filterDays={filterDays} />
+        <DocumentDistribution daysCount={filterDays} />
       </div>
       <div className="md:col-span-2 lg:col-span-1">
-        <StatCard filterDays={filterDays} />
+        <StatCard daysCount={filterDays} />
       </div>
       <div className="col-span-2 md:col-span-2 lg:col-span-1">
-        <ChannelPerformance filterDays={filterDays} />
+        <ChannelPerformance daysCount={filterDays} />
       </div>
       <div className="col-span-2 md:col-span-2 lg:col-span-1">
-        <DocumentChannelChart filterDays={filterDays} />
+        <DocumentChannelChart daysCount={filterDays} />
       </div>
       <div className="col-span-2">
         <DailyReports />

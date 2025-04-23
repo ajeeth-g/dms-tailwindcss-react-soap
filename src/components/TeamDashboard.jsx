@@ -6,6 +6,7 @@ import { getEmployeeImage } from "../services/employeeService";
 import TeamCard from "./TeamCard";
 import LoadingSpinner from "./common/LoadingSpinner";
 import SearchInput from "./common/SearchInput";
+import { ChevronRight } from "lucide-react";
 
 export default function TeamDashboard() {
   const { userData } = useAuth();
@@ -73,9 +74,8 @@ export default function TeamDashboard() {
   }, [userData.currentUserLogin]);
   return (
     <div className="cust-card-group">
-      <div className="flex items-center justify-between flex-wrap gap-2 mb-8">
-        <h2 className="text-xl font-semibold mb-4">My Team</h2>
-        <SearchInput />
+      <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+        <h2 className="text-xl font-semibold">My Team</h2>
       </div>
       {loading ? (
         <div className="flex justify-center items-start">
@@ -89,8 +89,12 @@ export default function TeamDashboard() {
             ))}
           </div>
           <div className="mt-4 text-right">
-            <Link to="/my-team" className="btn btn-link btn-sm">
-              See All
+            <Link
+              to="/my-team"
+              className="inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-700 hover:underline dark:text-blue-500 dark:hover:text-blue-600"
+            >
+              View Teams
+              <ChevronRight size={18} />
             </Link>
           </div>
         </>

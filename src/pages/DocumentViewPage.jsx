@@ -1,4 +1,4 @@
-import { FileSearch } from "lucide-react";
+import { FileSearch, SearchIcon } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import DocumentForm from "../components/DocumentForm";
 import TaskForm from "../components/TaskForm";
@@ -8,10 +8,12 @@ import { useAuth } from "../context/AuthContext";
 import { getAllDmsActiveUser } from "../services/dashboardService";
 import { getDocMasterList, updateDmsAssignedTo } from "../services/dmsService";
 import { formatDateTime } from "../utils/dateUtils";
+import { useLocation } from "react-router-dom";
 
 export default function DocumentViewPage() {
   const [docsData, setDocsData] = useState([]);
   const [loadingDocs, setLoadingDocs] = useState(false);
+  const [globalFilter, setGlobalFilter] = useState("");
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([]);
   const [selectedDocument, setSelectedDocument] = useState(null);
@@ -25,7 +27,7 @@ export default function DocumentViewPage() {
   const modalRefTask = useRef(null);
   const modalRefForm = useRef(null);
   const { userData } = useAuth();
-
+  const location = useLocation();
   // Task assignment state (for TaskForm modal)
   const [taskData, setTaskData] = useState({
     userName: userData.currentUserName,
@@ -42,6 +44,14 @@ export default function DocumentViewPage() {
     verifiedBy: userData.currentUserName,
   });
 
+  useEffect(() => {
+    console.log(location.state?.categoryName);
+
+    if (location.state?.categoryName) {
+      setGlobalFilter(location.state.categoryName);
+    }
+  }, [location.state]);
+
   // Fetch documents from master
   const fetchDmsMaster = useCallback(async () => {
     setLoadingDocs(true);
@@ -57,6 +67,7 @@ export default function DocumentViewPage() {
         userData.currentUserLogin,
         userData.clientURL
       );
+
       setDocsData(response?.length > 0 ? response : []);
       if (!response?.length) setError("No documents available.");
     } catch (err) {
@@ -159,10 +170,6 @@ export default function DocumentViewPage() {
         userData.currentUserLogin,
         userData.clientURL
       );
-      // On successful assignment:
-      // - Store the selected employee so the dropdown shows that name.
-      // - Disable the dropdown.
-      // - Enable the Verify button.
       setAssignedUsers((prev) => ({ ...prev, [doc.REF_SEQ_NO]: value }));
       setVerifyEnabled((prev) => ({ ...prev, [doc.REF_SEQ_NO]: true }));
     } catch (error) {
@@ -181,6 +188,18 @@ export default function DocumentViewPage() {
     setTaskData((prevTasks) => ({ ...prevTasks, newTask }));
   };
 
+  const filteredDocs = docsData.filter(doc => {
+    const search = globalFilter.toLowerCase();
+    return (
+      doc.DOCUMENT_DESCRIPTION.toLowerCase().includes(search) ||
+      doc.DOCUMENT_NO.toLowerCase().includes(search) ||
+      doc.DOC_RELATED_TO.toLowerCase().includes(search) ||
+      doc.DOC_RELATED_CATEGORY.toLowerCase().includes(search) ||
+      doc.USER_NAME.toLowerCase().includes(search) ||
+      doc.REF_SEQ_NO.toString().toLowerCase().includes(search)
+    );
+  });
+
   return (
     <>
       {loadingDocs ? (
@@ -188,102 +207,114 @@ export default function DocumentViewPage() {
           <LoadingSpinner className="loading loading-spinner loading-lg" />
         </div>
       ) : docsData.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-          {docsData.map((doc) => (
-            <div
-              key={doc.REF_SEQ_NO}
-              className="card card-compact cust-card-group p-2 "
-            >
-              <div className="card-body">
-                <div
-                  className={`flex items-start gap-2 ${doc.VERIFIED_BY ? "cursor-pointer" : ""
-                    }`}
-                  onClick={doc.VERIFIED_BY ? () => handleView(doc) : undefined}
-                >
-                  <div className="bg-neutral-100 p-2 rounded-lg">
-                    <FileSearch className="w-4 h-4 text-neutral-900" />
-                  </div>
-                  <div className="flex justify-between items-start w-full">
-                    <div>
-                      <h2 className="text-lg font-semibold leading-tight truncate">
-                        {doc.DOCUMENT_DESCRIPTION.length > 25
-                          ? doc.DOCUMENT_DESCRIPTION.substring(0, 25) + "..."
-                          : doc.DOCUMENT_DESCRIPTION}
-                      </h2>
-                      <p className="text-sm text-gray-500 leading-none">
-                        {doc.DOCUMENT_NO}
-                      </p>
+        <div className="grid grid-cols-1 gap-4">
+          <label className="input input-bordered input-sm flex items-center gap-2 w-72">
+            <input
+              type="text"
+              className="grow"
+              placeholder="Global Search..."
+              value={globalFilter}
+              onChange={(e) => setGlobalFilter(e.target.value)}
+            />
+            <SearchIcon className="w-4 h-4" />
+          </label>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+            {filteredDocs.map((doc) => (
+              <div
+                key={doc.REF_SEQ_NO}
+                className="card card-compact cust-card-group p-2"
+              >
+                <div className="card-body">
+                  <div
+                    className={`flex items-start gap-2 ${doc.VERIFIED_BY ? "cursor-pointer" : ""
+                      }`}
+                    onClick={doc.VERIFIED_BY ? () => handleView(doc) : undefined}
+                  >
+                    <div className="bg-neutral-100 p-2 rounded-lg">
+                      <FileSearch className="w-4 h-4 text-neutral-900" />
                     </div>
-                    <span className="text-xs badge badge-primary">
-                      {doc.REF_SEQ_NO}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex flex-col items-center justify-between gap-3">
-                  <div className="flex justify-between items-center w-full">
-                    <span className="text-sm font-medium">{doc.USER_NAME}</span>
-                    <span className="text-sm text-gray-500">
-                      {doc.NO_OF_DOCUMENTS} File(s)
-                    </span>
-                  </div>
-                  <div className="card-actions items-start justify-between gap-2 w-full">
-                    <div className="flex-1">
-                      <div className="flex flex-wrap items-center justify-between gap-1 mb-3">
-                        {doc.VERIFIED_BY ? (
-                          <span
-                            className={`text-xs text-gray-500 ${doc.DOCUMENT_STATUS === "Rejected"
-                              ? "text-red-500"
-                              : ""
-                              }`}
-                          >
-                            {doc.DOCUMENT_STATUS === "Rejected"
-                              ? "Rejected by"
-                              : "Verified by"}
-                          </span>
-                        ) : (
-                          <span className="text-xs badge badge-error badge-outline leading-tight px-1">
-                            Unverified
-                          </span>
-                        )}
+                    <div className="flex justify-between items-start w-full">
+                      <div>
+                        <h2 className="text-lg font-semibold leading-tight truncate">
+                          {doc.DOCUMENT_DESCRIPTION.length > 25
+                            ? doc.DOCUMENT_DESCRIPTION.substring(0, 25) + "..."
+                            : doc.DOCUMENT_DESCRIPTION}
+                        </h2>
+                        <p className="text-sm text-gray-500 leading-none">
+                          {doc.DOCUMENT_NO}
+                        </p>
                       </div>
-                      <Button
-                        className={`${!doc.VERIFIED_BY
-                          ? "btn btn-success btn-xs w-full"
-                          : "btn btn-xs btn-active btn-ghost w-full"
-                          }`}
-                        label={doc.VERIFIED_BY || "Verify"}
-                        onClick={
-                          !doc.VERIFIED_BY ? () => handleVerify(doc) : undefined
-                        }
-                        disabled={!verifyEnabled[doc.REF_SEQ_NO]}
-                      />
+                      <span className="text-xs badge badge-primary">
+                        {doc.REF_SEQ_NO}
+                      </span>
                     </div>
-                    <div className="flex-1">
-                      <p className="text-sm text-gray-500 mb-3">Assign to</p>
-                      <select
-                        name="assignedTo"
-                        className="select select-bordered select-xs text-center w-full"
-                        onChange={(e) => handleEmployeeSelect(doc, e)}
-                        value={assignedUsers[doc.REF_SEQ_NO] || ""}
-                        // Disable dropdown if an assignee exists (or if the document is verified)
-                        disabled={!!assignedUsers[doc.REF_SEQ_NO] || !!doc.VERIFIED_BY}
-                      // disabled={!!doc.VERIFIED_BY}
-                      >
-                        <option value="" disabled>
-                          Assign to
-                        </option>
-                        {users.map((user) => (
-                          <option key={user.user_name} value={user.user_name}>
-                            {user.user_name}
+                  </div>
+                  <div className="flex flex-col items-center justify-between gap-3">
+                    <div className="flex justify-between items-center w-full">
+                      <span className="text-sm font-medium">{doc.USER_NAME}</span>
+                      <span className="text-sm text-gray-500">
+                        {doc.NO_OF_DOCUMENTS} File(s)
+                      </span>
+                    </div>
+                    <div className="card-actions items-start justify-between gap-2 w-full">
+                      <div className="flex-1">
+                        <div className="flex flex-wrap items-center justify-between gap-1 mb-3">
+                          {doc.VERIFIED_BY ? (
+                            <span
+                              className={`text-xs text-gray-500 ${doc.DOCUMENT_STATUS === "Rejected"
+                                ? "text-red-500"
+                                : ""
+                                }`}
+                            >
+                              {doc.DOCUMENT_STATUS === "Rejected"
+                                ? "Rejected by"
+                                : "Verified by"}
+                            </span>
+                          ) : (
+                            <span className="text-xs badge badge-error badge-outline leading-tight px-1">
+                              Unverified
+                            </span>
+                          )}
+                        </div>
+                        <Button
+                          className={`${!doc.VERIFIED_BY
+                            ? "btn btn-success btn-xs w-full"
+                            : "btn btn-xs btn-active btn-ghost w-full"
+                            }`}
+                          label={doc.VERIFIED_BY || "Verify"}
+                          onClick={
+                            !doc.VERIFIED_BY ? () => handleVerify(doc) : undefined
+                          }
+                          disabled={!verifyEnabled[doc.REF_SEQ_NO]}
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-gray-500 mb-3">Assign to</p>
+                        <select
+                          name="assignedTo"
+                          className="select select-bordered select-xs text-center w-full"
+                          onChange={(e) => handleEmployeeSelect(doc, e)}
+                          value={assignedUsers[doc.REF_SEQ_NO] || ""}
+                          // Disable dropdown if an assignee exists (or if the document is verified)
+                          disabled={!!assignedUsers[doc.REF_SEQ_NO] || !!doc.VERIFIED_BY}
+                        // disabled={!!doc.VERIFIED_BY}
+                        >
+                          <option value="" disabled>
+                            Assign to
                           </option>
-                        ))}
-                      </select>
+                          {users.map((user) => (
+                            <option key={user.user_name} value={user.user_name}>
+                              {user.user_name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       ) : (
         <div>

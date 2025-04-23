@@ -362,9 +362,9 @@ const DocumentForm = ({
           <div className="divider my-1"></div>
 
           <form onSubmit={handleSubmit} id="document-form" name="document-form">
-            <div className="grid grid-cols-3 gap-1 mx-2">
+            <div className="grid grid-cols-5 gap-1 mx-2">
               {/* Left Side - Document Form */}
-              <div className="col-span-2">
+              <div className="col-span-5 lg:col-span-3">
                 <div className="max-h-[450px] overflow-y-auto min-h-0 p-2">
                   {/* Fields Section */}
                   <div className="grid grid-cols-2 gap-4 mt-1">
@@ -596,7 +596,7 @@ const DocumentForm = ({
               </div>
 
               {/* Right Side - Activity Section */}
-              <div className="col-span-1 rounded-lg p-4 bg-base-200 max-h-[400px] overflow-y-auto min-h-0">
+              <div className="col-span-5 lg:col-span-2 rounded-lg p-4 bg-base-200 max-h-[400px] overflow-y-auto min-h-0">
                 <h2 className="text-base font-medium mb-3">Others Details:</h2>
 
                 {/* Fields Section */}
@@ -648,6 +648,7 @@ const DocumentForm = ({
                       <LocateFixed className="h-4 w-4" />
                       <label className="text-sm">Reference Task ID</label>
                     </div>
+
                     <p className="text-sm font-medium">
                       {formData.REF_TASK_ID}
                     </p>
@@ -656,11 +657,16 @@ const DocumentForm = ({
                   <div className="flex items-center justify-between gap-3 w-full">
                     <div className="flex items-center gap-1 text-gray-500">
                       <Loader className="h-4 w-4" />
-                      <label className="text-sm">Document Status</label>
+                      <label className="text-sm hitespace-nowrap">Document Status</label>
                     </div>
-                    <p className="badge badge-error text-xs font-medium">
-                      {formData.DOCUMENT_STATUS}
-                    </p>
+                    {
+                      formData.DOCUMENT_STATUS && (
+                        <p className="badge badge-error text-xs font-medium whitespace-nowrap">
+                          {formData.DOCUMENT_STATUS}
+                        </p>
+                      )
+                    }
+
                   </div>
 
                   {docMode === "verify" && (
@@ -695,9 +701,9 @@ const DocumentForm = ({
                       {existingDocs.map((doc) => (
                         <div
                           key={`${doc.REF_SEQ_NO}-${doc.SERIAL_NO}`}
-                          className="card card-compact bg-neutral text-neutral-content rounded-lg"
+                          className="cust-card-group p-4"
                         >
-                          <div className="card-body">
+                          <div>
                             <div className="flex flex-wrap items-center justify-between gap-2">
                               {/* Left Section - Icon + Text */}
                               <div className="flex items-start gap-2 min-w-0">

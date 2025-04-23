@@ -38,29 +38,35 @@ const TaskView = () => {
   const DEFAULT_IMAGE =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBa24AAg4zVSuUsL4hJnMC9s3DguLgeQmZA&s";
 
+
+
   const fetchUserTasks = useCallback(async () => {
     setLoadingTasks(true);
     try {
-      const taskDataResponse = await getUserTasks(
+      const response = await getUserTasks(
         userData.currentUserName,
         userData.currentUserLogin,
         userData.clientURL
       );
 
-      const taskDataArray = Array.isArray(taskDataResponse)
-        ? taskDataResponse
-        : taskDataResponse
-          ? [taskDataResponse]
+      const taskDataArray = Array.isArray(response)
+        ? response
+        : response
+          ? [response]
           : [];
 
       const tasksWithImages = await Promise.all(
         taskDataArray.map(async (task) => {
+
+          console.log(task.TASK_ID);
+
           try {
             const imageData = await getEmployeeImage(
               task.ASSIGNED_EMP_NO,
               userData.currentUserLogin,
               userData.clientURL
             );
+
             return {
               ...task,
               // If imageData is available, return the image data URL, else default image
@@ -89,6 +95,7 @@ const TaskView = () => {
       setLoadingTasks(false);
     }
   }, [userData.currentUserLogin, userData.currentUserName, userData.clientURL]);
+
   useEffect(() => {
     fetchUserTasks();
   }, [fetchUserTasks]);
