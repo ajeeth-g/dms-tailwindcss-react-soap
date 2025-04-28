@@ -1,4 +1,5 @@
 import {
+  CalendarClock,
   ClipboardListIcon,
   FileSearch,
   FileText,
@@ -103,6 +104,18 @@ const Sidebar = ({ isOpen }) => {
             >
               <ClipboardListIcon className="h-5 w-5" />
               Task View
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/time-sheet"
+              className={({ isActive }) =>
+                `text-sm rounded-full py-2 px-4 mb-2 ${isActive ? "active" : ""
+                }`
+              }
+            >
+              <CalendarClock className="h-5 w-5" />
+              Time Sheet
             </NavLink>
           </li>
         </ul>

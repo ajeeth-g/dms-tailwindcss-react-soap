@@ -8,6 +8,7 @@ import MyTeamPage from "./pages/MyTeamPage";
 import NotFound from "./pages/NotFound";
 import TaskView from "./pages/TaskView";
 import LoginPage from "./pages/LoginPage";
+import TimeSheetPage from "./pages/TimeSheetPage";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="document-list" element={<DocumentListPage />} />
         <Route path="document-view" element={<DocumentViewPage />} />
         <Route path="task-view" element={<TaskView />} />
+        <Route path="time-sheet" element={<TimeSheetPage />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
