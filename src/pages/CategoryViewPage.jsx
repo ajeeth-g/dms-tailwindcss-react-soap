@@ -76,6 +76,7 @@ const CategoryViewPage = () => {
                 <div className="text-center">
                   <h1 className="text-6xl font-bold">{category.total_count}</h1>
                   <h6 className="text-sm">{category.DOC_RELATED_CATEGORY}</h6>
+                  
                   <div className="mt-2">
                     <Link
                       to="/document-view"

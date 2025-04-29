@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const NotFound = () => {
+const NotFoundPage = () => {
   return (
     <div className="flex min-h-screen items-center justify-center primary-content">
       <div className="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-2xl shadow-lg max-w-lg w-full text-white text-center">
@@ -22,4 +22,4 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;
+export default NotFoundPage;

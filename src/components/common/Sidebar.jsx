@@ -12,114 +12,81 @@ import LogoDark from "../../assets/logo-dark.png";
 import LogoLight from "../../assets/logo-light.png";
 import { useAuth } from "../../context/AuthContext";
 
-const Sidebar = ({ isOpen }) => {
+const Sidebar = ({ isOpen, toggleSidebar }) => {
   const { theme } = useAuth();
+
   return (
     <aside
-      className={`bg-white shadow-md transition-colors dark:bg-slate-900 border-r border-slate-300 dark:border-slate-700 ${isOpen ? "w-full max-w-48" : "w-0 overflow-hidden"
-        } min-h-screen`}
-    >
+      className={`
+        fixed inset-y-0 left-0 z-20 flex-shrink-0 flex flex-col
+        bg-white shadow-md dark:bg-slate-900 border-r border-slate-300 dark:border-slate-700
+        overflow-y-auto
 
-      {/* Logo Container */}
-      <div className="flex items-center justify-center h-16 shadow">
+        /* animate both width and transform */
+        transform transition-all duration-100 ease-in-out
+
+        /* desktop widths */
+        md:relative md:translate-x-0 
+        ${isOpen ? "md:w-48" : "md:w-16"}
+
+        /* mobile slide */
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+      `}
+    >
+      {/* Logo */}
+      <div className="flex items-center justify-center h-14 w-full my-2">
         <img
           src={theme === "dark" ? LogoDark : LogoLight}
-          alt="iStreams ERP Solutions"
-          className="object-cover"
+          alt="Logo"
+          className="h-full w-full object-contain"
         />
       </div>
 
-      <div className="px-2">
-        {/* Navigation Menu */}
+      {/* mobile close button */}
+      {/* <button
+        className="p-2 md:hidden self-end"
+        onClick={toggleSidebar}
+        aria-label="Close sidebar"
+      >
+        ✕
+      </button> */}
 
-        <ul className="menu menu-md w-full p-0">
-          <li className="menu-title text-xs">MENU</li>
-          <li>
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                `text-sm rounded-full py-2 px-4 mb-2 ${isActive ? "active " : ""
-                }`
-              }
-            >
-              <LayoutDashboard className="h-5 w-5" />
-              Dashboard
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/my-team"
-              className={({ isActive }) =>
-                `text-sm rounded-full py-2 px-4 mb-2 ${isActive ? "active" : ""
-                }`
-              }
-            >
-              <Users className="h-5 w-5" />
-              My Team
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/category-view"
-              className={({ isActive }) =>
-                `text-sm rounded-full py-2 px-4 mb-2 ${isActive ? "active" : ""
-                }`
-              }
-            >
-              <LayoutGrid className="h-5 w-5" />
-              Category View
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/document-list"
-              className={({ isActive }) =>
-                `text-sm  rounded-full py-2 px-4 mb-2 ${isActive ? "active" : ""
-                }`
-              }
-            >
-              <FileText className="h-5 w-5" />
-              Document List
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/document-view"
-              className={({ isActive }) =>
-                `text-sm rounded-full py-2 px-4 mb-2 ${isActive ? "active" : ""
-                }`
-              }
-            >
-              <FileSearch className="h-5 w-5" />
-              Document View
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/task-view"
-              className={({ isActive }) =>
-                `text-sm rounded-full py-2 px-4 mb-2 ${isActive ? "active" : ""
-                }`
-              }
-            >
-              <ClipboardListIcon className="h-5 w-5" />
-              Task View
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/time-sheet"
-              className={({ isActive }) =>
-                `text-sm rounded-full py-2 px-4 mb-2 ${isActive ? "active" : ""
-                }`
-              }
-            >
-              <CalendarClock className="h-5 w-5" />
-              Time Sheet
-            </NavLink>
-          </li>
+      <nav className="flex-1 p-2">
+        <ul className="space-y-1">
+          {[
+            { to: "/", Icon: LayoutDashboard, label: "Dashboard" },
+            { to: "/my-team", Icon: Users, label: "My Team" },
+            { to: "/category-view", Icon: LayoutGrid, label: "Category" },
+            { to: "/document-list", Icon: FileText, label: "Document List" },
+            { to: "/document-view", Icon: FileSearch, label: "Document View" },
+            { to: "/task-view", Icon: ClipboardListIcon, label: "Task View" },
+            { to: "/task", Icon: ClipboardListIcon, label: "Tasks" },
+            { to: "/time-sheet", Icon: CalendarClock, label: "Time Sheet" },
+          ].map(({ to, Icon, label }) => (
+            <li key={to}>
+              <NavLink
+                to={to}
+                title={!isOpen ? label : undefined}
+                className={({ isActive }) => {
+                  const active = isActive
+                    ? "bg-slate-200 dark:bg-slate-700"
+                    : "";
+                  const sizeClasses = isOpen
+                    ? "flex items-center space-x-2 py-2 px-4"
+                    : "flex justify-center py-3 w-full";
+                  return `${active} ${sizeClasses} rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors`;
+                }}
+                onClick={() => {
+                  if (window.innerWidth < 768) toggleSidebar();
+                }}
+              >
+                <Icon className="h-5 w-5" />
+                {isOpen && <span className="text-sm">{label}</span>}
+              </NavLink>
+            </li>
+          ))}
         </ul>
-      </div>
+      </nav>
     </aside>
   );
 };
