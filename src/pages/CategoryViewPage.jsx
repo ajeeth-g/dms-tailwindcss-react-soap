@@ -8,7 +8,7 @@ import { ChevronRight, SearchIcon } from "lucide-react";
 
 const CategoryViewPage = () => {
   const [categories, setCategories] = useState([]);
-  const [filterDays, setFilterDays] = useState("30");
+  const [filterDays, setFilterDays] = useState("365");
   const [loading, setLoading] = useState(true);
   const { userData } = useAuth();
   const [globalFilter, setGlobalFilter] = useState("");

@@ -94,9 +94,12 @@ const LoginPage = () => {
 
         const organization = await getDefaultCompanyName("", email, clientURL);
 
+        const isAdmin = false;
+
         const payload = {
           token: "dummy-token",
           email,
+          isAdmin,
           organization: organization,
           currentUserLogin: email,
           currentUserName: employeeData[0].USER_NAME,

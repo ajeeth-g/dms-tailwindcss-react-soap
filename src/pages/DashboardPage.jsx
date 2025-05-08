@@ -10,7 +10,7 @@ import StatCard from "../components/StatCard";
 import TeamDashboard from "../components/TeamDashboard";
 
 export default function DashboardPage() {
-  const [filterDays, setFilterDays] = useState("30");
+  const [filterDays, setFilterDays] = useState("365");
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">

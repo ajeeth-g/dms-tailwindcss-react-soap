@@ -80,8 +80,9 @@ const TaskPage = () => {
     const fetchTasksList = async () => {
         try {
             const query = {
-                SQLQuery: "SELECT * FROM TASK_LIST WHERE DMS_SEQ_NO NOT LIKE ''"
-            }
+                SQLQuery: `SELECT * FROM TASK_LIST`,
+            };
+
 
             const response = await getDataModelFromQueryService(query, userData.currentUserLogin, userData.clientURL);
 
@@ -97,30 +98,39 @@ const TaskPage = () => {
     return (
         <div className="space-y-6">
             {/* Header & Filters */}
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                <div className="flex items-center space-x-3">
-                    <button className="btn btn-ghost btn-circle">
-                        <ArrowLeft />
-                    </button>
-                    <h1 className="text-2xl font-bold">Tasks</h1>
-                </div>
-                <div className="flex flex-wrap items-center gap-3">
-                    <select className="select select-bordered select-sm w-40" value={location} onChange={(e) => setLocation(e.target.value)}>
+            <div>
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-end flex-wrap gap-2">
+                    <select
+                        className="select select-bordered select-sm w-full md:w-40"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                    >
                         <option value="">All Locations</option>
                         <option>Location A</option>
                         <option>Location B</option>
                     </select>
-                    <select className="select select-bordered select-sm w-40" value={department} onChange={(e) => setDepartment(e.target.value)}>
+
+                    <select
+                        className="select select-bordered select-sm w-full md:w-40"
+                        value={department}
+                        onChange={(e) => setDepartment(e.target.value)}
+                    >
                         <option value="">All Departments</option>
                         <option>Dept 1</option>
                     </select>
-                    <select className="select select-bordered select-sm w-24" value={year} onChange={(e) => setYear(e.target.value)}>
+
+                    <select
+                        className="select select-bordered select-sm w-full md:w-40"
+                        value={year}
+                        onChange={(e) => setYear(e.target.value)}
+                    >
                         <option value="">Year</option>
                         <option>2023</option>
                         <option>2024</option>
                     </select>
                 </div>
             </div>
+
 
             {/* Cards and Charts */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
