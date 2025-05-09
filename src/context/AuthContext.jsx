@@ -36,12 +36,13 @@ export const AuthProvider = ({ children }) => {
   const toggleTheme = () =>
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
 
-
   // auth only stores token and email for authentication
   const [auth, setAuth] = useState(() => {
     try {
       const storedAuth = localStorage.getItem("auth");
-      return storedAuth ? JSON.parse(storedAuth) : { token: null, email: null };
+      return storedAuth
+        ? JSON.parse(storedAuth)
+        : { token: null, email: null, isAdmin: false };
     } catch (error) {
       console.error("Error parsing stored auth:", error);
       return { token: null, email: null };
@@ -78,7 +79,7 @@ export const AuthProvider = ({ children }) => {
   // Memoized login function: expects data to have token, email, and other user details
   const login = useCallback((data) => {
     // Set minimal authentication data
-    const authData = { token: data.token, email: data.email };
+    const authData = { token: data.token, email: data.email, isAdmin: data.isAdmin };
     setAuth(authData);
     localStorage.setItem("auth", JSON.stringify(authData));
 

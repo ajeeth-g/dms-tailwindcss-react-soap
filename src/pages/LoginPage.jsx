@@ -94,9 +94,12 @@ const LoginPage = () => {
 
         const organization = await getDefaultCompanyName("", email, clientURL);
 
+        const isAdmin = false;
+
         const payload = {
           token: "dummy-token",
           email,
+          isAdmin,
           organization: organization,
           currentUserLogin: email,
           currentUserName: employeeData[0].USER_NAME,
@@ -105,7 +108,6 @@ const LoginPage = () => {
             employeeImage !== null
               ? `data:image/jpeg;base64,${employeeImage}`
               : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBa24AAg4zVSuUsL4hJnMC9s3DguLgeQmZA&s",
-
           clientURL: clientURL,
         };
 

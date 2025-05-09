@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { SearchIcon } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import TeamCard from "../components/TeamCard";
 import { useAuth } from "../context/AuthContext";
@@ -7,7 +8,10 @@ import { getEmployeeImage } from "../services/employeeService";
 
 const MyTeamPage = () => {
   const { userData } = useAuth();
+  const searchInputRef = useRef(null);
+
   const [usersData, setUsersData] = useState([]);
+  const [globalFilter, setGlobalFilter] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,9 +26,7 @@ const MyTeamPage = () => {
         let usersArray = [];
 
         // Process user data as before
-        if (userDetails && Array.isArray(userDetails.data)) {
-          usersArray = userDetails.data;
-        } else if (userDetails && Array.isArray(userDetails)) {
+        if (userDetails && Array.isArray(userDetails)) {
           usersArray = userDetails;
         } else {
           usersArray = userDetails ? [userDetails] : [];
@@ -53,12 +55,13 @@ const MyTeamPage = () => {
               );
               return {
                 ...user,
-                image: "/placeholder-user.png", // Ensure fallback here too
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBa24AAg4zVSuUsL4hJnMC9s3DguLgeQmZA&s", // Ensure fallback here too
               };
             }
           })
-        );
 
+
+        );
         setUsersData(usersWithImages);
       } catch (error) {
         console.error("Failed to fetch users:", error);
@@ -70,15 +73,51 @@ const MyTeamPage = () => {
     fetchUsersAndImages();
   }, [userData.currentUserLogin]);
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const filteredusersData = usersData.filter((user) => {
+    const search = globalFilter.toLowerCase();
+    return (
+      user.user_name.toLowerCase().includes(search)
+    )
+  });
+
+  console.log(filteredusersData);
+  
+
   return loading ? (
     <div className="flex justify-center items-start">
       <LoadingSpinner className="loading loading-spinner loading-lg" />
     </div>
   ) : usersData.length > 0 ? (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
-      {usersData.map((user, index) => (
-        <TeamCard key={index} user={user} />
-      ))}
+    <div className="grid grid-cols-1 gap-4">
+      <label className="input input-bordered input-sm flex items-center gap-2 w-72">
+        <input
+          ref={searchInputRef}
+          type="text"
+          className="grow"
+          placeholder="Global Search... (Ctrl+K)"
+          value={globalFilter}
+          onChange={(e) => setGlobalFilter(e.target.value)}
+        />
+        <kbd className="kbd kbd-sm">⌘</kbd>
+        <kbd className="kbd kbd-sm">K</kbd>
+      </label>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        {filteredusersData.map((user, index) => (
+          <TeamCard key={index} user={user} />
+        ))}
+      </div>
     </div>
   ) : (
     <div className="flex justify-center items-center min-h-screen">

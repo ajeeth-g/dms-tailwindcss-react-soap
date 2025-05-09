@@ -14,7 +14,15 @@ const Layout = () => {
 
   return (
     <div className="flex h-screen bg-slate-100 transition-colors dark:bg-slate-950">
-      <Sidebar isOpen={isSidebarOpen} />
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+
+      {/* mobile backdrop */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 z-10 bg-black/50 md:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
 
       <div className="flex flex-col flex-1 overflow-hidden">
         <Header toggleSidebar={toggleSidebar} />
@@ -22,7 +30,7 @@ const Layout = () => {
         {/* content area */}
         <div className="flex-1 overflow-auto p-5">
           <Breadcrumb />
-          <main className="py-6">
+          <main>
             <Outlet />
           </main>
         </div>
@@ -30,7 +38,6 @@ const Layout = () => {
         <Footer />
       </div>
     </div>
-
   );
 };
 

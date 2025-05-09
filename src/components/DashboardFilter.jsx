@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 
 const DashboardFilter = ({ onFilterChange }) => {
-  const [selectedFilter, setSelectedFilter] = useState("30");
+  const [selectedFilter, setSelectedFilter] = useState("365");
 
   const filterOptions = [
+    { label: "All", value: "365" },
     { label: "Past 7 Days", value: "7" },
     { label: "Past 30 Days", value: "30" },
     { label: "Past 90 Days", value: "90" },

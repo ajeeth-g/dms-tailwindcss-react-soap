@@ -4,10 +4,12 @@ import CategoryViewPage from "./pages/CategoryViewPage";
 import DashboardPage from "./pages/DashboardPage";
 import DocumentListPage from "./pages/DocumentListPage";
 import DocumentViewPage from "./pages/DocumentViewPage";
-import MyTeamPage from "./pages/MyTeamPage";
-import NotFound from "./pages/NotFound";
-import TaskView from "./pages/TaskView";
 import LoginPage from "./pages/LoginPage";
+import MyTeamPage from "./pages/MyTeamPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import TaskView from "./pages/TaskView";
+import TimeSheetPage from "./pages/TimeSheetPage";
+import TaskPage from "./pages/TaskPage";
 
 const App = () => {
   return (
@@ -20,8 +22,10 @@ const App = () => {
         <Route path="document-list" element={<DocumentListPage />} />
         <Route path="document-view" element={<DocumentViewPage />} />
         <Route path="task-view" element={<TaskView />} />
+        <Route path="time-sheet" element={<TimeSheetPage />} />
+        <Route path="task" element={<TaskPage />} />
       </Route>
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

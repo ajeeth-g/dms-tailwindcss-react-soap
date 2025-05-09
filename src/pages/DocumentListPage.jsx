@@ -12,8 +12,8 @@ const DocumentListPage = () => {
   const fetchDataRef = useRef(null);
 
   useEffect(() => {
-    if (location.state?.categoryName) {
-      setGlobalFilter(location.state.categoryName);
+    if (location.state?.userName) {
+      setGlobalFilter(location.state.userName);
     }
   }, [location.state]);
 

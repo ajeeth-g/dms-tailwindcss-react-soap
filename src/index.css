@@ -10,4 +10,8 @@
   .cust-card-group:hover {
     @apply hover:bg-slate-100 dark:hover:bg-slate-900;
   }
+
+  .cust-card-group.no-hover:hover {
+    @apply bg-white dark:bg-slate-950;
+  }
 }

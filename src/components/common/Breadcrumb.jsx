@@ -11,6 +11,8 @@ const Breadcrumb = () => {
     "document-list": "Document List",
     "document-view": "Document View",
     "task-view": "Task View",
+    "task": "Task",
+    "time-sheet": "Time Sheet",
     // Add more as needed
   };
 
@@ -39,7 +41,7 @@ const Breadcrumb = () => {
   };
 
   return (
-    <div className="flex items-end justify-between flex-wrap gap-3 mb-5 ">
+    <div className="flex items-end justify-between flex-wrap gap-3 mb-1">
       <h1 className="text-3xl font-medium">
         {breadcrumbNames[location.pathname.split("/").pop()] ||
           location.pathname.split("/").pop()?.replace("-", " ") ||
