@@ -369,7 +369,7 @@ const DocumentUpload = ({
                   key={`${doc.REF_SEQ_NO}-${doc.SERIAL_NO}`}
                   className="flex items-center rounded"
                 >
-                  <div className="card card-compact bg-neutral text-neutral-content w-72">
+                  <div className="card card-compact bg-base-200 text-neutral-content w-72">
                     <div className="card-body">
                       <div className="flex items-start justify-between gap-1">
                         <div className="flex items-start gap-1">
@@ -379,7 +379,7 @@ const DocumentUpload = ({
                             className="w-8 h-8"
                           />
                           <div className="flex-1">
-                            <h5 className="text-md font-medium truncate">
+                            <h5 className="text-md font-medium truncate text-black dark:text-white">
                               {doc.DOC_NAME.length > 24
                                 ? doc.DOC_NAME.substring(0, 24) + "..."
                                 : doc.DOC_NAME}
@@ -397,19 +397,22 @@ const DocumentUpload = ({
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-col items-center justify-end gap-1">
                           <Button
                             icon={<View size={18} />}
                             onClick={() => handleViewDocs(doc)}
+                            className="btn btn-primary btn-xs w-full flex justify-end"
                             tooltip="View"
                             variant="ghost"
+                            label="View"
                           />
                           <Button
                             icon={<Trash2 size={18} />}
                             onClick={() => handleDelete(doc)}
                             tooltip="Delete"
                             variant="error"
-                            className="text-red-600"
+                            label="Delete"
+                            className="text-red-600 w-full"
                           />
                         </div>
                       </div>

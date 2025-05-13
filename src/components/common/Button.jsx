@@ -7,7 +7,9 @@ const Button = ({ type, className, icon, label, onClick, disabled }) => {
         onClick={onClick}
         disabled={disabled}
       >
-        {label} {icon && icon}{" "}
+        <div className="flex items-center gap-1">
+          {label} {icon && icon}
+        </div>
       </button>
     </>
   );

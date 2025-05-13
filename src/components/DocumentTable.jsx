@@ -246,14 +246,15 @@ const DocumentTable = ({ fetchDataRef, globalFilter, setGlobalFilter }) => {
           <div className="flex items-center justify-end gap-1">
             {info.getValue() > 0 ? (
               <>
-                <span className="badge badge-success text-xs font-medium">
-                  {info.getValue()}
-                </span>
                 <button
-                  className="btn btn-ghost btn-circle btn-sm"
                   onClick={() => handleOpenUpload(info.row.original)}
                 >
-                  <FilePen className="h-4 w-4" />
+                  <div className="flex items-center gap-1">
+                    <span className="badge badge-success text-xs font-medium">
+                      {info.getValue()}
+                    </span>
+                    <FilePen className="h-4 w-4" />
+                  </div>
                 </button>
               </>
             ) : (

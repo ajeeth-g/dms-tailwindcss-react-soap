@@ -11,7 +11,7 @@ const Breadcrumb = () => {
     "document-list": "Document List",
     "document-view": "Document View",
     "task-view": "Task View",
-    "task": "Task",
+    "task": "Task Dashboard",
     "time-sheet": "Time Sheet",
     // Add more as needed
   };

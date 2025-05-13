@@ -5,6 +5,7 @@ import {
   FileText,
   LayoutDashboard,
   LayoutGrid,
+  Trello,
   Users,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
@@ -60,7 +61,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             { to: "/document-list", Icon: FileText, label: "Document List" },
             { to: "/document-view", Icon: FileSearch, label: "Document View" },
             { to: "/task-view", Icon: ClipboardListIcon, label: "Task View" },
-            { to: "/task", Icon: ClipboardListIcon, label: "Tasks" },
+            { to: "/task", Icon: Trello, label: "Task Dashboard" },
             { to: "/time-sheet", Icon: CalendarClock, label: "Time Sheet" },
           ].map(({ to, Icon, label }) => (
             <li key={to}>

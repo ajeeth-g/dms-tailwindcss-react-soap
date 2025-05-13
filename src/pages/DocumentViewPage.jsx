@@ -188,7 +188,7 @@ export default function DocumentViewPage() {
     setTaskData((prevTasks) => ({ ...prevTasks, newTask }));
   };
 
-  const filteredDocs = docsData.filter(doc => {
+  const filteredDocs = docsData.filter((doc) => {
     const search = globalFilter.toLowerCase();
     return (
       doc.DOCUMENT_DESCRIPTION.toLowerCase().includes(search) ||
@@ -199,6 +199,8 @@ export default function DocumentViewPage() {
       doc.REF_SEQ_NO.toString().toLowerCase().includes(search)
     );
   });
+
+  console.log(filteredDocs);
 
   return (
     <>
@@ -218,7 +220,7 @@ export default function DocumentViewPage() {
             />
             <SearchIcon className="w-4 h-4" />
           </label>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
             {filteredDocs.map((doc) => (
               <div
@@ -227,9 +229,12 @@ export default function DocumentViewPage() {
               >
                 <div className="card-body">
                   <div
-                    className={`flex items-start gap-2 ${doc.VERIFIED_BY ? "cursor-pointer" : ""
-                      }`}
-                    onClick={doc.VERIFIED_BY ? () => handleView(doc) : undefined}
+                    className={`flex items-start gap-2 ${
+                      doc.VERIFIED_BY ? "cursor-pointer" : ""
+                    }`}
+                    onClick={
+                      doc.VERIFIED_BY ? () => handleView(doc) : undefined
+                    }
                   >
                     <div className="bg-neutral-100 p-2 rounded-lg">
                       <FileSearch className="w-4 h-4 text-neutral-900" />
@@ -250,22 +255,31 @@ export default function DocumentViewPage() {
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-col items-center justify-between gap-3">
+                  <div className="flex flex-col items-start justify-between gap-3">
                     <div className="flex justify-between items-center w-full">
-                      <span className="text-sm font-medium">{doc.USER_NAME}</span>
+                      <span className="text-sm font-medium">
+                        {doc.USER_NAME}
+                      </span>
                       <span className="text-sm text-gray-500">
                         {doc.NO_OF_DOCUMENTS} File(s)
                       </span>
                     </div>
+                    <p className="font-medium">
+                      Category :{' '}
+                      <span className="text-sm text-gray-500">
+                        {doc.DOC_RELATED_CATEGORY}
+                      </span>
+                    </p>
                     <div className="card-actions items-start justify-between gap-2 w-full">
                       <div className="flex-1">
                         <div className="flex flex-wrap items-center justify-between gap-1 mb-3">
                           {doc.VERIFIED_BY ? (
                             <span
-                              className={`text-xs text-gray-500 ${doc.DOCUMENT_STATUS === "Rejected"
-                                ? "text-red-500"
-                                : ""
-                                }`}
+                              className={`text-xs text-gray-500 ${
+                                doc.DOCUMENT_STATUS === "Rejected"
+                                  ? "text-red-500"
+                                  : ""
+                              }`}
                             >
                               {doc.DOCUMENT_STATUS === "Rejected"
                                 ? "Rejected by"
@@ -278,13 +292,16 @@ export default function DocumentViewPage() {
                           )}
                         </div>
                         <Button
-                          className={`${!doc.VERIFIED_BY
-                            ? "btn btn-success btn-xs w-full"
-                            : "btn btn-xs btn-active btn-ghost w-full"
-                            }`}
+                          className={`${
+                            !doc.VERIFIED_BY
+                              ? "btn btn-success btn-xs w-full"
+                              : "btn btn-xs btn-active btn-ghost w-full"
+                          }`}
                           label={doc.VERIFIED_BY || "Verify"}
                           onClick={
-                            !doc.VERIFIED_BY ? () => handleVerify(doc) : undefined
+                            !doc.VERIFIED_BY
+                              ? () => handleVerify(doc)
+                              : undefined
                           }
                           disabled={!verifyEnabled[doc.REF_SEQ_NO]}
                         />
@@ -297,8 +314,10 @@ export default function DocumentViewPage() {
                           onChange={(e) => handleEmployeeSelect(doc, e)}
                           value={assignedUsers[doc.REF_SEQ_NO] || ""}
                           // Disable dropdown if an assignee exists (or if the document is verified)
-                          disabled={!!assignedUsers[doc.REF_SEQ_NO] || !!doc.VERIFIED_BY}
-                        // disabled={!!doc.VERIFIED_BY}
+                          disabled={
+                            !!assignedUsers[doc.REF_SEQ_NO] || !!doc.VERIFIED_BY
+                          }
+                          // disabled={!!doc.VERIFIED_BY}
                         >
                           <option value="" disabled>
                             Assign to
